@@ -147,3 +147,4 @@ CREATE INDEX IF NOT EXISTS idx_farmers_krishak ON farmers(krishak_card_no);
 CREATE INDEX IF NOT EXISTS idx_ledger_outlet_fert ON inventory_ledgers(outlet_id, fertilizer_type);
 CREATE INDEX IF NOT EXISTS idx_transactions_invoice ON sales_transactions(invoice_number);
 CREATE INDEX IF NOT EXISTS idx_transactions_qr ON sales_transactions(qr_token);
+

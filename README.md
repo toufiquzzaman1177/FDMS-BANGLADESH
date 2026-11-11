@@ -21,14 +21,7 @@ FDMS BANGLADESH/
 │   ├── mvnw / mvnw.cmd       # Maven Wrapper
 │   ├── pom.xml               # Dependencies (Web, JPA, Security, PostgreSQL, JWT, Lombok)
 │   └── src/main/java/com/fdms/
-│       ├── config/           # Security, JWT Filter, CORS
-│       ├── controller/       # Auth, Farmer Verification, POS Checkout, Public MRP Board
-│       ├── dto/              # Auth, Farmer, POS, and API Request/Response DTOs
-│       ├── entity/           # Users, Dealers, Outlets, Allotments, Ledgers, Farmers, Sales
-│       ├── enums/            # UserRole, DealerStatus, FertType, CropType, PaymentMethod
-│       ├── repository/       # Spring Data JPA Repositories (ACID Pessimistic Locks)
-│       ├── security/         # JwtTokenProvider, UserPrincipal, CustomUserDetailsService
-│       └── service/          # AuthService, FarmerService, PosService
+│       └── FdmsBackendApplication.java  # Spring Boot Main Application Class
 ├── database/                 # PostgreSQL Relational Database Schema
 │   └── schema.sql            # Complete 3NF DDL schema with indexes and constraints
 ├── documantation/            # Project SRS, ERD Diagram, and Proposal
