@@ -21,6 +21,10 @@ target/
 build/
 .gradle/
 
+# Uploads (ignore contents, keep directory)
+uploads/*
+!uploads/.gitkeep
+
 # IDE & Operating System
 .vscode/
 .idea/
