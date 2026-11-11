@@ -1,17 +1,20 @@
 import { useState } from 'react'
+import LoginPage from './components/LoginPage'
 import { 
   Building2, 
   Sprout, 
   PackageCheck, 
   Users, 
   ShieldCheck, 
-  FileSpreadsheet, 
   TrendingUp, 
-  AlertTriangle 
+  LogIn,
+  CheckCircle2
 } from 'lucide-react'
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('overview')
+  // Default to 'login' view so user sees the login page immediately
+  const [currentPage, setCurrentPage] = useState('login')
+  const [loggedInUser, setLoggedInUser] = useState(null)
 
   const modules = [
     {
@@ -51,6 +54,21 @@ export default function App() {
     { label: 'Compliance Rate', value: '98.4%', change: 'Fair MRP monitored' }
   ]
 
+  // If on login view, display the high-fidelity login page
+  if (currentPage === 'login') {
+    return (
+      <LoginPage 
+        onBackToHome={() => setCurrentPage('home')}
+        onLoginSuccess={(user) => {
+          setLoggedInUser(user)
+          // Open home/dashboard view after successful login
+          setTimeout(() => setCurrentPage('home'), 1200)
+        }}
+      />
+    )
+  }
+
+  // Home / Landing Page View
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800">
       {/* Top Banner */}
@@ -68,31 +86,63 @@ export default function App() {
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-emerald-200">
-                Fertilizer Dealer & Distribution Management System • CSE 3292
+                Fertilizer Dealer &amp; Distribution Management System • CSE 3292
               </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2 text-xs">
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-900 text-emerald-300 font-mono">
-              <span className="w-2 h-2 mr-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              React + Tailwind + Vite Active
-            </span>
+          <div className="flex items-center gap-3">
+            {loggedInUser ? (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-700/80 rounded-xl text-xs">
+                <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+                <span className="text-white font-medium">{loggedInUser.role}</span>
+                <button 
+                  onClick={() => { setLoggedInUser(null); setCurrentPage('login'); }}
+                  className="ml-2 text-emerald-200 hover:text-white underline cursor-pointer"
+                >
+                  লগআউট
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setCurrentPage('login')}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 text-xs sm:text-sm font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
+              >
+                <LogIn className="w-4 h-4 text-emerald-700" />
+                <span>লগইন করুন</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
 
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
         {/* Welcome Card */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
-          <div className="max-w-3xl">
-            <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
-              National Chemical Fertilizer Distribution Management
-            </h2>
-            <p className="mt-3 text-slate-600 leading-relaxed">
-              Digitizing end-to-end supply chain logistics from BCIC/BADC buffer godowns to Union level dealers and marginal farmers across Bangladesh. Built with Spring Boot, PostgreSQL, and React.js.
-            </p>
+        <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-6 sm:p-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="max-w-3xl">
+              <span className="inline-block px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full mb-3">
+                কৃষি মন্ত্রণালয় • গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
+              </span>
+              <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
+                জাতীয় রাসায়নিক সার বিতরণ ও ডিলার ব্যবস্থাপনা
+              </h2>
+              <p className="mt-2 text-slate-600 leading-relaxed text-sm sm:text-base">
+                বিসিআইসি ও বিএডিসি বাফার গুদাম থেকে ইউনিয়ন পর্যায়ের অনুমোদিত ডিলার এবং প্রান্তিক কৃষকদের মাঝে ন্যায্যমূল্যে সার বিতরণ নিশ্চিতকরণে ডিজিটাল ট্র্যাকিং প্ল্যাটফর্ম।
+              </p>
+            </div>
+
+            <div className="shrink-0">
+              <button
+                onClick={() => setCurrentPage('login')}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#2e8b57] hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all text-sm cursor-pointer"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>লগইন পোর্টালে যান</span>
+              </button>
+            </div>
           </div>
 
           {/* Quick Metrics */}
@@ -111,8 +161,8 @@ export default function App() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-lg font-bold text-slate-900">Core Architecture Modules</h3>
-              <p className="text-sm text-slate-500">Specified in the project SRS and ERD documentation</p>
+              <h3 className="text-lg font-bold text-slate-900">কোর আর্কিটেকচার মডিউলসমূহ</h3>
+              <p className="text-sm text-slate-500">SRS ও ERD ডকুমেন্টেশন অনুযায়ী প্রস্তুতকৃত ফ্রন্টএন্ড মডিউল</p>
             </div>
           </div>
 
@@ -122,7 +172,7 @@ export default function App() {
               return (
                 <div 
                   key={idx}
-                  className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+                  className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center justify-between">
@@ -137,9 +187,13 @@ export default function App() {
                     <p className="text-xs text-slate-500 mt-2 leading-relaxed">{mod.description}</p>
                   </div>
                   <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="text-emerald-700 font-medium hover:underline cursor-pointer">
-                      Module Ready &rarr;
-                    </span>
+                    <button
+                      onClick={() => setCurrentPage('login')}
+                      className="text-emerald-700 font-medium hover:underline cursor-pointer flex items-center gap-1"
+                    >
+                      <span>লগইন করে প্রবেশ করুন</span>
+                      <span>&rarr;</span>
+                    </button>
                   </div>
                 </div>
               )
@@ -147,26 +201,25 @@ export default function App() {
           </div>
         </div>
 
-        {/* Quick Developer Guide */}
+        {/* Developer Guide */}
         <div className="bg-slate-900 text-slate-200 rounded-2xl p-6 shadow-sm">
           <div className="flex items-center space-x-2 text-emerald-400 font-semibold text-sm">
             <TrendingUp className="w-4 h-4" />
-            <span>Developer Next Steps</span>
+            <span>টিম টু ফ্যাক্টর (Team Two Factor)</span>
           </div>
-          <h3 className="text-lg font-bold text-white mt-1">Frontend is Ready for Development</h3>
+          <h3 className="text-lg font-bold text-white mt-1">লগইন পেজ ডিজাইন সম্পন্ন হয়েছে</h3>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            To start the development server locally, run:
+            উপরে ডান পাশের বোতাম বা সরাসরি লগইন বাটনে ক্লিক করে প্রস্তুতকৃত পেজটি প্রিভিউ দেখতে পারেন।
           </p>
-          <div className="mt-3 bg-black/40 rounded-lg p-3 font-mono text-xs text-emerald-300 border border-slate-800 flex items-center justify-between overflow-x-auto">
-            <code>cd frontend &amp;&amp; npm run dev</code>
-            <span className="text-[10px] text-slate-500">Localhost: 5173</span>
-          </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="mt-16 border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
-        FDMS BANGLADESH • Department of Computer Science &amp; Engineering • CSE 3292
+      <footer className="mt-16 border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500 space-y-1">
+        <p>© সার ডিলার ও বিতরণ ব্যবস্থাপনা সিস্টেম — All Rights Reserved</p>
+        <p className="text-slate-400 text-[11px]">
+          Developed by <span className="text-slate-600 font-medium">Team Two Factor</span> (Fahad &amp; Toufiq) • CSE 3292
+        </p>
       </footer>
     </div>
   )
