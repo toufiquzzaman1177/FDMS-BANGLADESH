@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import logoImg from '../assets/logo.jpg'
 import { 
   Sprout, 
   ArrowLeft, 
@@ -111,11 +112,13 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
           ======================================================== */}
       <div className="w-full max-w-[430px] sm:max-w-[460px] bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100/80 p-8 sm:p-10 z-10 transition-all duration-300">
         
-        {/* Top Logo Badge */}
-        <div className="flex justify-center mb-5">
-          <div className="w-16 h-16 rounded-full bg-[#2e8b57] text-white flex items-center justify-center shadow-md shadow-emerald-700/20 ring-4 ring-emerald-50">
-            <Sprout className="w-9 h-9 text-emerald-50" strokeWidth={2.2} />
-          </div>
+        {/* Top Logo */}
+        <div className="flex justify-center mb-4">
+          <img 
+            src={logoImg} 
+            alt="SarDistributor Logo" 
+            className="w-20 h-20 sm:w-24 sm:h-24 object-contain rounded-xl hover:scale-105 transition-transform duration-200" 
+          />
         </div>
 
         {/* Title & Subtitle */}
@@ -253,3 +256,4 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
     </div>
   )
 }
+
