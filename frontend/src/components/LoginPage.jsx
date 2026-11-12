@@ -246,11 +246,8 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
       {/* ========================================================
           FOOTER COPYRIGHT & CREDITS (Matching target style)
           ======================================================== */}
-      <footer className="mt-8 text-center text-xs text-slate-500 space-y-1 z-10">
-        <p>© উপজেলা সার বিতরণ ব্যবস্থাপনা সিস্টেম — All Rights Reserved</p>
-        <p className="text-slate-400 text-[11px]">
-          Developed by <span className="text-slate-600 font-medium">Team Two Factor</span> (Fahad &amp; Toufiq)
-        </p>
+      <footer className="mt-8 text-center text-xs text-slate-500 z-10">
+        <p>© Fertilizer Distribution Management System — All Rights Reserved · Developed by Toufiq &amp; Fahad</p>
       </footer>
 
     </div>

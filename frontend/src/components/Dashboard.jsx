@@ -1133,6 +1133,13 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
             </div>
           )}
 
+          {/* ========================================================
+              FOOTER COPYRIGHT & CREDITS (Exact match to reference)
+              ======================================================== */}
+          <footer className="pt-6 pb-2 text-center text-xs text-slate-500 border-t border-slate-200/80">
+            <p>© Fertilizer Distribution Management System — All Rights Reserved · Developed by Toufiq &amp; Fahad</p>
+          </footer>
+
         </main>
 
       </div>
