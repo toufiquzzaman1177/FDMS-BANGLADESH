@@ -24,8 +24,11 @@ import {
   CheckCircle2,
   Search,
   Filter,
-  PlusCircle,
-  AlertTriangle
+  ShieldCheck,
+  TrendingUp,
+  AlertCircle,
+  ChevronRight,
+  ExternalLink
 } from 'lucide-react'
 
 export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', role: 'জেলা অফিসার' } }) {
@@ -34,38 +37,49 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
   const [isVerifying, setIsVerifying] = useState(false)
   const [verificationSuccess, setVerificationSuccess] = useState(false)
   const [selectedDealerModal, setSelectedDealerModal] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
 
   // Top metric cards
   const summaryStats = [
     {
       label: 'মোট ডিলার',
       value: '6',
+      subtext: '১০০% নিবন্ধিত',
       icon: Users,
-      iconBg: 'bg-emerald-50 text-emerald-700',
+      color: 'emerald',
+      iconBg: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/10',
     },
     {
       label: 'মোট কৃষক',
       value: '64',
+      subtext: 'NID ও কার্ড যাচাইকৃত',
       icon: User,
-      iconBg: 'bg-emerald-50 text-emerald-700',
+      color: 'emerald',
+      iconBg: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/10',
     },
     {
       label: 'মোট বিতরণ',
       value: '211',
+      subtext: 'ডিজিটাল এন্ট্রি সম্পন্ন',
       icon: Truck,
-      iconBg: 'bg-emerald-50 text-emerald-700',
+      color: 'emerald',
+      iconBg: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/10',
     },
     {
       label: 'ডুপ্লিকেট ডেটা',
       value: '4',
+      subtext: 'অডিট নিরীক্ষা আবশ্যক',
       icon: Copy,
-      iconBg: 'bg-rose-50 text-rose-500',
+      color: 'rose',
+      iconBg: 'bg-rose-50 text-rose-600 ring-1 ring-rose-500/10',
     },
     {
       label: 'মোট সার বিতরণ (কেজি)',
       value: '৩,০৫৫',
+      subtext: 'ইউরিয়া, টিএসপি, ডিএপি, এমওপি',
       icon: ShoppingBag,
-      iconBg: 'bg-amber-50 text-amber-700',
+      color: 'amber',
+      iconBg: 'bg-amber-50 text-amber-700 ring-1 ring-amber-600/10',
     },
   ]
 
@@ -74,50 +88,59 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     {
       label: 'ছোট কৃষক',
       value: '28',
+      percentage: '৪৩.৮%',
+      landRange: '০.০১ - ০.৪৯ একর',
       icon: User,
-      iconBg: 'bg-emerald-50 text-emerald-700',
+      color: '#16a34a',
+      iconBg: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/15',
     },
     {
       label: 'মাঝারি কৃষক',
       value: '25',
+      percentage: '৩৯.১%',
+      landRange: '০.৫০ - ২.৪৯ একর',
       icon: User,
-      iconBg: 'bg-amber-50 text-amber-700',
+      color: '#d97706',
+      iconBg: 'bg-amber-50 text-amber-700 ring-1 ring-amber-600/15',
     },
     {
       label: 'বড় কৃষক',
       value: '11',
+      percentage: '১৭.২%',
+      landRange: '২.৫০ একর বা তদূর্ধ্ব',
       icon: User,
-      iconBg: 'bg-rose-50 text-rose-500',
+      color: '#e11d48',
+      iconBg: 'bg-rose-50 text-rose-600 ring-1 ring-rose-600/15',
     },
   ]
 
   // Fertilizer Donut Chart data
   const fertilizerDistribution = [
-    { name: 'ইউরিয়া', value: 38, color: '#1f6a39', hex: '#1f6a39' },
-    { name: 'টিএসপি', value: 24, color: '#22c55e', hex: '#22c55e' },
-    { name: 'ডিএপি', value: 18, color: '#4ade80', hex: '#4ade80' },
-    { name: 'এমওপি', value: 14, color: '#ca8a04', hex: '#ca8a04' },
-    { name: 'জৈব সার', value: 6, color: '#78350f', hex: '#78350f' },
+    { name: 'ইউরিয়া', value: 38, hex: '#166534', kg: '১,১৬১ কেজি' },
+    { name: 'টিএসপি', value: 24, hex: '#16a34a', kg: '৭৩৩ কেজি' },
+    { name: 'ডিএপি', value: 18, hex: '#4ade80', kg: '৫৫০ কেজি' },
+    { name: 'এমওপি', value: 14, hex: '#ca8a04', kg: '৪২৮ কেজি' },
+    { name: 'জৈব সার', value: 6, hex: '#78350f', kg: '১৮৩ কেজি' },
   ]
 
   // Union distribution bar chart data
   const unionData = [
-    { name: '১', value: 600 },
-    { name: '২', value: 650 },
-    { name: '৩', value: 680 },
-    { name: '৪', value: 480 },
-    { name: '৫', value: 650 },
-    { name: '৬', value: 0 },
-    { name: '৭', value: 0 },
-    { name: 'বকশীগঞ্জ', value: 0 },
+    { name: '১', value: 600, label: '১ নং ইউনিয়ন' },
+    { name: '২', value: 650, label: '২ নং বগারচর' },
+    { name: '৩', value: 680, label: '৩ নং বাট্টাজোড়' },
+    { name: '৪', value: 480, label: '৪ নং সাধুরপাড়া' },
+    { name: '৫', value: 650, label: '৫ নং বকশীগঞ্জ' },
+    { name: '৬', value: 0, label: '৬ নং নিলাখিয়া' },
+    { name: '৭', value: 0, label: '৭ নং ইউনিয়ন' },
+    { name: 'বকশীগঞ্জ', value: 0, label: 'বকশীগঞ্জ পৌরসভা' },
   ]
 
   // Monthly distribution trend (Last 6 / 4 months)
   const monthlyTrend = [
-    { month: '2026-08', value: 330, x: 80, y: 163 },
-    { month: '2026-09', value: 1450, x: 380, y: 37 },
-    { month: '2026-10', value: 1100, x: 680, y: 76 },
-    { month: '2026-11', value: 200, x: 960, y: 178 },
+    { month: '2026-08', value: '৩৩০ কেজি', x: 80, y: 163 },
+    { month: '2026-09', value: '১,৪৫০ কেজি', x: 380, y: 37 },
+    { month: '2026-10', value: '১,১০০ কেজি', x: 680, y: 76 },
+    { month: '2026-11', value: '২০০ কেজি', x: 960, y: 178 },
   ]
 
   // Top Dealers by total fertilizer distribution
@@ -259,22 +282,42 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     },
   ]
 
-  // Sidebar Menu Items (Exact match to target design)
-  const menuItems = [
-    { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: LayoutDashboard },
-    { id: 'add-dealer', label: 'ডিলার যুক্ত করুন', icon: UserPlus },
-    { id: 'dealers-list', label: 'ডিলার তালিকা', icon: Users },
-    { id: 'stock', label: 'স্টক ব্যবস্থাপনা', icon: Package },
-    { id: 'dealer-audit', label: 'ডিলার অডিট / প্রোফাইল', icon: FileCheck2 },
-    { id: 'distribution-records', label: 'বিতরণ রেকর্ড', icon: FileText },
-    { id: 'duplicate-data', label: 'ডুপ্লিকেট ডেটা', icon: Copy },
-    { id: 'farmer-search', label: 'কৃষক অনুসন্ধান', icon: UserSearch },
-    { id: 'reports', label: 'রিপোর্ট', icon: BarChart3 },
-    { id: 'export', label: 'ডেটা এক্সপোর্ট', icon: Download },
-    { id: 'logs', label: 'সিস্টেম লগ', icon: Terminal },
-    { id: 'verify', label: 'পরিসংখ্যান যাচাই', icon: CheckSquare },
-    { id: 'cleanup', label: 'ডেটা মুছুন', icon: Trash2 },
-    { id: 'settings', label: 'সেটিংস', icon: Settings },
+  // Grouped Sidebar Menu Items for a formal, organized enterprise experience
+  const navigationGroups = [
+    {
+      group: 'মূল মেনু',
+      items: [
+        { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: LayoutDashboard },
+      ],
+    },
+    {
+      group: 'ডিলার ও বিতরণ',
+      items: [
+        { id: 'add-dealer', label: 'ডিলার যুক্ত করুন', icon: UserPlus },
+        { id: 'dealers-list', label: 'ডিলার তালিকা', icon: Users, badge: '৬' },
+        { id: 'stock', label: 'স্টক ব্যবস্থাপনা', icon: Package },
+        { id: 'dealer-audit', label: 'ডিলার অডিট / প্রোফাইল', icon: FileCheck2 },
+        { id: 'distribution-records', label: 'বিতরণ রেকর্ড', icon: FileText, badge: '২১১' },
+        { id: 'duplicate-data', label: 'ডুপ্লিকেট ডেটা', icon: Copy, badgeColor: 'rose', badge: '৪' },
+      ],
+    },
+    {
+      group: 'কৃষক ও রিপোর্ট',
+      items: [
+        { id: 'farmer-search', label: 'কৃষক অনুসন্ধান', icon: UserSearch },
+        { id: 'reports', label: 'রিপোর্ট ও বিশ্লেষণ', icon: BarChart3 },
+        { id: 'export', label: 'ডেটা এক্সপোর্ট', icon: Download },
+      ],
+    },
+    {
+      group: 'সিস্টেম প্রশাসন',
+      items: [
+        { id: 'logs', label: 'সিস্টেম লগ', icon: Terminal },
+        { id: 'verify', label: 'পরিসংখ্যান যাচাই', icon: CheckSquare },
+        { id: 'cleanup', label: 'ডেটা মুছুন', icon: Trash2 },
+        { id: 'settings', label: 'সেটিংস', icon: Settings },
+      ],
+    },
   ]
 
   const handleRefresh = () => {
@@ -286,28 +329,38 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     setTimeout(() => {
       setIsVerifying(false)
       setVerificationSuccess(true)
-      setTimeout(() => setVerificationSuccess(false), 3000)
-    }, 800)
+      setTimeout(() => setVerificationSuccess(false), 3500)
+    }, 700)
   }
 
+  const filteredDealers = allDealersDistribution.filter(dealer => 
+    dealer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    dealer.union.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
   return (
-    <div className="min-h-screen bg-[#f3f6f3] flex flex-col font-sans select-none text-slate-800">
+    <div className="min-h-screen bg-[#f8faf8] text-slate-800 flex flex-col font-sans select-none antialiased">
       
       {/* ========================================================
-          TOP HEADER (Green Navbar)
+          TOP HEADER (Formal Government Deep Emerald Navbar)
           ======================================================== */}
-      <header className="bg-[#1e6837] text-white px-4 py-2.5 sm:px-6 shadow-md flex items-center justify-between sticky top-0 z-30">
+      <header className="bg-gradient-to-r from-[#123e21] via-[#164e2a] to-[#144525] text-white px-4 sm:px-6 py-2.5 shadow-sm border-b border-emerald-900/40 flex items-center justify-between sticky top-0 z-30">
         
         {/* Left Branding */}
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center p-1 border border-white/20">
-            <img src="/logo.jpg" alt="FDMS" className="w-full h-full object-contain rounded-full" />
+        <div className="flex items-center space-x-3.5">
+          <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center p-1.5 border border-white/20 shadow-inner">
+            <img src="/logo.jpg" alt="FDMS" className="w-full h-full object-contain rounded-lg" />
           </div>
           <div>
-            <h1 className="text-sm sm:text-base font-bold tracking-tight text-white leading-tight">
-              FDMS — সার বিতরণ ব্যবস্থাপনা সিস্টেম
-            </h1>
-            <p className="text-[10px] sm:text-[11px] text-emerald-200 font-medium">
+            <div className="flex items-center gap-2">
+              <h1 className="text-sm sm:text-base font-bold tracking-tight text-white leading-tight">
+                FDMS — সার বিতরণ ব্যবস্থাপনা সিস্টেম
+              </h1>
+              <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/20 text-[10px] font-medium">
+                জাতীয় পোর্টাল
+              </span>
+            </div>
+            <p className="text-[10px] sm:text-[11px] text-emerald-200/90 font-normal tracking-wide">
               রেকর্ড ওয়ার্কস্পেস — DEMO DATA — NOT OFFICIAL RECORDS
             </p>
           </div>
@@ -318,26 +371,29 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           
           {/* Tour Button */}
           <button 
-            onClick={() => alert('সিস্টেম ট্যুর: বাম পাশের মেনু থেকে যেকোনো মডিউলে নেভিগেট করতে পারবেন।')}
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white transition-colors cursor-pointer"
+            onClick={() => alert('সিস্টেম ট্যুর: বাম পাশের মেনু থেকে ডিলার, কৃষক ও বিতরণ সংক্রান্ত যেকোনো মডিউল ব্যবহার করতে পারেন।')}
+            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg text-emerald-100 transition-colors cursor-pointer text-[11px] font-medium"
           >
-            <Clock className="w-3.5 h-3.5" />
+            <Clock className="w-3.5 h-3.5 text-emerald-300" />
             <span>ট্যুর</span>
           </button>
 
           {/* Request Button */}
           <button 
             onClick={() => alert('অনুরোধ পাঠানো হয়েছে: কেন্দ্রীয় সার্ভারের সাথে ডাটা সিঙ্ক হচ্ছে।')}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-white transition-colors cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg text-emerald-100 transition-colors cursor-pointer text-[11px] font-medium"
           >
-            <Send className="w-3.5 h-3.5" />
+            <Send className="w-3.5 h-3.5 text-emerald-300" />
             <span>FDMS অনুরোধ</span>
           </button>
 
           {/* User Profile Pill */}
-          <div className="flex items-center bg-black/20 rounded-full py-0.5 px-1.5 pl-3 border border-white/10 text-white">
-            <span className="font-semibold text-xs mr-2">{currentUser.name}</span>
-            <span className="bg-amber-600/90 text-amber-50 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+          <div className="flex items-center bg-black/25 rounded-xl py-1 px-2.5 border border-white/15 text-white">
+            <div className="w-5 h-5 rounded-full bg-emerald-600 flex items-center justify-center text-[10px] font-bold text-white mr-2 border border-emerald-400/30">
+              {currentUser.name.charAt(0)}
+            </div>
+            <span className="font-semibold text-xs mr-2 text-slate-100">{currentUser.name}</span>
+            <span className="bg-amber-500/90 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded-md tracking-wider">
               {currentUser.role}
             </span>
           </div>
@@ -345,8 +401,8 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           {/* Logout Button */}
           <button
             onClick={onLogout}
-            title="লগআউট"
-            className="p-1.5 rounded-lg bg-white/10 hover:bg-red-600/80 text-white border border-white/20 transition-colors cursor-pointer"
+            title="লগআউট করে প্রস্থান করুন"
+            className="p-2 rounded-xl bg-white/10 hover:bg-rose-600/80 text-white border border-white/15 transition-colors cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -358,95 +414,131 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           ======================================================== */}
       <div className="flex-1 flex overflow-hidden">
         
-        {/* Left Sidebar */}
-        <aside className="w-52 sm:w-60 bg-white border-r border-slate-200/80 flex flex-col shrink-0 overflow-y-auto py-3">
-          <nav className="space-y-0.5 px-2">
-            {menuItems.map((item) => {
-              const Icon = item.icon
-              const isActive = activeTab === item.id
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${
-                    isActive
-                      ? 'bg-emerald-100/80 text-emerald-900 font-bold shadow-xs'
-                      : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-800' : 'text-slate-500'}`} />
-                  <span className="truncate">{item.label}</span>
-                </button>
-              )
-            })}
+        {/* Left Sidebar (Formal Grouped Navigation) */}
+        <aside className="w-56 sm:w-64 bg-white border-r border-slate-200/70 flex flex-col shrink-0 overflow-y-auto py-4 shadow-[1px_0_4px_rgba(0,0,0,0.01)]">
+          <nav className="space-y-5 px-3">
+            {navigationGroups.map((group, gIdx) => (
+              <div key={gIdx} className="space-y-1">
+                <p className="px-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  {group.group}
+                </p>
+                <div className="space-y-0.5 pt-0.5">
+                  {group.items.map((item) => {
+                    const Icon = item.icon
+                    const isActive = activeTab === item.id
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => setActiveTab(item.id)}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${
+                          isActive
+                            ? 'bg-emerald-50/90 text-emerald-900 font-semibold border-l-4 border-emerald-700 shadow-2xs'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-2.5 truncate">
+                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-700' : 'text-slate-400'}`} strokeWidth={1.8} />
+                          <span className="truncate">{item.label}</span>
+                        </div>
+                        {item.badge && (
+                          <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full ${
+                            item.badgeColor === 'rose'
+                              ? 'bg-rose-100 text-rose-700'
+                              : 'bg-emerald-100 text-emerald-800'
+                          }`}>
+                            {item.badge}
+                          </span>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
           </nav>
         </aside>
 
         {/* Main Workspace Area */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-7 space-y-6">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
           
           {activeTab === 'dashboard' ? (
             <>
-              {/* Dashboard Sub-Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200/60">
+              {/* Formal Sub-Header & Status Banner */}
+              <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-                    ড্যাশবোর্ড
-                  </h2>
-                  <div className="flex items-center gap-1.5 text-xs text-emerald-700 font-medium mt-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                      ড্যাশবোর্ড পর্যবেক্ষণ
+                    </h2>
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                      লাইভ রেকর্ড
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-medium mt-1.5">
+                    <ShieldCheck className="w-4 h-4 shrink-0 text-emerald-600" />
                     <span>
                       কাউন্টার সামঞ্জস্য যাচাই: সব ডিলার সেলস হিস্টোরির যোগফল = মোট বিতরণ ও মোট সার। সর্বশেষ পূর্ণ যাচাই: ৯/১১/২০২৬, ৯:৫৮:০৩ PM
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 self-start sm:self-auto">
-                  <span className="text-[11px] text-slate-500 hidden xl:inline">সিস্টেমের সামগ্রিক অবস্থা</span>
-                  
+                <div className="flex items-center gap-2.5 self-start md:self-auto shrink-0">
                   <button
                     onClick={handleRefresh}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-600 rounded-full text-xs font-medium shadow-2xs transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white hover:bg-emerald-50/60 text-emerald-800 border border-slate-200 hover:border-emerald-500 rounded-xl text-xs font-semibold shadow-2xs transition-all cursor-pointer"
                   >
-                    <RefreshCw className={`w-3.5 h-3.5 ${refreshKey ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-3.5 h-3.5 text-emerald-700 ${refreshKey ? 'animate-spin' : ''}`} />
                     <span>রিফ্রেশ</span>
                   </button>
 
                   <button
                     onClick={handleVerify}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-600 rounded-full text-xs font-medium shadow-2xs transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-[#164e2a] hover:bg-[#123e21] text-white rounded-xl text-xs font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
                   >
-                    <CheckSquare className="w-3.5 h-3.5" />
+                    <CheckSquare className="w-3.5 h-3.5 text-emerald-200" />
                     <span>{isVerifying ? 'যাচাই হচ্ছে...' : 'পরিসংখ্যান যাচাই'}</span>
                   </button>
                 </div>
               </div>
 
+              {/* Toast message on verify */}
               {verificationSuccess && (
-                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>সকল ডিলার স্টক ও বিক্রয় হিস্টোরি নির্ভুলভাবে মিলিয়ে যাচাই সম্পন্ন হয়েছে!</span>
+                <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-900 text-xs flex items-center justify-between shadow-xs animate-fadeIn">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>সকল ডিলারের মজুদ খতিয়ান এবং বিক্রয় রসিদ নির্ভুলভাবে নিরীক্ষিত হয়েছে। কোনো অসঙ্গতি পাওয়া যায়নি।</span>
+                  </div>
+                  <span className="text-[11px] font-bold text-emerald-700">১০০% সামঞ্জস্যপূর্ণ</span>
                 </div>
               )}
 
-              {/* Row 1: Top 5 Summary Metrics Cards */}
+              {/* Row 1: Top 5 Summary Metrics Cards (Executive KPIs) */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
                 {summaryStats.map((item, index) => {
                   const Icon = item.icon
                   return (
                     <div
                       key={index}
-                      className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between"
+                      className="bg-white rounded-2xl p-4 sm:p-4.5 border border-slate-200/70 shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
                     >
-                      <div className={`w-fit p-2 rounded-xl mb-3 ${item.iconBg}`}>
-                        <Icon className="w-4 h-4" />
+                      <div className="flex items-center justify-between mb-3">
+                        <div className={`p-2.5 rounded-xl ${item.iconBg}`}>
+                          <Icon className="w-4 h-4" strokeWidth={2} />
+                        </div>
+                        <span className="text-[10px] font-semibold text-slate-400">
+                          ID-0{index + 1}
+                        </span>
                       </div>
                       <div>
-                        <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                        <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-mono">
                           {item.value}
                         </div>
-                        <div className="text-xs text-slate-500 font-medium mt-1">
+                        <div className="text-xs text-slate-700 font-semibold mt-1">
                           {item.label}
+                        </div>
+                        <div className="text-[11px] text-slate-400 font-normal mt-0.5">
+                          {item.subtext}
                         </div>
                       </div>
                     </div>
@@ -455,10 +547,15 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
 
               {/* Row 2: Farmer Categories (কৃষক শ্রেণী - জমির পরিমাণ অনুযায়ী) */}
-              <div className="space-y-2.5">
-                <h3 className="text-sm sm:text-base font-bold text-slate-900">
-                  কৃষক শ্রেণী (জমির পরিমাণ অনুযায়ী)
-                </h3>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                    কৃষক শ্রেণী (জমির পরিমাণ অনুযায়ী)
+                  </h3>
+                  <span className="text-xs text-slate-500 font-normal">
+                    মোট ৬৪ জন নিবন্ধিত কৃষক
+                  </span>
+                </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                   {farmerClassStats.map((item, index) => {
@@ -466,17 +563,37 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                     return (
                       <div
                         key={index}
-                        className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between"
+                        className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/70 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between"
                       >
-                        <div className={`w-fit p-2 rounded-xl mb-3 ${item.iconBg}`}>
-                          <Icon className="w-4 h-4" />
+                        <div className="flex items-start justify-between">
+                          <div className={`p-2.5 rounded-xl ${item.iconBg}`}>
+                            <Icon className="w-4 h-4" strokeWidth={2} />
+                          </div>
+                          <span className="text-xs font-bold text-slate-700 bg-slate-50 px-2.5 py-0.5 rounded-full border border-slate-200/70">
+                            {item.percentage}
+                          </span>
                         </div>
-                        <div>
-                          <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                        
+                        <div className="mt-4">
+                          <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-mono">
                             {item.value}
                           </div>
-                          <div className="text-xs text-slate-500 font-medium mt-1">
+                          <div className="text-xs text-slate-800 font-semibold mt-1">
                             {item.label}
+                          </div>
+                          <div className="text-[11px] text-slate-400 mt-0.5">
+                            জমির আওতা: {item.landRange}
+                          </div>
+
+                          {/* Soft visual progress indicator */}
+                          <div className="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
+                            <div 
+                              className="h-full rounded-full transition-all duration-500" 
+                              style={{ 
+                                width: item.percentage.replace('%', '') + '%', 
+                                backgroundColor: item.color 
+                              }}
+                            ></div>
                           </div>
                         </div>
                       </div>
@@ -489,24 +606,26 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 
                 {/* Left Chart Card: সার ভিত্তিক বিতরণ (Donut Chart) */}
-                <div className="lg:col-span-5 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between">
-                  <h4 className="text-sm font-bold text-slate-900 mb-2">
-                    সার ভিত্তিক বিতরণ
-                  </h4>
+                <div className="lg:col-span-5 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <h4 className="text-sm font-bold text-slate-900">
+                      সার ভিত্তিক বিতরণ
+                    </h4>
+                    <span className="text-[11px] text-slate-400">শতাংশ ও পরিমাণ</span>
+                  </div>
 
                   {/* SVG Donut Chart */}
                   <div className="py-4 flex flex-col items-center justify-center">
                     <div className="relative w-44 h-44">
-                      <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 transform">
-                        {/* Circle circumference = 2 * PI * 35 = ~220 */}
+                      <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 transform drop-shadow-xs">
                         {/* Segment 1: Urea (38%) */}
                         <circle
                           cx="50"
                           cy="50"
                           r="35"
                           fill="transparent"
-                          stroke="#1f6a39"
-                          strokeWidth="20"
+                          stroke="#166534"
+                          strokeWidth="18"
                           strokeDasharray="83.6 220"
                           strokeDashoffset="0"
                         />
@@ -516,8 +635,8 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                           cy="50"
                           r="35"
                           fill="transparent"
-                          stroke="#22c55e"
-                          strokeWidth="20"
+                          stroke="#16a34a"
+                          strokeWidth="18"
                           strokeDasharray="52.8 220"
                           strokeDashoffset="-83.6"
                         />
@@ -528,7 +647,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                           r="35"
                           fill="transparent"
                           stroke="#4ade80"
-                          strokeWidth="20"
+                          strokeWidth="18"
                           strokeDasharray="39.6 220"
                           strokeDashoffset="-136.4"
                         />
@@ -539,7 +658,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                           r="35"
                           fill="transparent"
                           stroke="#ca8a04"
-                          strokeWidth="20"
+                          strokeWidth="18"
                           strokeDasharray="30.8 220"
                           strokeDashoffset="-176"
                         />
@@ -550,27 +669,30 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                           r="35"
                           fill="transparent"
                           stroke="#78350f"
-                          strokeWidth="20"
+                          strokeWidth="18"
                           strokeDasharray="13.2 220"
                           strokeDashoffset="-206.8"
                         />
                       </svg>
-                      {/* Inner Hole for Donut */}
+                      {/* Inner Center Badge */}
                       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                        <span className="text-xs font-bold text-slate-700">১০০%</span>
-                        <span className="text-[10px] text-slate-400">মোট সার</span>
+                        <span className="text-sm font-bold text-slate-900 font-mono">৩,০৫৫</span>
+                        <span className="text-[10px] text-slate-500 font-medium">মোট কেজি</span>
                       </div>
                     </div>
 
-                    {/* Chart Legend */}
-                    <div className="flex flex-wrap items-center justify-center gap-x-3.5 gap-y-1.5 mt-5 text-[11px] text-slate-600 font-medium">
+                    {/* Chart Legend with Quantities */}
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-5 text-[11px] text-slate-600 font-medium w-full px-2">
                       {fertilizerDistribution.map((item, idx) => (
-                        <div key={idx} className="flex items-center space-x-1.5">
-                          <span
-                            className="w-2.5 h-2.5 rounded-xs inline-block"
-                            style={{ backgroundColor: item.hex }}
-                          ></span>
-                          <span>{item.name}</span>
+                        <div key={idx} className="flex items-center justify-between py-1 border-b border-slate-50">
+                          <div className="flex items-center space-x-1.5">
+                            <span
+                              className="w-2.5 h-2.5 rounded-full inline-block shrink-0"
+                              style={{ backgroundColor: item.hex }}
+                            ></span>
+                            <span>{item.name}</span>
+                          </div>
+                          <span className="text-slate-400 text-[10px] font-mono">{item.kg}</span>
                         </div>
                       ))}
                     </div>
@@ -578,17 +700,20 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                 </div>
 
                 {/* Right Chart Card: ইউনিয়ন ভিত্তিক বিতরণ (কেজি) (Bar Chart) */}
-                <div className="lg:col-span-7 bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs flex flex-col justify-between">
-                  <h4 className="text-sm font-bold text-slate-900 mb-2">
-                    ইউনিয়ন ভিত্তিক বিতরণ (কেজি)
-                  </h4>
+                <div className="lg:col-span-7 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <h4 className="text-sm font-bold text-slate-900">
+                      ইউনিয়ন ভিত্তিক বিতরণ (কেজি)
+                    </h4>
+                    <span className="text-[11px] text-slate-400">সর্বোচ্চ সীমা: ৭০০ কেজি</span>
+                  </div>
 
                   {/* SVG Bar Chart with Axis */}
-                  <div className="pt-2 pb-1 w-full">
+                  <div className="pt-3 pb-1 w-full">
                     <div className="flex w-full h-56">
                       
                       {/* Y-Axis scale */}
-                      <div className="flex flex-col justify-between items-end pr-2.5 text-[10px] text-slate-400 font-mono select-none h-48">
+                      <div className="flex flex-col justify-between items-end pr-3 text-[10px] text-slate-400 font-mono select-none h-48">
                         <span>700</span>
                         <span>600</span>
                         <span>500</span>
@@ -601,7 +726,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                       {/* Bars Container */}
                       <div className="flex-1 flex flex-col justify-between h-full">
-                        <div className="relative flex-1 border-b border-l border-slate-200 flex items-end justify-around px-2 sm:px-4">
+                        <div className="relative flex-1 border-b border-l border-slate-200/80 flex items-end justify-around px-2 sm:px-4">
                           
                           {/* Horizontal Gridlines */}
                           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
@@ -616,7 +741,6 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                           {/* Bars */}
                           {unionData.map((union, i) => {
-                            // Max value 700
                             const heightPercent = union.value > 0 ? (union.value / 700) * 100 : 0
                             return (
                               <div
@@ -626,10 +750,10 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                                 {union.value > 0 ? (
                                   <div
                                     style={{ height: `${heightPercent}%` }}
-                                    className="w-full bg-[#2e8b57] hover:bg-emerald-600 rounded-t-sm transition-all duration-300 relative"
+                                    className="w-full bg-gradient-to-t from-[#15532d] to-[#22c55e] hover:to-emerald-400 rounded-t-md transition-all duration-300 relative shadow-2xs"
                                   >
                                     {/* Tooltip on hover */}
-                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-0.5 px-1.5 rounded pointer-events-none whitespace-nowrap shadow-xs">
+                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded-md pointer-events-none whitespace-nowrap shadow-md z-20 font-medium">
                                       {union.value} কেজি
                                     </div>
                                   </div>
@@ -642,7 +766,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                         </div>
 
                         {/* X-Axis labels */}
-                        <div className="flex justify-around items-center pt-2 text-[11px] text-slate-500 font-medium px-2 sm:px-4">
+                        <div className="flex justify-around items-center pt-2 text-[11px] text-slate-600 font-medium px-2 sm:px-4">
                           {unionData.map((union, i) => (
                             <span key={i} className="w-8 sm:w-11 text-center truncate">
                               {union.name}
@@ -658,13 +782,16 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
 
               {/* Row 4: মাসিক বিতরণ ট্রেন্ড (সর্বশেষ ৬ মাস) (Monthly Distribution Trend) */}
-              <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs">
-                <h4 className="text-sm font-bold text-slate-900 mb-3">
-                  মাসিক বিতরণ ট্রেন্ড (সর্বশেষ ৬ মাস)
-                </h4>
+              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-xs space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <h4 className="text-sm font-bold text-slate-900">
+                    মাসিক বিতরণ ট্রেন্ড (সর্বশেষ ৬ মাস)
+                  </h4>
+                  <span className="text-[11px] text-slate-400">সর্বোচ্চ মৌসুম: সেপ্টেম্বর ২০২৬</span>
+                </div>
 
                 {/* SVG Area / Spline Trend Chart */}
-                <div className="w-full overflow-x-auto">
+                <div className="w-full overflow-x-auto pt-2">
                   <div className="min-w-[550px] sm:min-w-full">
                     <div className="flex w-full">
                       
@@ -683,7 +810,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                       {/* Chart Area */}
                       <div className="flex-1 flex flex-col justify-between">
-                        <div className="relative h-44 border-b border-l border-slate-200">
+                        <div className="relative h-44 border-b border-l border-slate-200/80">
                           
                           {/* Gridlines */}
                           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
@@ -700,24 +827,24 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                           {/* SVG Spline Path & Gradient */}
                           <svg viewBox="0 0 1000 200" preserveAspectRatio="none" className="absolute inset-0 w-full h-full overflow-visible">
                             <defs>
-                              <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#2e8b57" stopOpacity="0.25" />
-                                <stop offset="100%" stopColor="#2e8b57" stopOpacity="0.02" />
+                              <linearGradient id="trendGradientEyeSmooth" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#15803d" stopOpacity="0.28" />
+                                <stop offset="100%" stopColor="#15803d" stopOpacity="0.01" />
                               </linearGradient>
                             </defs>
                             
                             {/* Filled Area */}
                             <path
                               d="M 80 163 C 200 120, 260 37, 380 37 C 500 37, 580 60, 680 76 C 780 95, 880 160, 960 178 L 960 200 L 80 200 Z"
-                              fill="url(#trendGradient)"
+                              fill="url(#trendGradientEyeSmooth)"
                             />
 
                             {/* Curve Line */}
                             <path
                               d="M 80 163 C 200 120, 260 37, 380 37 C 500 37, 580 60, 680 76 C 780 95, 880 160, 960 178"
                               fill="none"
-                              stroke="#2e8b57"
-                              strokeWidth="2.5"
+                              stroke="#166534"
+                              strokeWidth="2.75"
                               strokeLinecap="round"
                             />
 
@@ -727,8 +854,8 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                                 <circle
                                   cx={pt.x}
                                   cy={pt.y}
-                                  r="4"
-                                  className="fill-[#2e8b57] stroke-white stroke-2 group-hover:r-6 transition-all"
+                                  r="4.5"
+                                  className="fill-[#166534] stroke-white stroke-2 group-hover:r-6.5 transition-all"
                                 />
                               </g>
                             ))}
@@ -750,20 +877,23 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
 
               {/* Row 5: শীর্ষ ডিলার (মোট সার বিতরণ অনুযায়ী) (Top Dealers Card) */}
-              <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
-                <h4 className="text-sm font-bold text-slate-900">
-                  শীর্ষ ডিলার (মোট সার বিতরণ অনুযায়ী)
-                </h4>
+              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-xs space-y-4">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                  <h4 className="text-sm font-bold text-slate-900">
+                    শীর্ষ ডিলার (মোট সার বিতরণ অনুযায়ী)
+                  </h4>
+                  <span className="text-[11px] text-slate-400">সেরা ৫ জন বিক্রেতা</span>
+                </div>
 
-                <div className="space-y-3">
+                <div className="divide-y divide-slate-100">
                   {topDealers.map((dealer) => (
                     <div
                       key={dealer.rank}
-                      className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50/80 transition-colors"
+                      className="flex items-center justify-between py-3 px-2 rounded-xl hover:bg-slate-50/70 transition-colors"
                     >
                       {/* Left: Rank & Dealer Info */}
-                      <div className="flex items-center space-x-3">
-                        <div className="w-6 h-6 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold flex items-center justify-center shrink-0 border border-emerald-100/60">
+                      <div className="flex items-center space-x-3.5">
+                        <div className="w-7 h-7 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold flex items-center justify-center shrink-0 border border-emerald-200/70">
                           {dealer.rank}
                         </div>
                         <div>
@@ -778,7 +908,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                       {/* Right: Quantity & Distributions */}
                       <div className="text-right flex flex-col items-end">
-                        <span className="bg-emerald-100/80 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full inline-block">
+                        <span className="bg-emerald-50 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-200/60 inline-block font-mono">
                           {dealer.totalKg}
                         </span>
                         <span className="text-[10px] text-slate-400 mt-0.5 font-medium">
@@ -792,22 +922,23 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                 {/* Bottom Reconciliation Bar & Action Button */}
                 <div className="pt-3 border-t border-dashed border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <p className="text-xs text-slate-700 font-bold">
+                    <p className="text-xs text-slate-800 font-bold">
                       সকল ডিলারের যোগফল: ২১১ বিতরণ • ৩,০৫৫ কেজি
                     </p>
-                    <div className="mt-3">
+                    <div className="mt-2.5">
                       <button 
                         onClick={() => setActiveTab('dealer-audit')}
-                        className="border border-emerald-600 text-emerald-700 hover:bg-emerald-50 text-xs font-semibold px-3 py-1.5 rounded-lg cursor-pointer transition-colors inline-flex items-center gap-1"
+                        className="border border-emerald-700/60 text-emerald-800 hover:bg-emerald-50 text-xs font-semibold px-3.5 py-1.5 rounded-xl cursor-pointer transition-colors inline-flex items-center gap-1.5 shadow-2xs"
                       >
                         <span>ডিলার-ভিত্তিক অডিট দেখুন</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
 
                   <div className="self-start sm:self-auto">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-medium">
-                      <span>✓</span>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-semibold">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                       <span>ড্যাশবোর্ড মোটের সাথে মিলেছে</span>
                     </span>
                   </div>
@@ -816,16 +947,34 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
 
               {/* Row 6: সকল ডিলারের সার বিতরণ (কেজি) (All Dealers Distribution Table) */}
-              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
+              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-xs space-y-4">
                 
-                {/* Header */}
-                <div className="flex items-center justify-between pb-1">
-                  <h4 className="text-base font-bold text-slate-900">
-                    সকল ডিলারের সার বিতরণ (কেজি)
-                  </h4>
-                  <span className="text-xs text-slate-500 font-medium">
-                    6 জন ডিলার
-                  </span>
+                {/* Header & Table Search Filter */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-100">
+                  <div>
+                    <h4 className="text-base font-bold text-slate-900">
+                      সকল ডিলারের সার বিতরণ (কেজি)
+                    </h4>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      উপজেলা সার ও বীজ মনিটরিং কমিটির নিরীক্ষিত খতিয়ান
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="ডিলার বা ইউনিয়ন খুঁজুন..."
+                        className="pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all w-48 sm:w-56"
+                      />
+                    </div>
+                    <span className="text-xs text-slate-500 font-semibold px-2 py-1 bg-slate-100 rounded-lg shrink-0">
+                      {filteredDealers.length} জন ডিলার
+                    </span>
+                  </div>
                 </div>
 
                 {/* Table */}
@@ -833,49 +982,49 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                   <table className="w-full text-left text-xs sm:text-sm text-slate-700">
                     
                     {/* Table Head */}
-                    <thead className="bg-[#f0f6f1] text-emerald-950 font-bold text-xs">
+                    <thead className="bg-[#f2f7f3] text-emerald-950 font-bold text-xs">
                       <tr>
-                        <th className="py-3 px-3.5 w-12 text-center text-emerald-800">#</th>
-                        <th className="py-3 px-3.5 text-emerald-800">ডিলার</th>
-                        <th className="py-3 px-3.5 text-emerald-800">ইউনিয়ন</th>
-                        <th className="py-3 px-3.5 text-emerald-800">বিতরণ (এন্ট্রি)</th>
-                        <th className="py-3 px-3.5 text-emerald-800">মোট সার (কেজি)</th>
-                        <th className="py-3 px-3.5 text-right w-28"></th>
+                        <th className="py-3.5 px-3.5 w-12 text-center text-emerald-900">#</th>
+                        <th className="py-3.5 px-3.5 text-emerald-900">ডিলার</th>
+                        <th className="py-3.5 px-3.5 text-emerald-900">ইউনিয়ন</th>
+                        <th className="py-3.5 px-3.5 text-emerald-900">বিতরণ (এন্ট্রি)</th>
+                        <th className="py-3.5 px-3.5 text-emerald-900">মোট সার (কেজি)</th>
+                        <th className="py-3.5 px-3.5 text-right w-28">অ্যাকশন</th>
                       </tr>
                     </thead>
 
                     {/* Table Body */}
                     <tbody className="divide-y divide-slate-100">
-                      {allDealersDistribution.map((dealer) => (
-                        <tr key={dealer.id} className="hover:bg-slate-50/80 transition-colors">
-                          <td className="py-3 px-3.5 text-center text-slate-500 font-medium">
+                      {filteredDealers.map((dealer) => (
+                        <tr key={dealer.id} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="py-3.5 px-3.5 text-center text-slate-400 font-mono font-medium">
                             {dealer.id}
                           </td>
-                          <td className="py-3 px-3.5 font-medium text-slate-900">
+                          <td className="py-3.5 px-3.5 font-medium text-slate-900">
                             <div className="flex items-center">
                               <span>{dealer.name}</span>
                               {dealer.status === 'inactive' && (
-                                <span className="ml-2 px-2 py-0.5 bg-rose-100 text-rose-700 rounded-full text-[10px] font-semibold">
+                                <span className="ml-2.5 px-2 py-0.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-full text-[10px] font-bold">
                                   নিষ্ক্রিয়
                                 </span>
                               )}
                             </div>
                           </td>
-                          <td className="py-3 px-3.5 text-slate-600">
+                          <td className="py-3.5 px-3.5 text-slate-600">
                             {dealer.union}
                           </td>
-                          <td className="py-3 px-3.5 text-slate-600 font-medium">
+                          <td className="py-3.5 px-3.5 text-slate-600 font-mono font-medium">
                             {dealer.entries}
                           </td>
-                          <td className="py-3 px-3.5 font-bold text-slate-900">
+                          <td className="py-3.5 px-3.5 font-bold text-slate-900 font-mono">
                             {dealer.totalKg}
                           </td>
-                          <td className="py-3 px-3.5 text-right">
+                          <td className="py-3.5 px-3.5 text-right">
                             <button
                               onClick={() => setSelectedDealerModal(dealer)}
-                              className="px-3.5 py-1 bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-600 rounded-lg text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
+                              className="px-3.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-600/70 rounded-xl text-xs font-semibold shadow-2xs transition-all cursor-pointer inline-flex items-center gap-1"
                             >
-                              বিস্তারিত
+                              <span>বিস্তারিত</span>
                             </button>
                           </td>
                         </tr>
@@ -884,12 +1033,12 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                     {/* Table Footer: Total Row */}
                     <tfoot>
-                      <tr className="border-t-2 border-slate-200 font-bold text-slate-900">
+                      <tr className="border-t-2 border-slate-200 font-bold text-slate-900 bg-slate-50/40">
                         <td className="py-3.5 px-3.5"></td>
                         <td className="py-3.5 px-3.5 text-slate-900">সকল ডিলারের মোট</td>
                         <td className="py-3.5 px-3.5"></td>
-                        <td className="py-3.5 px-3.5 text-slate-900">২১১</td>
-                        <td className="py-3.5 px-3.5 text-slate-900">৩,০৫৫</td>
+                        <td className="py-3.5 px-3.5 text-slate-900 font-mono">২১১</td>
+                        <td className="py-3.5 px-3.5 text-slate-900 font-mono">৩,০৫৫</td>
                         <td className="py-3.5 px-3.5"></td>
                       </tr>
                     </tfoot>
@@ -905,7 +1054,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               <div className="flex items-center justify-between pb-4 border-b border-slate-200">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900">
-                    {menuItems.find(m => m.id === activeTab)?.label}
+                    {navigationGroups.flatMap(g => g.items).find(m => m.id === activeTab)?.label}
                   </h2>
                   <p className="text-xs text-slate-500 mt-0.5">
                     মডিউলটির ফ্রন্টএন্ড ভিউ প্রস্তুত ও সক্রিয় রয়েছে
@@ -974,7 +1123,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                   <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-500">
                     <Package className="w-6 h-6" />
                   </div>
-                  <h4 className="text-sm font-semibold text-slate-700">{menuItems.find(m => m.id === activeTab)?.label} মডিউল</h4>
+                  <h4 className="text-sm font-semibold text-slate-700">{navigationGroups.flatMap(g => g.items).find(m => m.id === activeTab)?.label} মডিউল</h4>
                   <p className="text-xs text-slate-500 max-w-md mx-auto">
                     এই মডিউলের জন্য ফ্রন্টএন্ড কম্পোনেন্ট রেডি রয়েছে। ড্যাশবোর্ড থেকে সহজেই এক ক্লিকে যেকোনো ডেটা মনিটর করতে পারবেন।
                   </p>
@@ -990,7 +1139,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
       {/* Dealer Details Modal */}
       {selectedDealerModal && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl border border-slate-100 animate-fadeIn space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
@@ -999,7 +1148,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
               <button
                 onClick={() => setSelectedDealerModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold cursor-pointer"
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold cursor-pointer transition-colors"
               >
                 ✕
               </button>
@@ -1032,13 +1181,13 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
               <div className="flex justify-between py-1 pt-2 font-bold text-sm">
                 <span className="text-slate-900">মোট সার বিতরণ:</span>
-                <span className="text-emerald-800">{selectedDealerModal.totalKg} কেজি</span>
+                <span className="text-emerald-800 font-mono">{selectedDealerModal.totalKg} কেজি</span>
               </div>
             </div>
 
             <button
               onClick={() => setSelectedDealerModal(null)}
-              className="w-full py-2.5 bg-[#1e6837] hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+              className="w-full py-2.5 bg-[#123e21] hover:bg-[#164e2a] text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
             >
               বন্ধ করুন
             </button>
@@ -1049,4 +1198,3 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     </div>
   )
 }
-
