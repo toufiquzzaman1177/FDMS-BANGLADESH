@@ -412,10 +412,10 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
       {/* ========================================================
           BODY: SIDEBAR + MAIN CONTENT
           ======================================================== */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col md:flex-row">
         
         {/* Left Sidebar (Formal Grouped Navigation) */}
-        <aside className="w-56 sm:w-64 bg-white border-r border-slate-200/70 flex flex-col shrink-0 overflow-y-auto py-4 shadow-[1px_0_4px_rgba(0,0,0,0.01)]">
+        <aside className="w-full md:w-56 lg:w-64 bg-white md:border-r border-slate-200/70 flex flex-col shrink-0 py-4 shadow-[1px_0_4px_rgba(0,0,0,0.01)] md:sticky md:top-14 md:self-start md:max-h-[calc(100vh-3.5rem)] md:overflow-y-auto">
           <nav className="space-y-5 px-3">
             {navigationGroups.map((group, gIdx) => (
               <div key={gIdx} className="space-y-1">
@@ -459,7 +459,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
         </aside>
 
         {/* Main Workspace Area */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 min-w-0">
           
           {activeTab === 'dashboard' ? (
             <>
@@ -1133,18 +1133,18 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
             </div>
           )}
 
-          {/* ========================================================
-              FOOTER COPYRIGHT & CREDITS (Exact match to reference image)
-              ======================================================== */}
-          <footer className="-mx-4 sm:-mx-6 lg:-mx-8 mt-12 pt-6 pb-7 border-t border-slate-200/90 text-center text-[12px] sm:text-xs text-slate-500">
-            <p className="px-4 font-normal tracking-normal text-slate-500">
-              © Fertilizer Distribution Management System — All Rights Reserved · Developed by Toufiq &amp; Fahad
-            </p>
-          </footer>
-
         </main>
 
       </div>
+
+      {/* ========================================================
+          FULL WIDTH FOOTER (Spans across entire screen including under the left sidebar menu)
+          ======================================================== */}
+      <footer className="w-full bg-[#f2f6f3] border-t border-slate-200/90 py-6 text-center text-[12px] sm:text-xs text-slate-500 z-10">
+        <p className="px-4 font-normal tracking-normal text-slate-500">
+          © Fertilizer Distribution Management System — All Rights Reserved · Developed by Toufiq &amp; Fahad
+        </p>
+      </footer>
 
       {/* Dealer Details Modal */}
       {selectedDealerModal && (
