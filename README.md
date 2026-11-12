@@ -65,5 +65,6 @@ Runs locally at: `http://localhost:5173`
 ---
 
 ## 👥 Developed By (Team Two Factor)
-- **Md. Fahad Hossain** (Team Leader) — ID: `41240102109` • [mdfahadhossain10](https://github.com/mdfahadhossain10)
-- **Md. Toufiquzzaman** (Team Member) — ID: `41240102158` • [toufiquzzaman1177](https://github.com/toufiquzzaman1177)
+- **Md. Toufiquzzaman** (Team Leader) — ID: `41240102158` • [toufiquzzaman1177](https://github.com/toufiquzzaman1177)
+- **Md. Fahad Hossain** (Team Member) — ID: `41240102109` • [mdfahadhossain10](https://github.com/mdfahadhossain10)
+
