@@ -344,56 +344,56 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
       {/* ========================================================
           TOP HEADER (Formal Government Deep Emerald Navbar)
           ======================================================== */}
-      <header className="bg-gradient-to-r from-[#123e21] via-[#164e2a] to-[#144525] text-white px-4 sm:px-6 py-2.5 shadow-sm border-b border-emerald-900/40 flex items-center justify-between sticky top-0 z-30">
+      <header className="bg-gradient-to-r from-[#123e21] via-[#164e2a] to-[#144525] text-white px-3 sm:px-5 py-2 shadow-sm border-b border-emerald-900/40 flex items-center justify-between sticky top-0 z-30">
         
         {/* Left Branding */}
-        <div className="flex items-center space-x-3.5">
-          <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center p-1.5 border border-white/20 shadow-inner">
-            <img src="/logo.jpg" alt="FDMS" className="w-full h-full object-contain rounded-lg" />
+        <div className="flex items-center space-x-2.5">
+          <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center p-1 border border-white/20 shadow-inner">
+            <img src="/logo.jpg" alt="FDMS" className="w-full h-full object-contain rounded-md" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-sm sm:text-base font-bold tracking-tight text-white leading-tight">
+            <div className="flex items-center gap-1.5">
+              <h1 className="text-xs sm:text-sm font-bold tracking-tight text-white leading-tight">
                 FDMS — সার বিতরণ ব্যবস্থাপনা সিস্টেম
               </h1>
-              <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/20 text-[10px] font-medium">
+              <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/20 text-[9px] font-medium">
                 জাতীয় পোর্টাল
               </span>
             </div>
-            <p className="text-[10px] sm:text-[11px] text-emerald-200/90 font-normal tracking-wide">
+            <p className="text-[9px] sm:text-[10px] text-emerald-200/90 font-normal tracking-wide">
               রেকর্ড ওয়ার্কস্পেস — DEMO DATA — NOT OFFICIAL RECORDS
             </p>
           </div>
         </div>
 
         {/* Right Action Controls */}
-        <div className="flex items-center space-x-2 sm:space-x-3 text-xs">
+        <div className="flex items-center space-x-2 text-xs">
           
           {/* Tour Button */}
           <button 
             onClick={() => alert('সিস্টেম ট্যুর: বাম পাশের মেনু থেকে ডিলার, কৃষক ও বিতরণ সংক্রান্ত যেকোনো মডিউল ব্যবহার করতে পারেন।')}
-            className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg text-emerald-100 transition-colors cursor-pointer text-[11px] font-medium"
+            className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg text-emerald-100 transition-colors cursor-pointer text-[10px] font-medium"
           >
-            <Clock className="w-3.5 h-3.5 text-emerald-300" />
+            <Clock className="w-3 h-3 text-emerald-300" />
             <span>ট্যুর</span>
           </button>
 
           {/* Request Button */}
           <button 
             onClick={() => alert('অনুরোধ পাঠানো হয়েছে: কেন্দ্রীয় সার্ভারের সাথে ডাটা সিঙ্ক হচ্ছে।')}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg text-emerald-100 transition-colors cursor-pointer text-[11px] font-medium"
+            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg text-emerald-100 transition-colors cursor-pointer text-[10px] font-medium"
           >
-            <Send className="w-3.5 h-3.5 text-emerald-300" />
+            <Send className="w-3 h-3 text-emerald-300" />
             <span>FDMS অনুরোধ</span>
           </button>
 
           {/* User Profile Pill */}
-          <div className="flex items-center bg-black/25 rounded-xl py-1 px-2.5 border border-white/15 text-white">
-            <div className="w-5 h-5 rounded-full bg-emerald-600 flex items-center justify-center text-[10px] font-bold text-white mr-2 border border-emerald-400/30">
+          <div className="flex items-center bg-black/25 rounded-lg py-0.5 px-2 border border-white/15 text-white">
+            <div className="w-4.5 h-4.5 rounded-full bg-emerald-600 flex items-center justify-center text-[9px] font-bold text-white mr-1.5 border border-emerald-400/30">
               {currentUser.name.charAt(0)}
             </div>
-            <span className="font-semibold text-xs mr-2 text-slate-100">{currentUser.name}</span>
-            <span className="bg-amber-500/90 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded-md tracking-wider">
+            <span className="font-semibold text-[11px] mr-1.5 text-slate-100">{currentUser.name}</span>
+            <span className="bg-amber-500/90 text-slate-950 text-[9px] font-bold px-1.5 py-0.2 rounded tracking-wider">
               {currentUser.role}
             </span>
           </div>
@@ -402,24 +402,24 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           <button
             onClick={onLogout}
             title="লগআউট করে প্রস্থান করুন"
-            className="p-2 rounded-xl bg-white/10 hover:bg-rose-600/80 text-white border border-white/15 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-rose-600/80 text-white border border-white/15 transition-colors cursor-pointer"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-3.5 h-3.5" />
           </button>
         </div>
       </header>
 
       {/* ========================================================
-          BODY: SIDEBAR + MAIN CONTENT
+          BODY: SIDEBAR + MAIN CONTENT (Centered Max-Width Layout)
           ======================================================== */}
-      <div className="flex-1 flex flex-col md:flex-row">
+      <div className="flex-1 flex flex-col md:flex-row max-w-[1400px] w-full mx-auto">
         
-        {/* Left Sidebar (Formal Grouped Navigation) */}
-        <aside className="w-full md:w-56 lg:w-64 bg-white md:border-r border-slate-200/70 flex flex-col shrink-0 py-4 shadow-[1px_0_4px_rgba(0,0,0,0.01)] md:sticky md:top-14 md:self-start md:max-h-[calc(100vh-3.5rem)] md:overflow-y-auto">
-          <nav className="space-y-5 px-3">
+        {/* Left Sidebar (Formal Compact Navigation) */}
+        <aside className="w-full md:w-48 lg:w-56 bg-white md:border-r border-slate-200/70 flex flex-col shrink-0 py-3 shadow-[1px_0_4px_rgba(0,0,0,0.01)] md:sticky md:top-12 md:self-start md:max-h-[calc(100vh-3rem)] md:overflow-y-auto">
+          <nav className="space-y-3 px-2.5">
             {navigationGroups.map((group, gIdx) => (
-              <div key={gIdx} className="space-y-1">
-                <p className="px-2.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <div key={gIdx} className="space-y-0.5">
+                <p className="px-2 text-[9px] font-bold uppercase tracking-wider text-slate-400">
                   {group.group}
                 </p>
                 <div className="space-y-0.5 pt-0.5">
@@ -430,18 +430,18 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                       <button
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all text-left cursor-pointer ${
+                        className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all text-left cursor-pointer ${
                           isActive
-                            ? 'bg-emerald-50/90 text-emerald-900 font-semibold border-l-4 border-emerald-700 shadow-2xs'
+                            ? 'bg-emerald-50/90 text-emerald-900 font-semibold border-l-[3px] border-emerald-700 shadow-2xs'
                             : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                         }`}
                       >
-                        <div className="flex items-center space-x-2.5 truncate">
-                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-emerald-700' : 'text-slate-400'}`} strokeWidth={1.8} />
+                        <div className="flex items-center space-x-2 truncate">
+                          <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-emerald-700' : 'text-slate-400'}`} strokeWidth={1.8} />
                           <span className="truncate">{item.label}</span>
                         </div>
                         {item.badge && (
-                          <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full ${
+                          <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full ${
                             item.badgeColor === 'rose'
                               ? 'bg-rose-100 text-rose-700'
                               : 'bg-emerald-100 text-emerald-800'
@@ -458,35 +458,35 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           </nav>
         </aside>
 
-        {/* Main Workspace Area */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 min-w-0">
+        {/* Main Workspace Area (Formal Compact Density) */}
+        <main className="flex-1 p-3.5 sm:p-4 lg:p-5 space-y-4 min-w-0">
           
           {activeTab === 'dashboard' ? (
             <>
               {/* Formal Sub-Header & Status Banner */}
-              <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="bg-white rounded-xl p-3 sm:p-3.5 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-2.5">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                    <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
                       ড্যাশবোর্ড পর্যবেক্ষণ
                     </h2>
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold flex items-center gap-1">
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-semibold flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                       লাইভ রেকর্ড
                     </span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-medium mt-1.5">
-                    <ShieldCheck className="w-4 h-4 shrink-0 text-emerald-600" />
+                  <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 font-medium mt-1">
+                    <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
                     <span>
                       কাউন্টার সামঞ্জস্য যাচাই: সব ডিলার সেলস হিস্টোরির যোগফল = মোট বিতরণ ও মোট সার। সর্বশেষ পূর্ণ যাচাই: ৯/১১/২০২৬, ৯:৫৮:০৩ PM
                     </span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2.5 self-start md:self-auto shrink-0">
+                <div className="flex items-center gap-2 self-start md:self-auto shrink-0">
                   <button
                     onClick={handleRefresh}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white hover:bg-emerald-50/60 text-emerald-800 border border-slate-200 hover:border-emerald-500 rounded-xl text-xs font-semibold shadow-2xs transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-white hover:bg-emerald-50/60 text-emerald-800 border border-slate-200 hover:border-emerald-500 rounded-lg text-xs font-semibold shadow-2xs transition-all cursor-pointer"
                   >
                     <RefreshCw className={`w-3.5 h-3.5 text-emerald-700 ${refreshKey ? 'animate-spin' : ''}`} />
                     <span>রিফ্রেশ</span>
@@ -494,7 +494,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                   <button
                     onClick={handleVerify}
-                    className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-[#164e2a] hover:bg-[#123e21] text-white rounded-xl text-xs font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#164e2a] hover:bg-[#123e21] text-white rounded-lg text-xs font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
                   >
                     <CheckSquare className="w-3.5 h-3.5 text-emerald-200" />
                     <span>{isVerifying ? 'যাচাই হচ্ছে...' : 'পরিসংখ্যান যাচাই'}</span>
@@ -504,40 +504,40 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
               {/* Toast message on verify */}
               {verificationSuccess && (
-                <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-900 text-xs flex items-center justify-between shadow-xs animate-fadeIn">
+                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-900 text-xs flex items-center justify-between shadow-xs animate-fadeIn">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span>সকল ডিলারের মজুদ খতিয়ান এবং বিক্রয় রসিদ নির্ভুলভাবে নিরীক্ষিত হয়েছে। কোনো অসঙ্গতি পাওয়া যায়নি।</span>
                   </div>
-                  <span className="text-[11px] font-bold text-emerald-700">১০০% সামঞ্জস্যপূর্ণ</span>
+                  <span className="text-[10px] font-bold text-emerald-700">১০০% সামঞ্জস্যপূর্ণ</span>
                 </div>
               )}
 
               {/* Row 1: Top 5 Summary Metrics Cards (Executive KPIs) */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
                 {summaryStats.map((item, index) => {
                   const Icon = item.icon
                   return (
                     <div
                       key={index}
-                      className="bg-white rounded-2xl p-4 sm:p-4.5 border border-slate-200/70 shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
+                      className="bg-white rounded-xl p-3 sm:p-3.5 border border-slate-200/70 shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
                     >
-                      <div className="flex items-center justify-between mb-3">
-                        <div className={`p-2.5 rounded-xl ${item.iconBg}`}>
-                          <Icon className="w-4 h-4" strokeWidth={2} />
+                      <div className="flex items-center justify-between mb-2">
+                        <div className={`p-2 rounded-lg ${item.iconBg}`}>
+                          <Icon className="w-3.5 h-3.5" strokeWidth={2} />
                         </div>
-                        <span className="text-[10px] font-semibold text-slate-400">
+                        <span className="text-[9px] font-semibold text-slate-400">
                           ID-0{index + 1}
                         </span>
                       </div>
                       <div>
-                        <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-mono">
+                        <div className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-mono">
                           {item.value}
                         </div>
-                        <div className="text-xs text-slate-700 font-semibold mt-1">
+                        <div className="text-xs text-slate-700 font-semibold mt-0.5">
                           {item.label}
                         </div>
-                        <div className="text-[11px] text-slate-400 font-normal mt-0.5">
+                        <div className="text-[10px] text-slate-400 font-normal mt-0.5">
                           {item.subtext}
                         </div>
                       </div>
@@ -547,46 +547,46 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
 
               {/* Row 2: Farmer Categories (কৃষক শ্রেণী - জমির পরিমাণ অনুযায়ী) */}
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm sm:text-base font-bold text-slate-900">
+                  <h3 className="text-xs sm:text-sm font-bold text-slate-900">
                     কৃষক শ্রেণী (জমির পরিমাণ অনুযায়ী)
                   </h3>
-                  <span className="text-xs text-slate-500 font-normal">
+                  <span className="text-[11px] text-slate-500 font-normal">
                     মোট ৬৪ জন নিবন্ধিত কৃষক
                   </span>
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
                   {farmerClassStats.map((item, index) => {
                     const Icon = item.icon
                     return (
                       <div
                         key={index}
-                        className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/70 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between"
+                        className="bg-white rounded-xl p-3 sm:p-3.5 border border-slate-200/70 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between"
                       >
                         <div className="flex items-start justify-between">
-                          <div className={`p-2.5 rounded-xl ${item.iconBg}`}>
-                            <Icon className="w-4 h-4" strokeWidth={2} />
+                          <div className={`p-2 rounded-lg ${item.iconBg}`}>
+                            <Icon className="w-3.5 h-3.5" strokeWidth={2} />
                           </div>
-                          <span className="text-xs font-bold text-slate-700 bg-slate-50 px-2.5 py-0.5 rounded-full border border-slate-200/70">
+                          <span className="text-[11px] font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-200/70">
                             {item.percentage}
                           </span>
                         </div>
                         
-                        <div className="mt-4">
-                          <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-mono">
+                        <div className="mt-2.5">
+                          <div className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-mono">
                             {item.value}
                           </div>
-                          <div className="text-xs text-slate-800 font-semibold mt-1">
+                          <div className="text-xs text-slate-800 font-semibold mt-0.5">
                             {item.label}
                           </div>
-                          <div className="text-[11px] text-slate-400 mt-0.5">
+                          <div className="text-[10px] text-slate-400 mt-0.5">
                             জমির আওতা: {item.landRange}
                           </div>
 
                           {/* Soft visual progress indicator */}
-                          <div className="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
+                          <div className="w-full bg-slate-100 rounded-full h-1 mt-2 overflow-hidden">
                             <div 
                               className="h-full rounded-full transition-all duration-500" 
                               style={{ 
@@ -603,20 +603,20 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
 
               {/* Row 3: Two Analytics Charts (Donut + Bar Chart) */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
                 
                 {/* Left Chart Card: সার ভিত্তিক বিতরণ (Donut Chart) */}
-                <div className="lg:col-span-5 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-xs flex flex-col justify-between">
-                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                    <h4 className="text-sm font-bold text-slate-900">
+                <div className="lg:col-span-5 bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">
                       সার ভিত্তিক বিতরণ
                     </h4>
-                    <span className="text-[11px] text-slate-400">শতাংশ ও পরিমাণ</span>
+                    <span className="text-[10px] text-slate-400">শতাংশ ও পরিমাণ</span>
                   </div>
 
                   {/* SVG Donut Chart */}
-                  <div className="py-4 flex flex-col items-center justify-center">
-                    <div className="relative w-44 h-44">
+                  <div className="py-2 flex flex-col items-center justify-center">
+                    <div className="relative w-32 h-32 sm:w-36 sm:h-36">
                       <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 transform drop-shadow-xs">
                         {/* Segment 1: Urea (38%) */}
                         <circle
@@ -676,23 +676,23 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                       </svg>
                       {/* Inner Center Badge */}
                       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                        <span className="text-sm font-bold text-slate-900 font-mono">৩,০৫৫</span>
-                        <span className="text-[10px] text-slate-500 font-medium">মোট কেজি</span>
+                        <span className="text-xs font-bold text-slate-900 font-mono">৩,০৫৫</span>
+                        <span className="text-[9px] text-slate-500 font-medium">মোট কেজি</span>
                       </div>
                     </div>
 
                     {/* Chart Legend with Quantities */}
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-5 text-[11px] text-slate-600 font-medium w-full px-2">
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 mt-3 text-[10px] text-slate-600 font-medium w-full px-1">
                       {fertilizerDistribution.map((item, idx) => (
-                        <div key={idx} className="flex items-center justify-between py-1 border-b border-slate-50">
+                        <div key={idx} className="flex items-center justify-between py-0.5 border-b border-slate-50">
                           <div className="flex items-center space-x-1.5">
                             <span
-                              className="w-2.5 h-2.5 rounded-full inline-block shrink-0"
+                              className="w-2 h-2 rounded-full inline-block shrink-0"
                               style={{ backgroundColor: item.hex }}
                             ></span>
                             <span>{item.name}</span>
                           </div>
-                          <span className="text-slate-400 text-[10px] font-mono">{item.kg}</span>
+                          <span className="text-slate-400 text-[9px] font-mono">{item.kg}</span>
                         </div>
                       ))}
                     </div>
@@ -700,20 +700,20 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                 </div>
 
                 {/* Right Chart Card: ইউনিয়ন ভিত্তিক বিতরণ (কেজি) (Bar Chart) */}
-                <div className="lg:col-span-7 bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-xs flex flex-col justify-between">
-                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                    <h4 className="text-sm font-bold text-slate-900">
+                <div className="lg:col-span-7 bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs flex flex-col justify-between">
+                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">
                       ইউনিয়ন ভিত্তিক বিতরণ (কেজি)
                     </h4>
-                    <span className="text-[11px] text-slate-400">সর্বোচ্চ সীমা: ৭০০ কেজি</span>
+                    <span className="text-[10px] text-slate-400">সর্বোচ্চ সীমা: ৭০০ কেজি</span>
                   </div>
 
                   {/* SVG Bar Chart with Axis */}
-                  <div className="pt-3 pb-1 w-full">
-                    <div className="flex w-full h-56">
+                  <div className="pt-2 pb-0.5 w-full">
+                    <div className="flex w-full h-40 sm:h-44">
                       
                       {/* Y-Axis scale */}
-                      <div className="flex flex-col justify-between items-end pr-3 text-[10px] text-slate-400 font-mono select-none h-48">
+                      <div className="flex flex-col justify-between items-end pr-2 text-[9px] text-slate-400 font-mono select-none h-34 pb-1">
                         <span>700</span>
                         <span>600</span>
                         <span>500</span>
@@ -726,7 +726,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                       {/* Bars Container */}
                       <div className="flex-1 flex flex-col justify-between h-full">
-                        <div className="relative flex-1 border-b border-l border-slate-200/80 flex items-end justify-around px-2 sm:px-4">
+                        <div className="relative flex-1 border-b border-l border-slate-200/80 flex items-end justify-around px-1.5 sm:px-3">
                           
                           {/* Horizontal Gridlines */}
                           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
@@ -745,15 +745,15 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                             return (
                               <div
                                 key={i}
-                                className="flex flex-col items-center h-full justify-end group z-10 w-8 sm:w-11"
+                                className="flex flex-col items-center h-full justify-end group z-10 w-6 sm:w-8"
                               >
                                 {union.value > 0 ? (
                                   <div
                                     style={{ height: `${heightPercent}%` }}
-                                    className="w-full bg-gradient-to-t from-[#15532d] to-[#22c55e] hover:to-emerald-400 rounded-t-md transition-all duration-300 relative shadow-2xs"
+                                    className="w-full bg-gradient-to-t from-[#15532d] to-[#22c55e] hover:to-emerald-400 rounded-t transition-all duration-300 relative shadow-2xs"
                                   >
                                     {/* Tooltip on hover */}
-                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded-md pointer-events-none whitespace-nowrap shadow-md z-20 font-medium">
+                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] py-0.5 px-1.5 rounded pointer-events-none whitespace-nowrap shadow z-20 font-medium">
                                       {union.value} কেজি
                                     </div>
                                   </div>
@@ -766,9 +766,9 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                         </div>
 
                         {/* X-Axis labels */}
-                        <div className="flex justify-around items-center pt-2 text-[11px] text-slate-600 font-medium px-2 sm:px-4">
+                        <div className="flex justify-around items-center pt-1.5 text-[10px] text-slate-600 font-medium px-1.5 sm:px-3">
                           {unionData.map((union, i) => (
-                            <span key={i} className="w-8 sm:w-11 text-center truncate">
+                            <span key={i} className="w-6 sm:w-8 text-center truncate">
                               {union.name}
                             </span>
                           ))}
@@ -782,21 +782,21 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
 
               {/* Row 4: মাসিক বিতরণ ট্রেন্ড (সর্বশেষ ৬ মাস) (Monthly Distribution Trend) */}
-              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-xs space-y-3">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                  <h4 className="text-sm font-bold text-slate-900">
+              <div className="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs space-y-2">
+                <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+                  <h4 className="text-xs sm:text-sm font-bold text-slate-900">
                     মাসিক বিতরণ ট্রেন্ড (সর্বশেষ ৬ মাস)
                   </h4>
-                  <span className="text-[11px] text-slate-400">সর্বোচ্চ মৌসুম: সেপ্টেম্বর ২০২৬</span>
+                  <span className="text-[10px] text-slate-400">সর্বোচ্চ মৌসুম: সেপ্টেম্বর ২০২৬</span>
                 </div>
 
                 {/* SVG Area / Spline Trend Chart */}
-                <div className="w-full overflow-x-auto pt-2">
-                  <div className="min-w-[550px] sm:min-w-full">
+                <div className="w-full overflow-x-auto pt-1">
+                  <div className="min-w-[500px] sm:min-w-full">
                     <div className="flex w-full">
                       
                       {/* Y-Axis Labels */}
-                      <div className="flex flex-col justify-between items-end pr-3 text-[10px] text-slate-400 font-mono select-none h-44 pb-6">
+                      <div className="flex flex-col justify-between items-end pr-2.5 text-[9px] text-slate-400 font-mono select-none h-34 pb-4">
                         <span>1,600</span>
                         <span>1,400</span>
                         <span>1,200</span>
@@ -810,7 +810,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                       {/* Chart Area */}
                       <div className="flex-1 flex flex-col justify-between">
-                        <div className="relative h-44 border-b border-l border-slate-200/80">
+                        <div className="relative h-34 border-b border-l border-slate-200/80">
                           
                           {/* Gridlines */}
                           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
@@ -828,7 +828,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                           <svg viewBox="0 0 1000 200" preserveAspectRatio="none" className="absolute inset-0 w-full h-full overflow-visible">
                             <defs>
                               <linearGradient id="trendGradientEyeSmooth" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#15803d" stopOpacity="0.28" />
+                                <stop offset="0%" stopColor="#15803d" stopOpacity="0.25" />
                                 <stop offset="100%" stopColor="#15803d" stopOpacity="0.01" />
                               </linearGradient>
                             </defs>
@@ -844,7 +844,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                               d="M 80 163 C 200 120, 260 37, 380 37 C 500 37, 580 60, 680 76 C 780 95, 880 160, 960 178"
                               fill="none"
                               stroke="#166534"
-                              strokeWidth="2.75"
+                              strokeWidth="2.5"
                               strokeLinecap="round"
                             />
 
@@ -854,8 +854,8 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                                 <circle
                                   cx={pt.x}
                                   cy={pt.y}
-                                  r="4.5"
-                                  className="fill-[#166534] stroke-white stroke-2 group-hover:r-6.5 transition-all"
+                                  r="4"
+                                  className="fill-[#166534] stroke-white stroke-2 group-hover:r-5.5 transition-all"
                                 />
                               </g>
                             ))}
@@ -864,7 +864,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                         </div>
 
                         {/* X-Axis Month Labels */}
-                        <div className="flex justify-between items-center pt-2 text-[11px] text-slate-500 font-mono px-6 sm:px-12">
+                        <div className="flex justify-between items-center pt-1.5 text-[10px] text-slate-500 font-mono px-4 sm:px-10">
                           {monthlyTrend.map((pt, idx) => (
                             <span key={idx}>{pt.month}</span>
                           ))}
@@ -877,30 +877,30 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
 
               {/* Row 5: শীর্ষ ডিলার (মোট সার বিতরণ অনুযায়ী) (Top Dealers Card) */}
-              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-xs space-y-4">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                  <h4 className="text-sm font-bold text-slate-900">
+              <div className="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs space-y-3">
+                <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+                  <h4 className="text-xs sm:text-sm font-bold text-slate-900">
                     শীর্ষ ডিলার (মোট সার বিতরণ অনুযায়ী)
                   </h4>
-                  <span className="text-[11px] text-slate-400">সেরা ৫ জন বিক্রেতা</span>
+                  <span className="text-[10px] text-slate-400">সেরা ৫ জন বিক্রেতা</span>
                 </div>
 
                 <div className="divide-y divide-slate-100">
                   {topDealers.map((dealer) => (
                     <div
                       key={dealer.rank}
-                      className="flex items-center justify-between py-3 px-2 rounded-xl hover:bg-slate-50/70 transition-colors"
+                      className="flex items-center justify-between py-2 px-1.5 rounded-lg hover:bg-slate-50/70 transition-colors"
                     >
                       {/* Left: Rank & Dealer Info */}
-                      <div className="flex items-center space-x-3.5">
-                        <div className="w-7 h-7 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold flex items-center justify-center shrink-0 border border-emerald-200/70">
+                      <div className="flex items-center space-x-2.5">
+                        <div className="w-5.5 h-5.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-bold flex items-center justify-center shrink-0 border border-emerald-200/70">
                           {dealer.rank}
                         </div>
                         <div>
-                          <p className="text-xs sm:text-sm font-semibold text-slate-900 leading-tight">
+                          <p className="text-xs font-semibold text-slate-900 leading-tight">
                             {dealer.name}
                           </p>
-                          <p className="text-[11px] text-slate-400 mt-0.5">
+                          <p className="text-[10px] text-slate-400 mt-0.5">
                             {dealer.union}
                           </p>
                         </div>
@@ -908,10 +908,10 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                       {/* Right: Quantity & Distributions */}
                       <div className="text-right flex flex-col items-end">
-                        <span className="bg-emerald-50 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-200/60 inline-block font-mono">
+                        <span className="bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2 py-0.2 rounded-full border border-emerald-200/60 inline-block font-mono">
                           {dealer.totalKg}
                         </span>
-                        <span className="text-[10px] text-slate-400 mt-0.5 font-medium">
+                        <span className="text-[9px] text-slate-400 mt-0.5 font-medium">
                           {dealer.distributions}
                         </span>
                       </div>
@@ -920,25 +920,25 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                 </div>
 
                 {/* Bottom Reconciliation Bar & Action Button */}
-                <div className="pt-3 border-t border-dashed border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="pt-2.5 border-t border-dashed border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                   <div>
-                    <p className="text-xs text-slate-800 font-bold">
+                    <p className="text-[11px] text-slate-800 font-bold">
                       সকল ডিলারের যোগফল: ২১১ বিতরণ • ৩,০৫৫ কেজি
                     </p>
-                    <div className="mt-2.5">
+                    <div className="mt-1.5">
                       <button 
                         onClick={() => setActiveTab('dealer-audit')}
-                        className="border border-emerald-700/60 text-emerald-800 hover:bg-emerald-50 text-xs font-semibold px-3.5 py-1.5 rounded-xl cursor-pointer transition-colors inline-flex items-center gap-1.5 shadow-2xs"
+                        className="border border-emerald-700/60 text-emerald-800 hover:bg-emerald-50 text-[11px] font-semibold px-2.5 py-1 rounded-lg cursor-pointer transition-colors inline-flex items-center gap-1 shadow-2xs"
                       >
                         <span>ডিলার-ভিত্তিক অডিট দেখুন</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
+                        <ChevronRight className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
 
                   <div className="self-start sm:self-auto">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-semibold">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-semibold">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                       <span>ড্যাশবোর্ড মোটের সাথে মিলেছে</span>
                     </span>
                   </div>
@@ -947,31 +947,31 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
 
               {/* Row 6: সকল ডিলারের সার বিতরণ (কেজি) (All Dealers Distribution Table) */}
-              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/70 shadow-xs space-y-4">
+              <div className="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs space-y-3">
                 
                 {/* Header & Table Search Filter */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-100">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-1.5 border-b border-slate-100">
                   <div>
-                    <h4 className="text-base font-bold text-slate-900">
+                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">
                       সকল ডিলারের সার বিতরণ (কেজি)
                     </h4>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <p className="text-[10px] text-slate-400 mt-0.5">
                       উপজেলা সার ও বীজ মনিটরিং কমিটির নিরীক্ষিত খতিয়ান
                     </p>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <div className="relative">
-                      <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <Search className="w-3 h-3 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                       <input
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="ডিলার বা ইউনিয়ন খুঁজুন..."
-                        className="pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all w-48 sm:w-56"
+                        className="pl-7 pr-2.5 py-1 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1.5 focus:ring-emerald-600 focus:bg-white transition-all w-40 sm:w-48"
                       />
                     </div>
-                    <span className="text-xs text-slate-500 font-semibold px-2 py-1 bg-slate-100 rounded-lg shrink-0">
+                    <span className="text-[10px] text-slate-500 font-semibold px-2 py-0.5 bg-slate-100 rounded shrink-0">
                       {filteredDealers.length} জন ডিলার
                     </span>
                   </div>
@@ -979,17 +979,17 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                 {/* Table */}
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs sm:text-sm text-slate-700">
+                  <table className="w-full text-left text-xs text-slate-700">
                     
                     {/* Table Head */}
-                    <thead className="bg-[#f2f7f3] text-emerald-950 font-bold text-xs">
+                    <thead className="bg-[#f2f7f3] text-emerald-950 font-bold text-[11px]">
                       <tr>
-                        <th className="py-3.5 px-3.5 w-12 text-center text-emerald-900">#</th>
-                        <th className="py-3.5 px-3.5 text-emerald-900">ডিলার</th>
-                        <th className="py-3.5 px-3.5 text-emerald-900">ইউনিয়ন</th>
-                        <th className="py-3.5 px-3.5 text-emerald-900">বিতরণ (এন্ট্রি)</th>
-                        <th className="py-3.5 px-3.5 text-emerald-900">মোট সার (কেজি)</th>
-                        <th className="py-3.5 px-3.5 text-right w-28">অ্যাকশন</th>
+                        <th className="py-2.5 px-3 w-10 text-center text-emerald-900">#</th>
+                        <th className="py-2.5 px-3 text-emerald-900">ডিলার</th>
+                        <th className="py-2.5 px-3 text-emerald-900">ইউনিয়ন</th>
+                        <th className="py-2.5 px-3 text-emerald-900">বিতরণ (এন্ট্রি)</th>
+                        <th className="py-2.5 px-3 text-emerald-900">মোট সার (কেজি)</th>
+                        <th className="py-2.5 px-3 text-right w-24">অ্যাকশন</th>
                       </tr>
                     </thead>
 
@@ -997,32 +997,32 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                     <tbody className="divide-y divide-slate-100">
                       {filteredDealers.map((dealer) => (
                         <tr key={dealer.id} className="hover:bg-slate-50/70 transition-colors">
-                          <td className="py-3.5 px-3.5 text-center text-slate-400 font-mono font-medium">
+                          <td className="py-2 px-3 text-center text-slate-400 font-mono font-medium">
                             {dealer.id}
                           </td>
-                          <td className="py-3.5 px-3.5 font-medium text-slate-900">
+                          <td className="py-2 px-3 font-medium text-slate-900">
                             <div className="flex items-center">
                               <span>{dealer.name}</span>
                               {dealer.status === 'inactive' && (
-                                <span className="ml-2.5 px-2 py-0.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-full text-[10px] font-bold">
+                                <span className="ml-2 px-1.5 py-0.2 bg-rose-50 text-rose-700 border border-rose-200 rounded-full text-[9px] font-bold">
                                   নিষ্ক্রিয়
                                 </span>
                               )}
                             </div>
                           </td>
-                          <td className="py-3.5 px-3.5 text-slate-600">
+                          <td className="py-2 px-3 text-slate-600">
                             {dealer.union}
                           </td>
-                          <td className="py-3.5 px-3.5 text-slate-600 font-mono font-medium">
+                          <td className="py-2 px-3 text-slate-600 font-mono font-medium">
                             {dealer.entries}
                           </td>
-                          <td className="py-3.5 px-3.5 font-bold text-slate-900 font-mono">
+                          <td className="py-2 px-3 font-bold text-slate-900 font-mono">
                             {dealer.totalKg}
                           </td>
-                          <td className="py-3.5 px-3.5 text-right">
+                          <td className="py-2 px-3 text-right">
                             <button
                               onClick={() => setSelectedDealerModal(dealer)}
-                              className="px-3.5 py-1.5 bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-600/70 rounded-xl text-xs font-semibold shadow-2xs transition-all cursor-pointer inline-flex items-center gap-1"
+                              className="px-2.5 py-1 bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-600/70 rounded-lg text-[11px] font-semibold shadow-2xs transition-all cursor-pointer inline-flex items-center gap-1"
                             >
                               <span>বিস্তারিত</span>
                             </button>
@@ -1033,13 +1033,13 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                     {/* Table Footer: Total Row */}
                     <tfoot>
-                      <tr className="border-t-2 border-slate-200 font-bold text-slate-900 bg-slate-50/40">
-                        <td className="py-3.5 px-3.5"></td>
-                        <td className="py-3.5 px-3.5 text-slate-900">সকল ডিলারের মোট</td>
-                        <td className="py-3.5 px-3.5"></td>
-                        <td className="py-3.5 px-3.5 text-slate-900 font-mono">২১১</td>
-                        <td className="py-3.5 px-3.5 text-slate-900 font-mono">৩,০৫৫</td>
-                        <td className="py-3.5 px-3.5"></td>
+                      <tr className="border-t border-slate-200 font-bold text-slate-900 bg-slate-50/40">
+                        <td className="py-2 px-3"></td>
+                        <td className="py-2 px-3 text-slate-900">সকল ডিলারের মোট</td>
+                        <td className="py-2 px-3"></td>
+                        <td className="py-2 px-3 text-slate-900 font-mono">২১১</td>
+                        <td className="py-2 px-3 text-slate-900 font-mono">৩,০৫৫</td>
+                        <td className="py-2 px-3"></td>
                       </tr>
                     </tfoot>
 
@@ -1140,7 +1140,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
       {/* ========================================================
           FULL WIDTH FOOTER (Spans across entire screen including under the left sidebar menu)
           ======================================================== */}
-      <footer className="w-full bg-[#f2f6f3] border-t border-slate-200/90 py-6 text-center text-[12px] sm:text-xs text-slate-500 z-10">
+      <footer className="w-full bg-[#f2f6f3] border-t border-slate-200/90 py-4 sm:py-5 text-center text-[11px] sm:text-xs text-slate-500 z-10">
         <p className="px-4 font-normal tracking-normal text-slate-500">
           © Fertilizer Distribution Management System — All Rights Reserved · Developed by Toufiq &amp; Fahad
         </p>
