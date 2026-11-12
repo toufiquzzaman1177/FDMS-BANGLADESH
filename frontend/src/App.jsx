@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import LoginPage from './components/LoginPage'
+import Dashboard from './components/Dashboard'
 import { 
   Building2, 
   Sprout, 
@@ -8,13 +9,14 @@ import {
   ShieldCheck, 
   TrendingUp, 
   LogIn,
-  CheckCircle2
+  CheckCircle2,
+  LayoutDashboard
 } from 'lucide-react'
 
 export default function App() {
-  // Default to 'login' view so user sees the login page immediately
-  const [currentPage, setCurrentPage] = useState('login')
-  const [loggedInUser, setLoggedInUser] = useState(null)
+  // Default to 'dashboard' so user sees the newly designed dashboard immediately
+  const [currentPage, setCurrentPage] = useState('dashboard')
+  const [loggedInUser, setLoggedInUser] = useState({ name: 'Swapnil', role: 'জেলা অফিসার' })
 
   const modules = [
     {
@@ -54,21 +56,33 @@ export default function App() {
     { label: 'Compliance Rate', value: '98.4%', change: 'Fair MRP monitored' }
   ]
 
-  // If on login view, display the high-fidelity login page
-  if (currentPage === 'login') {
+  // View 1: Main Admin/Officer Dashboard (Matches target screenshot)
+  if (currentPage === 'dashboard') {
     return (
-      <LoginPage 
-        onBackToHome={() => setCurrentPage('home')}
-        onLoginSuccess={(user) => {
-          setLoggedInUser(user)
-          // Open home/dashboard view after successful login
-          setTimeout(() => setCurrentPage('home'), 1200)
+      <Dashboard 
+        currentUser={loggedInUser}
+        onLogout={() => {
+          setLoggedInUser({ name: 'Swapnil', role: 'জেলা অফিসার' })
+          setCurrentPage('login')
         }}
       />
     )
   }
 
-  // Home / Landing Page View
+  // View 2: High-Fidelity Login Page
+  if (currentPage === 'login') {
+    return (
+      <LoginPage 
+        onBackToHome={() => setCurrentPage('home')}
+        onLoginSuccess={(user) => {
+          setLoggedInUser({ name: user.name || 'Swapnil', role: user.role || 'জেলা অফিসার' })
+          setTimeout(() => setCurrentPage('dashboard'), 600)
+        }}
+      />
+    )
+  }
+
+  // View 3: Home / Landing Page View
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800">
       {/* Top Banner */}
@@ -92,26 +106,20 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
-            {loggedInUser ? (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-700/80 rounded-xl text-xs">
-                <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-                <span className="text-white font-medium">{loggedInUser.role}</span>
-                <button 
-                  onClick={() => { setLoggedInUser(null); setCurrentPage('login'); }}
-                  className="ml-2 text-emerald-200 hover:text-white underline cursor-pointer"
-                >
-                  লগআউট
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setCurrentPage('login')}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 text-xs sm:text-sm font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
-              >
-                <LogIn className="w-4 h-4 text-emerald-700" />
-                <span>লগইন করুন</span>
-              </button>
-            )}
+            <button
+              onClick={() => setCurrentPage('dashboard')}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs sm:text-sm font-semibold shadow-xs transition-all cursor-pointer"
+            >
+              <LayoutDashboard className="w-4 h-4 text-emerald-200" />
+              <span>ড্যাশবোর্ড খুলুন</span>
+            </button>
+            <button
+              onClick={() => setCurrentPage('login')}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 text-xs sm:text-sm font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
+            >
+              <LogIn className="w-4 h-4 text-emerald-700" />
+              <span>লগইন করুন</span>
+            </button>
           </div>
         </div>
       </header>
@@ -134,13 +142,20 @@ export default function App() {
               </p>
             </div>
 
-            <div className="shrink-0">
+            <div className="shrink-0 flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => setCurrentPage('dashboard')}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#1e6837] hover:bg-emerald-800 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all text-sm cursor-pointer"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>ড্যাশবোর্ডে প্রবেশ করুন</span>
+              </button>
               <button
                 onClick={() => setCurrentPage('login')}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#2e8b57] hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all text-sm cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all text-sm cursor-pointer"
               >
                 <LogIn className="w-4 h-4" />
-                <span>লগইন পোর্টালে যান</span>
+                <span>লগইন পেজ</span>
               </button>
             </div>
           </div>
@@ -188,10 +203,10 @@ export default function App() {
                   </div>
                   <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                     <button
-                      onClick={() => setCurrentPage('login')}
+                      onClick={() => setCurrentPage('dashboard')}
                       className="text-emerald-700 font-medium hover:underline cursor-pointer flex items-center gap-1"
                     >
-                      <span>লগইন করে প্রবেশ করুন</span>
+                      <span>ড্যাশবোর্ডে দেখুন</span>
                       <span>&rarr;</span>
                     </button>
                   </div>
@@ -207,9 +222,9 @@ export default function App() {
             <TrendingUp className="w-4 h-4" />
             <span>টিম টু ফ্যাক্টর (Team Two Factor)</span>
           </div>
-          <h3 className="text-lg font-bold text-white mt-1">লগইন পেজ ডিজাইন সম্পন্ন হয়েছে</h3>
+          <h3 className="text-lg font-bold text-white mt-1">ড্যাশবোর্ড ও লগইন পেজ সক্রিয় রয়েছে</h3>
           <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            উপরে ডান পাশের বোতাম বা সরাসরি লগইন বাটনে ক্লিক করে প্রস্তুতকৃত পেজটি প্রিভিউ দেখতে পারেন।
+            উপরে ডান পাশের বোতামে ক্লিক করে সহজেই যেকোনো মুহূর্তে ড্যাশবোর্ড ও লগইন পেজের মাঝে সুইচ করতে পারবেন।
           </p>
         </div>
       </main>
