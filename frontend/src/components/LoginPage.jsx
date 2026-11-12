@@ -247,7 +247,7 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
           FOOTER COPYRIGHT & CREDITS (Matching target style)
           ======================================================== */}
       <footer className="mt-8 text-center text-xs text-slate-500 z-10">
-        <p>© Fertilizer Distribution Management System — All Rights Reserved · Developed by Toufiq &amp; Fahad</p>
+        <p>© FDMS BANGLADESH — All Rights Reserved · Developed by Toufiq &amp; Fahad</p>
       </footer>
 
     </div>

@@ -333,19 +333,19 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     }, 700)
   }
 
-  const filteredDealers = allDealersDistribution.filter(dealer => 
+  const filteredDealers = allDealersDistribution.filter(dealer =>
     dealer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     dealer.union.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
     <div className="min-h-screen bg-[#f2f6f3] text-slate-800 flex flex-col font-sans select-none antialiased">
-      
+
       {/* ========================================================
           TOP HEADER (Formal Government Deep Emerald Navbar)
           ======================================================== */}
       <header className="bg-gradient-to-r from-[#123e21] via-[#164e2a] to-[#144525] text-white px-3 sm:px-5 py-2 shadow-sm border-b border-emerald-900/40 flex items-center justify-between sticky top-0 z-30">
-        
+
         {/* Left Branding */}
         <div className="flex items-center space-x-2.5">
           <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center p-1 border border-white/20 shadow-inner">
@@ -368,9 +368,9 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
         {/* Right Action Controls */}
         <div className="flex items-center space-x-2 text-xs">
-          
+
           {/* Tour Button */}
-          <button 
+          <button
             onClick={() => alert('সিস্টেম ট্যুর: বাম পাশের মেনু থেকে ডিলার, কৃষক ও বিতরণ সংক্রান্ত যেকোনো মডিউল ব্যবহার করতে পারেন।')}
             className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg text-emerald-100 transition-colors cursor-pointer text-[10px] font-medium"
           >
@@ -379,7 +379,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           </button>
 
           {/* Request Button */}
-          <button 
+          <button
             onClick={() => alert('অনুরোধ পাঠানো হয়েছে: কেন্দ্রীয় সার্ভারের সাথে ডাটা সিঙ্ক হচ্ছে।')}
             className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg text-emerald-100 transition-colors cursor-pointer text-[10px] font-medium"
           >
@@ -413,7 +413,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           BODY: SIDEBAR + MAIN CONTENT (Centered Max-Width Layout)
           ======================================================== */}
       <div className="flex-1 flex flex-col md:flex-row max-w-[1400px] w-full mx-auto">
-        
+
         {/* Left Sidebar (Formal Compact Navigation) */}
         <aside className="w-full md:w-48 lg:w-56 bg-white md:border-r border-slate-200/70 flex flex-col shrink-0 py-3 shadow-[1px_0_4px_rgba(0,0,0,0.01)] md:sticky md:top-12 md:self-start md:max-h-[calc(100vh-3rem)] md:overflow-y-auto">
           <nav className="space-y-3 px-2.5">
@@ -430,22 +430,20 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                       <button
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
-                        className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all text-left cursor-pointer ${
-                          isActive
+                        className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all text-left cursor-pointer ${isActive
                             ? 'bg-emerald-50/90 text-emerald-900 font-semibold border-l-[3px] border-emerald-700 shadow-2xs'
                             : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center space-x-2 truncate">
                           <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-emerald-700' : 'text-slate-400'}`} strokeWidth={1.8} />
                           <span className="truncate">{item.label}</span>
                         </div>
                         {item.badge && (
-                          <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full ${
-                            item.badgeColor === 'rose'
+                          <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full ${item.badgeColor === 'rose'
                               ? 'bg-rose-100 text-rose-700'
                               : 'bg-emerald-100 text-emerald-800'
-                          }`}>
+                            }`}>
                             {item.badge}
                           </span>
                         )}
@@ -460,7 +458,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
         {/* Main Workspace Area (Formal Compact Density) */}
         <main className="flex-1 p-3.5 sm:p-4 lg:p-5 space-y-4 min-w-0">
-          
+
           {activeTab === 'dashboard' ? (
             <>
               {/* Formal Sub-Header & Status Banner */}
@@ -556,7 +554,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                     মোট ৬৪ জন নিবন্ধিত কৃষক
                   </span>
                 </div>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
                   {farmerClassStats.map((item, index) => {
                     const Icon = item.icon
@@ -573,7 +571,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                             {item.percentage}
                           </span>
                         </div>
-                        
+
                         <div className="mt-2.5">
                           <div className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-mono">
                             {item.value}
@@ -587,11 +585,11 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
                           {/* Soft visual progress indicator */}
                           <div className="w-full bg-slate-100 rounded-full h-1 mt-2 overflow-hidden">
-                            <div 
-                              className="h-full rounded-full transition-all duration-500" 
-                              style={{ 
-                                width: item.percentage.replace('%', '') + '%', 
-                                backgroundColor: item.color 
+                            <div
+                              className="h-full rounded-full transition-all duration-500"
+                              style={{
+                                width: item.percentage.replace('%', '') + '%',
+                                backgroundColor: item.color
                               }}
                             ></div>
                           </div>
@@ -604,7 +602,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
               {/* Row 3: Two Analytics Charts (Donut + Bar Chart) */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-                
+
                 {/* Left Chart Card: সার ভিত্তিক বিতরণ (Donut Chart) */}
                 <div className="lg:col-span-5 bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs flex flex-col justify-between">
                   <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
@@ -711,7 +709,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                   {/* SVG Bar Chart with Axis */}
                   <div className="pt-2 pb-0.5 w-full">
                     <div className="flex w-full h-40 sm:h-44">
-                      
+
                       {/* Y-Axis scale */}
                       <div className="flex flex-col justify-between items-end pr-2 text-[9px] text-slate-400 font-mono select-none h-34 pb-1">
                         <span>700</span>
@@ -727,7 +725,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                       {/* Bars Container */}
                       <div className="flex-1 flex flex-col justify-between h-full">
                         <div className="relative flex-1 border-b border-l border-slate-200/80 flex items-end justify-around px-1.5 sm:px-3">
-                          
+
                           {/* Horizontal Gridlines */}
                           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
                             <div className="border-t border-dashed border-slate-200 w-full"></div>
@@ -794,7 +792,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                 <div className="w-full overflow-x-auto pt-1">
                   <div className="min-w-[500px] sm:min-w-full">
                     <div className="flex w-full">
-                      
+
                       {/* Y-Axis Labels */}
                       <div className="flex flex-col justify-between items-end pr-2.5 text-[9px] text-slate-400 font-mono select-none h-34 pb-4">
                         <span>1,600</span>
@@ -811,7 +809,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                       {/* Chart Area */}
                       <div className="flex-1 flex flex-col justify-between">
                         <div className="relative h-34 border-b border-l border-slate-200/80">
-                          
+
                           {/* Gridlines */}
                           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
                             <div className="border-t border-slate-200 w-full"></div>
@@ -832,7 +830,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                                 <stop offset="100%" stopColor="#15803d" stopOpacity="0.01" />
                               </linearGradient>
                             </defs>
-                            
+
                             {/* Filled Area */}
                             <path
                               d="M 80 163 C 200 120, 260 37, 380 37 C 500 37, 580 60, 680 76 C 780 95, 880 160, 960 178 L 960 200 L 80 200 Z"
@@ -926,7 +924,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                       সকল ডিলারের যোগফল: ২১১ বিতরণ • ৩,০৫৫ কেজি
                     </p>
                     <div className="mt-1.5">
-                      <button 
+                      <button
                         onClick={() => setActiveTab('dealer-audit')}
                         className="border border-emerald-700/60 text-emerald-800 hover:bg-emerald-50 text-[11px] font-semibold px-2.5 py-1 rounded-lg cursor-pointer transition-colors inline-flex items-center gap-1 shadow-2xs"
                       >
@@ -948,7 +946,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
               {/* Row 6: সকল ডিলারের সার বিতরণ (কেজি) (All Dealers Distribution Table) */}
               <div className="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs space-y-3">
-                
+
                 {/* Header & Table Search Filter */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-1.5 border-b border-slate-100">
                   <div>
@@ -980,7 +978,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                 {/* Table */}
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs text-slate-700">
-                    
+
                     {/* Table Head */}
                     <thead className="bg-[#f2f7f3] text-emerald-950 font-bold text-[11px]">
                       <tr>
@@ -1142,7 +1140,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           ======================================================== */}
       <footer className="w-full bg-[#f2f6f3] border-t border-slate-200/90 py-4 sm:py-5 text-center text-[11px] sm:text-xs text-slate-500 z-10">
         <p className="px-4 font-normal tracking-normal text-slate-500">
-          © Fertilizer Distribution Management System — All Rights Reserved · Developed by Toufiq &amp; Fahad
+          © FDMS BANGLADESH — All Rights Reserved · Developed by Toufiq &amp; Fahad
         </p>
       </footer>
 
