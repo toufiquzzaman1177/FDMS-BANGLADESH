@@ -6,8 +6,8 @@ Fertilizer Dealer & Distribution Management System - Bangladesh
 ---
 
 ## 🛠️ Technical Stack
-- **Backend:** Java 21 LTS, Spring Boot 3.3.5 (Virtual Threads / Project Loom)
-- **Database:** PostgreSQL (15, 16, 17, 18)
+- **Backend:** Java 21 LTS, Spring Boot 3.3.5 
+- **Database:** PostgreSQL (17, 18)
 - **Security:** Spring Security 6 + JWT (Role-Based Access Control: SUPER_ADMIN, UAO, DEALER, POS_OPERATOR, SAAO)
 - **Frontend:** React 19 (Vite), Tailwind CSS, Lucide Icons
 
