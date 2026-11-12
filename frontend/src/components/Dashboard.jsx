@@ -111,6 +111,53 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     { name: 'বকশীগঞ্জ', value: 0 },
   ]
 
+  // Monthly distribution trend (Last 6 / 4 months)
+  const monthlyTrend = [
+    { month: '2026-08', value: 330, x: 80, y: 163 },
+    { month: '2026-09', value: 1450, x: 380, y: 37 },
+    { month: '2026-10', value: 1100, x: 680, y: 76 },
+    { month: '2026-11', value: 200, x: 960, y: 178 },
+  ]
+
+  // Top Dealers by total fertilizer distribution
+  const topDealers = [
+    {
+      rank: 1,
+      name: 'মেসার্স মাটির মানুষ এন্টারপ্রাইজ (ডেমো)',
+      union: '৩ নং বাট্টাজোড় ইউনিয়ন',
+      totalKg: '৬৭০ কেজি',
+      distributions: '45 বিতরণ',
+    },
+    {
+      rank: 2,
+      name: 'মেসার্স কৃষক বন্ধু ঘর (ডেমো)',
+      union: '৫ নং বকশীগঞ্জ ইউনিয়ন',
+      totalKg: '৬২২ কেজি',
+      distributions: '43 বিতরণ',
+    },
+    {
+      rank: 3,
+      name: 'মেসার্স নতুন ফসল ট্রেডার্স (ডেমো)',
+      union: '২ নং বগারচর ইউনিয়ন',
+      totalKg: '৬২০ কেজি',
+      distributions: '45 বিতরণ',
+    },
+    {
+      rank: 4,
+      name: 'মেসার্স সবুজ কৃষি ভান্ডার (ডেমো)',
+      union: '৬ নং ধানুয়া কামালপুর ইউনিয়ন',
+      totalKg: '৫০৫ কেজি',
+      distributions: '41 বিতরণ',
+    },
+    {
+      rank: 5,
+      name: 'মেসার্স সোনালী মাঠ স্টোর (ডেমো)',
+      union: '৪ নং সাধুরপাড়া ইউনিয়ন',
+      totalKg: '৪৭৫ কেজি',
+      distributions: '37 বিতরণ',
+    },
+  ]
+
   // Sidebar Menu Items (Exact match to target design)
   const menuItems = [
     { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: LayoutDashboard },
@@ -508,6 +555,164 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                 </div>
 
               </div>
+
+              {/* Row 4: মাসিক বিতরণ ট্রেন্ড (সর্বশেষ ৬ মাস) (Monthly Distribution Trend) */}
+              <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs">
+                <h4 className="text-sm font-bold text-slate-900 mb-3">
+                  মাসিক বিতরণ ট্রেন্ড (সর্বশেষ ৬ মাস)
+                </h4>
+
+                {/* SVG Area / Spline Trend Chart */}
+                <div className="w-full overflow-x-auto">
+                  <div className="min-w-[550px] sm:min-w-full">
+                    <div className="flex w-full">
+                      
+                      {/* Y-Axis Labels */}
+                      <div className="flex flex-col justify-between items-end pr-3 text-[10px] text-slate-400 font-mono select-none h-44 pb-6">
+                        <span>1,600</span>
+                        <span>1,400</span>
+                        <span>1,200</span>
+                        <span>1,000</span>
+                        <span>800</span>
+                        <span>600</span>
+                        <span>400</span>
+                        <span>200</span>
+                        <span>0</span>
+                      </div>
+
+                      {/* Chart Area */}
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div className="relative h-44 border-b border-l border-slate-200">
+                          
+                          {/* Gridlines */}
+                          <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
+                            <div className="border-t border-slate-200 w-full"></div>
+                            <div className="border-t border-slate-200 w-full"></div>
+                            <div className="border-t border-slate-200 w-full"></div>
+                            <div className="border-t border-slate-200 w-full"></div>
+                            <div className="border-t border-slate-200 w-full"></div>
+                            <div className="border-t border-slate-200 w-full"></div>
+                            <div className="border-t border-slate-200 w-full"></div>
+                            <div className="border-t border-slate-200 w-full"></div>
+                          </div>
+
+                          {/* SVG Spline Path & Gradient */}
+                          <svg viewBox="0 0 1000 200" preserveAspectRatio="none" className="absolute inset-0 w-full h-full overflow-visible">
+                            <defs>
+                              <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#2e8b57" stopOpacity="0.25" />
+                                <stop offset="100%" stopColor="#2e8b57" stopOpacity="0.02" />
+                              </linearGradient>
+                            </defs>
+                            
+                            {/* Filled Area */}
+                            <path
+                              d="M 80 163 C 200 120, 260 37, 380 37 C 500 37, 580 60, 680 76 C 780 95, 880 160, 960 178 L 960 200 L 80 200 Z"
+                              fill="url(#trendGradient)"
+                            />
+
+                            {/* Curve Line */}
+                            <path
+                              d="M 80 163 C 200 120, 260 37, 380 37 C 500 37, 580 60, 680 76 C 780 95, 880 160, 960 178"
+                              fill="none"
+                              stroke="#2e8b57"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                            />
+
+                            {/* Data Points */}
+                            {monthlyTrend.map((pt, idx) => (
+                              <g key={idx} className="cursor-pointer group">
+                                <circle
+                                  cx={pt.x}
+                                  cy={pt.y}
+                                  r="4"
+                                  className="fill-[#2e8b57] stroke-white stroke-2 group-hover:r-6 transition-all"
+                                />
+                              </g>
+                            ))}
+                          </svg>
+
+                        </div>
+
+                        {/* X-Axis Month Labels */}
+                        <div className="flex justify-between items-center pt-2 text-[11px] text-slate-500 font-mono px-6 sm:px-12">
+                          {monthlyTrend.map((pt, idx) => (
+                            <span key={idx}>{pt.month}</span>
+                          ))}
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 5: শীর্ষ ডিলার (মোট সার বিতরণ অনুযায়ী) (Top Dealers Card) */}
+              <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+                <h4 className="text-sm font-bold text-slate-900">
+                  শীর্ষ ডিলার (মোট সার বিতরণ অনুযায়ী)
+                </h4>
+
+                <div className="space-y-3">
+                  {topDealers.map((dealer) => (
+                    <div
+                      key={dealer.rank}
+                      className="flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50/80 transition-colors"
+                    >
+                      {/* Left: Rank & Dealer Info */}
+                      <div className="flex items-center space-x-3">
+                        <div className="w-6 h-6 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold flex items-center justify-center shrink-0 border border-emerald-100/60">
+                          {dealer.rank}
+                        </div>
+                        <div>
+                          <p className="text-xs sm:text-sm font-semibold text-slate-900 leading-tight">
+                            {dealer.name}
+                          </p>
+                          <p className="text-[11px] text-slate-400 mt-0.5">
+                            {dealer.union}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Right: Quantity & Distributions */}
+                      <div className="text-right flex flex-col items-end">
+                        <span className="bg-emerald-100/80 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full inline-block">
+                          {dealer.totalKg}
+                        </span>
+                        <span className="text-[10px] text-slate-400 mt-0.5 font-medium">
+                          {dealer.distributions}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Bottom Reconciliation Bar & Action Button */}
+                <div className="pt-3 border-t border-dashed border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs text-slate-700 font-bold">
+                      সকল ডিলারের যোগফল: ২১১ বিতরণ • ৩,০৫৫ কেজি
+                    </p>
+                    <div className="mt-3">
+                      <button 
+                        onClick={() => setActiveTab('dealer-audit')}
+                        className="border border-emerald-600 text-emerald-700 hover:bg-emerald-50 text-xs font-semibold px-3 py-1.5 rounded-lg cursor-pointer transition-colors inline-flex items-center gap-1"
+                      >
+                        <span>ডিলার-ভিত্তিক অডিট দেখুন</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="self-start sm:self-auto">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-medium">
+                      <span>✓</span>
+                      <span>ড্যাশবোর্ড মোটের সাথে মিলেছে</span>
+                    </span>
+                  </div>
+                </div>
+
+              </div>
             </>
           ) : (
             /* Sub-View for Other Sidebar Tabs */
@@ -601,3 +806,4 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     </div>
   )
 }
+
