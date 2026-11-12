@@ -33,6 +33,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
   const [refreshKey, setRefreshKey] = useState(0)
   const [isVerifying, setIsVerifying] = useState(false)
   const [verificationSuccess, setVerificationSuccess] = useState(false)
+  const [selectedDealerModal, setSelectedDealerModal] = useState(null)
 
   // Top metric cards
   const summaryStats = [
@@ -155,6 +156,106 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
       union: '৪ নং সাধুরপাড়া ইউনিয়ন',
       totalKg: '৪৭৫ কেজি',
       distributions: '37 বিতরণ',
+    },
+  ]
+
+  // All dealers distribution table data (Matches target image)
+  const allDealersDistribution = [
+    {
+      id: 1,
+      name: 'মেসার্স মাটির মানুষ এন্টারপ্রাইজ (ডেমো)',
+      union: '৩ নং বাট্টাজোড় ইউনিয়ন',
+      entries: '৪৫',
+      totalKg: '৬৭০',
+      status: 'active',
+      details: {
+        dealerId: 'D-101',
+        tradeLicense: 'TR-2026-3391',
+        urea: '৩৫০ কেজি',
+        tsp: '১২০ কেজি',
+        dap: '১০০ কেজি',
+        mop: '১০০ কেজি',
+      },
+    },
+    {
+      id: 2,
+      name: 'মেসার্স কৃষক বন্ধু ঘর (ডেমো)',
+      union: '৫ নং বকশীগঞ্জ ইউনিয়ন',
+      entries: '৪৩',
+      totalKg: '৬২২',
+      status: 'active',
+      details: {
+        dealerId: 'D-102',
+        tradeLicense: 'TR-2026-4412',
+        urea: '৩১০ কেজি',
+        tsp: '১১২ কেজি',
+        dap: '১০০ কেজি',
+        mop: '১০০ কেজি',
+      },
+    },
+    {
+      id: 3,
+      name: 'মেসার্স নতুন ফসল ট্রেডার্স (ডেমো)',
+      union: '২ নং বগারচর ইউনিয়ন',
+      entries: '৪৫',
+      totalKg: '৬২০',
+      status: 'active',
+      details: {
+        dealerId: 'D-103',
+        tradeLicense: 'TR-2026-5589',
+        urea: '৩০০ কেজি',
+        tsp: '১২০ কেজি',
+        dap: '১০০ কেজি',
+        mop: '১০০ কেজি',
+      },
+    },
+    {
+      id: 4,
+      name: 'মেসার্স সবুজ কৃষি ভান্ডার (ডেমো)',
+      union: '৬ নং ধানুয়া কামালপুর ইউনিয়ন',
+      entries: '৪১',
+      totalKg: '৫০৫',
+      status: 'active',
+      details: {
+        dealerId: 'D-104',
+        tradeLicense: 'TR-2026-6670',
+        urea: '২৫০ কেজি',
+        tsp: '৯৫ কেজি',
+        dap: '৮০ কেজি',
+        mop: '৮০ কেজি',
+      },
+    },
+    {
+      id: 5,
+      name: 'মেসার্স সোনালী মাঠ স্টোর (ডেমো)',
+      union: '৪ নং সাধুরপাড়া ইউনিয়ন',
+      entries: '৩৭',
+      totalKg: '৪৭৫',
+      status: 'active',
+      details: {
+        dealerId: 'D-105',
+        tradeLicense: 'TR-2026-7781',
+        urea: '২৩০ কেজি',
+        tsp: '৮৫ কেজি',
+        dap: '৮০ কেজি',
+        mop: '৮০ কেজি',
+      },
+    },
+    {
+      id: 6,
+      name: 'মেসার্স শ্যামল বাংলা সার বিতান (ডেমো)',
+      union: '৬ নং নিলাখিয়া ইউনিয়ন',
+      entries: '০',
+      totalKg: '০',
+      status: 'inactive',
+      details: {
+        dealerId: 'D-106',
+        tradeLicense: 'TR-2026-8890',
+        urea: '০ কেজি',
+        tsp: '০ কেজি',
+        dap: '০ কেজি',
+        mop: '০ কেজি',
+      },
     },
   ]
 
@@ -713,6 +814,90 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                 </div>
 
               </div>
+
+              {/* Row 6: সকল ডিলারের সার বিতরণ (কেজি) (All Dealers Distribution Table) */}
+              <div className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
+                
+                {/* Header */}
+                <div className="flex items-center justify-between pb-1">
+                  <h4 className="text-base font-bold text-slate-900">
+                    সকল ডিলারের সার বিতরণ (কেজি)
+                  </h4>
+                  <span className="text-xs text-slate-500 font-medium">
+                    6 জন ডিলার
+                  </span>
+                </div>
+
+                {/* Table */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs sm:text-sm text-slate-700">
+                    
+                    {/* Table Head */}
+                    <thead className="bg-[#f0f6f1] text-emerald-950 font-bold text-xs">
+                      <tr>
+                        <th className="py-3 px-3.5 w-12 text-center text-emerald-800">#</th>
+                        <th className="py-3 px-3.5 text-emerald-800">ডিলার</th>
+                        <th className="py-3 px-3.5 text-emerald-800">ইউনিয়ন</th>
+                        <th className="py-3 px-3.5 text-emerald-800">বিতরণ (এন্ট্রি)</th>
+                        <th className="py-3 px-3.5 text-emerald-800">মোট সার (কেজি)</th>
+                        <th className="py-3 px-3.5 text-right w-28"></th>
+                      </tr>
+                    </thead>
+
+                    {/* Table Body */}
+                    <tbody className="divide-y divide-slate-100">
+                      {allDealersDistribution.map((dealer) => (
+                        <tr key={dealer.id} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="py-3 px-3.5 text-center text-slate-500 font-medium">
+                            {dealer.id}
+                          </td>
+                          <td className="py-3 px-3.5 font-medium text-slate-900">
+                            <div className="flex items-center">
+                              <span>{dealer.name}</span>
+                              {dealer.status === 'inactive' && (
+                                <span className="ml-2 px-2 py-0.5 bg-rose-100 text-rose-700 rounded-full text-[10px] font-semibold">
+                                  নিষ্ক্রিয়
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="py-3 px-3.5 text-slate-600">
+                            {dealer.union}
+                          </td>
+                          <td className="py-3 px-3.5 text-slate-600 font-medium">
+                            {dealer.entries}
+                          </td>
+                          <td className="py-3 px-3.5 font-bold text-slate-900">
+                            {dealer.totalKg}
+                          </td>
+                          <td className="py-3 px-3.5 text-right">
+                            <button
+                              onClick={() => setSelectedDealerModal(dealer)}
+                              className="px-3.5 py-1 bg-white hover:bg-emerald-50 text-emerald-700 border border-emerald-600 rounded-lg text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
+                            >
+                              বিস্তারিত
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+
+                    {/* Table Footer: Total Row */}
+                    <tfoot>
+                      <tr className="border-t-2 border-slate-200 font-bold text-slate-900">
+                        <td className="py-3.5 px-3.5"></td>
+                        <td className="py-3.5 px-3.5 text-slate-900">সকল ডিলারের মোট</td>
+                        <td className="py-3.5 px-3.5"></td>
+                        <td className="py-3.5 px-3.5 text-slate-900">২১১</td>
+                        <td className="py-3.5 px-3.5 text-slate-900">৩,০৫৫</td>
+                        <td className="py-3.5 px-3.5"></td>
+                      </tr>
+                    </tfoot>
+
+                  </table>
+                </div>
+
+              </div>
             </>
           ) : (
             /* Sub-View for Other Sidebar Tabs */
@@ -802,6 +987,64 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
         </main>
 
       </div>
+
+      {/* Dealer Details Modal */}
+      {selectedDealerModal && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl border border-slate-100 animate-fadeIn space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 className="text-base font-bold text-slate-900">{selectedDealerModal.name}</h3>
+                <p className="text-xs text-slate-500">{selectedDealerModal.union}</p>
+              </div>
+              <button
+                onClick={() => setSelectedDealerModal(null)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-2.5 text-xs">
+              <div className="flex justify-between py-1 border-b border-slate-100">
+                <span className="text-slate-500">ডিলার আইডি:</span>
+                <span className="font-semibold text-slate-800 font-mono">{selectedDealerModal.details?.dealerId}</span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-slate-100">
+                <span className="text-slate-500">ট্রেড লাইসেন্স:</span>
+                <span className="font-semibold text-slate-800 font-mono">{selectedDealerModal.details?.tradeLicense}</span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-slate-100">
+                <span className="text-slate-500">ইউরিয়া বিতরণ:</span>
+                <span className="font-semibold text-emerald-700">{selectedDealerModal.details?.urea}</span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-slate-100">
+                <span className="text-slate-500">টিএসপি বিতরণ:</span>
+                <span className="font-semibold text-emerald-700">{selectedDealerModal.details?.tsp}</span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-slate-100">
+                <span className="text-slate-500">ডিএপি বিতরণ:</span>
+                <span className="font-semibold text-emerald-700">{selectedDealerModal.details?.dap}</span>
+              </div>
+              <div className="flex justify-between py-1 border-b border-slate-100">
+                <span className="text-slate-500">এমওপি বিতরণ:</span>
+                <span className="font-semibold text-emerald-700">{selectedDealerModal.details?.mop}</span>
+              </div>
+              <div className="flex justify-between py-1 pt-2 font-bold text-sm">
+                <span className="text-slate-900">মোট সার বিতরণ:</span>
+                <span className="text-emerald-800">{selectedDealerModal.totalKg} কেজি</span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setSelectedDealerModal(null)}
+              className="w-full py-2.5 bg-[#1e6837] hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
+            >
+              বন্ধ করুন
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   )
