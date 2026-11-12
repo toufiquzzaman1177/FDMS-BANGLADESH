@@ -339,7 +339,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
   )
 
   return (
-    <div className="min-h-screen bg-[#f8faf8] text-slate-800 flex flex-col font-sans select-none antialiased">
+    <div className="min-h-screen bg-[#f2f6f3] text-slate-800 flex flex-col font-sans select-none antialiased">
       
       {/* ========================================================
           TOP HEADER (Formal Government Deep Emerald Navbar)
@@ -1134,10 +1134,12 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           )}
 
           {/* ========================================================
-              FOOTER COPYRIGHT & CREDITS (Exact match to reference)
+              FOOTER COPYRIGHT & CREDITS (Exact match to reference image)
               ======================================================== */}
-          <footer className="pt-6 pb-2 text-center text-xs text-slate-500 border-t border-slate-200/80">
-            <p>© Fertilizer Distribution Management System — All Rights Reserved · Developed by Toufiq &amp; Fahad</p>
+          <footer className="-mx-4 sm:-mx-6 lg:-mx-8 mt-12 pt-6 pb-7 border-t border-slate-200/90 text-center text-[12px] sm:text-xs text-slate-500">
+            <p className="px-4 font-normal tracking-normal text-slate-500">
+              © Fertilizer Distribution Management System — All Rights Reserved · Developed by Toufiq &amp; Fahad
+            </p>
           </footer>
 
         </main>
