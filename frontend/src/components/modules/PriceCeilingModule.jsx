@@ -603,3 +603,4 @@ export default function PriceCeilingModule() {
     </div>
   );
 }
+

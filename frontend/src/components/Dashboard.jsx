@@ -51,6 +51,21 @@ import UserApprovalModule from './modules/UserApprovalModule'
 import PriceCeilingModule from './modules/PriceCeilingModule'
 import SmsAlertsModule from './modules/SmsAlertsModule'
 
+// Dedicated Modular Feature Components
+import DealersListModule from './modules/DealersListModule'
+import AddDealerModule from './modules/AddDealerModule'
+import StockManagementModule from './modules/StockManagementModule'
+import DealerAuditModule from './modules/DealerAuditModule'
+import DistributionRecordsModule from './modules/DistributionRecordsModule'
+import DuplicateDataModule from './modules/DuplicateDataModule'
+import FarmerSearchModule from './modules/FarmerSearchModule'
+import ReportsAnalyticsModule from './modules/ReportsAnalyticsModule'
+import DataExportModule from './modules/DataExportModule'
+import SystemLogsModule from './modules/SystemLogsModule'
+import VerifyStatisticsModule from './modules/VerifyStatisticsModule'
+import DataCleanupModule from './modules/DataCleanupModule'
+import SettingsModule from './modules/SettingsModule'
+
 export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', role: 'জেলা অফিসার' } }) {
   const [activeTab, setActiveTab] = useState('dashboard')
   const [refreshKey, setRefreshKey] = useState(0)
@@ -1120,96 +1135,35 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                 </div>
               </div>
 
-              {/* 10 Core Enterprise GovMIS Modules */}
+              {/* Dedicated Modular Views for All Features */}
               {activeTab === 'quota-do' && <QuotaDOModule />}
               {activeTab === 'bank-treasury' && <BankTreasuryModule />}
               {activeTab === 'ward-outlets' && <WardOutletsModule />}
-              {activeTab === 'farmer-database' && <FarmerDatabaseModule />}
-              {activeTab === 'mobile-court' && <MobileCourtModule />}
-              {activeTab === 'complaints' && <ComplaintsModule />}
-              {activeTab === 'gov-reports' && <GovReportsModule />}
-              {activeTab === 'user-approval' && <UserApprovalModule />}
               {activeTab === 'price-ceiling' && <PriceCeilingModule />}
+
+              {activeTab === 'dealers-list' && <DealersListModule />}
+              {activeTab === 'add-dealer' && <AddDealerModule />}
+              {activeTab === 'stock' && <StockManagementModule />}
+              {activeTab === 'dealer-audit' && <DealerAuditModule />}
+              {activeTab === 'distribution-records' && <DistributionRecordsModule />}
+              {activeTab === 'duplicate-data' && <DuplicateDataModule />}
+
+              {activeTab === 'farmer-database' && <FarmerDatabaseModule />}
+              {activeTab === 'complaints' && <ComplaintsModule />}
+              {activeTab === 'farmer-search' && <FarmerSearchModule />}
+
+              {activeTab === 'mobile-court' && <MobileCourtModule />}
               {activeTab === 'sms-alerts' && <SmsAlertsModule />}
 
-              {/* Standard Auxiliary Views */}
-              {activeTab === 'add-dealer' && (
-                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-xs max-w-2xl space-y-4">
-                  <h3 className="text-sm font-bold text-slate-800">নতুন ডিলার নিবন্ধন ফর্ম</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <input type="text" placeholder="ডিলারের পূর্ণ নাম" className="px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-                    <input type="text" placeholder="ট্রেড লাইসেন্স নম্বর" className="px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-                    <input type="text" placeholder="ইউনিয়ন" className="px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-                    <input type="text" placeholder="মোবাইল নম্বর" className="px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-                  </div>
-                  <button className="px-5 py-2.5 bg-[#14532d] hover:bg-emerald-900 text-white rounded-xl text-xs font-semibold shadow-xs cursor-pointer">
-                    সংরক্ষণ করুন
-                  </button>
-                </div>
-              )}
+              {activeTab === 'gov-reports' && <GovReportsModule />}
+              {activeTab === 'reports' && <ReportsAnalyticsModule />}
+              {activeTab === 'export' && <DataExportModule />}
 
-              {activeTab === 'dealers-list' && (
-                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-3">
-                  <h3 className="text-sm font-bold text-slate-800 mb-3">অনুমোদিত ডিলার তালিকা</h3>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-xs text-left text-slate-600">
-                      <thead className="bg-slate-50 text-slate-700 font-semibold uppercase text-[11px]">
-                        <tr>
-                          <th className="py-2.5 px-3">ডিলার আইডি</th>
-                          <th className="py-2.5 px-3">নাম</th>
-                          <th className="py-2.5 px-3">ইউনিয়ন</th>
-                          <th className="py-2.5 px-3">ট্রেড লাইসেন্স</th>
-                          <th className="py-2.5 px-3">স্ট্যাটাস</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        <tr>
-                          <td className="py-2.5 px-3 font-mono">D-1001</td>
-                          <td className="py-2.5 px-3 font-medium text-slate-900">মেসার্স রহমত ট্রেডার্স</td>
-                          <td className="py-2.5 px-3">ইউনিয়ন ১</td>
-                          <td className="py-2.5 px-3">TL-2026-8812</td>
-                          <td className="py-2.5 px-3"><span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-semibold">সক্রিয়</span></td>
-                        </tr>
-                        <tr>
-                          <td className="py-2.5 px-3 font-mono">D-1002</td>
-                          <td className="py-2.5 px-3 font-medium text-slate-900">আল-মদিনা এগ্রো সেন্টার</td>
-                          <td className="py-2.5 px-3">ইউনিয়ন ২</td>
-                          <td className="py-2.5 px-3">TL-2026-9934</td>
-                          <td className="py-2.5 px-3"><span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-semibold">সক্রিয়</span></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-
-              {/* Other generic views fallback if not in the 10 modules or add/list */}
-              {![
-                'quota-do',
-                'bank-treasury',
-                'ward-outlets',
-                'farmer-database',
-                'mobile-court',
-                'complaints',
-                'gov-reports',
-                'user-approval',
-                'price-ceiling',
-                'sms-alerts',
-                'add-dealer',
-                'dealers-list'
-              ].includes(activeTab) && (
-                <div className="bg-white rounded-2xl p-8 border border-slate-200/80 shadow-xs text-center text-slate-400 space-y-2">
-                  <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-500">
-                    <Package className="w-6 h-6" />
-                  </div>
-                  <h4 className="text-sm font-semibold text-slate-700">
-                    {navigationGroups.flatMap(g => g.items).find(m => m.id === activeTab)?.label} মডিউল
-                  </h4>
-                  <p className="text-xs text-slate-500 max-w-md mx-auto">
-                    এই মডিউলের জন্য ফ্রন্টএন্ড ভিউ প্রস্তুত রয়েছে। বামপাশের মেনু থেকে যেকোনো মডিউলে সহজেই কাজ করতে পারবেন।
-                  </p>
-                </div>
-              )}
+              {activeTab === 'user-approval' && <UserApprovalModule />}
+              {activeTab === 'logs' && <SystemLogsModule />}
+              {activeTab === 'verify' && <VerifyStatisticsModule />}
+              {activeTab === 'cleanup' && <DataCleanupModule />}
+              {activeTab === 'settings' && <SettingsModule />}
             </div>
           )}
 

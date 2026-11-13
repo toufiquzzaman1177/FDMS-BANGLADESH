@@ -547,3 +547,4 @@ export default function SmsAlertsModule() {
     </div>
   );
 }
+
