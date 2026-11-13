@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import logoImg from '../assets/logo.jpg'
+import loginBg from '../assets/login-bg.jpg'
 import {
   Sprout,
   ArrowLeft,
@@ -72,34 +73,18 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#f3f6f4] relative flex flex-col justify-between items-center py-6 sm:py-8 px-4 overflow-hidden select-none font-sans">
+    <div className="min-h-screen w-full relative flex flex-col justify-between items-center py-6 sm:py-8 px-4 overflow-hidden select-none font-sans">
       
       {/* ========================================================
-          DECORATIVE BOTANICAL WATERMARKS (Soft, Eye-Smoothing)
+          AGRICULTURAL LANDSCAPE BACKGROUND & OVERLAY
           ======================================================== */}
-      {/* Left Leaf Silhouette */}
-      <div className="absolute left-[-60px] sm:left-[-20px] lg:left-8 top-1/4 -translate-y-1/2 pointer-events-none opacity-10 lg:opacity-15 transition-opacity">
-        <svg width="220" height="420" viewBox="0 0 200 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-900">
-          <path d="M100 380V40" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M98 320C60 310 30 270 30 230C70 230 95 280 98 320Z" fill="currentColor" opacity="0.4" />
-          <path d="M102 280C140 270 170 230 170 190C130 190 105 240 102 280Z" fill="currentColor" opacity="0.4" />
-          <path d="M98 220C60 210 30 170 30 130C70 130 95 180 98 220Z" fill="currentColor" opacity="0.4" />
-          <path d="M102 170C140 160 170 120 170 80C130 80 105 130 102 170Z" fill="currentColor" opacity="0.4" />
-          <path d="M98 100C75 90 55 60 55 30C85 30 96 70 98 100Z" fill="currentColor" opacity="0.4" />
-        </svg>
-      </div>
-
-      {/* Right Leaf Silhouette */}
-      <div className="absolute right-[-60px] sm:right-[-20px] lg:right-8 bottom-1/6 pointer-events-none opacity-10 lg:opacity-15 transition-opacity">
-        <svg width="220" height="420" viewBox="0 0 200 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-900">
-          <path d="M100 380V40" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-          <path d="M98 320C60 310 30 270 30 230C70 230 95 280 98 320Z" fill="currentColor" opacity="0.4" />
-          <path d="M102 280C140 270 170 230 170 190C130 190 105 240 102 280Z" fill="currentColor" opacity="0.4" />
-          <path d="M98 220C60 210 30 170 30 130C70 130 95 180 98 220Z" fill="currentColor" opacity="0.4" />
-          <path d="M102 170C140 160 170 120 170 80C130 80 105 130 102 170Z" fill="currentColor" opacity="0.4" />
-          <path d="M98 100C75 90 55 60 55 30C85 30 96 70 98 100Z" fill="currentColor" opacity="0.4" />
-        </svg>
-      </div>
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all scale-100"
+        style={{ backgroundImage: `url(${loginBg})` }}
+      />
+      {/* Eye-smoothing formal backdrop overlay so the card and text stand out perfectly */}
+      <div className="absolute inset-0 bg-slate-950/35 backdrop-blur-[1px]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-black/20 to-slate-950/45" />
 
       {/* ========================================================
           TOP NAVIGATION BAR (Back to Home button)
@@ -107,7 +92,7 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
       <div className="w-full max-w-5xl flex justify-start items-center z-10 mb-2 sm:mb-4">
         <button
           onClick={onBackToHome}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 hover:text-emerald-900 text-xs font-semibold rounded-lg shadow-2xs border border-slate-200 transition-all cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/95 hover:bg-white text-slate-800 hover:text-emerald-950 text-xs font-semibold rounded-lg shadow-sm border border-white/80 transition-all cursor-pointer backdrop-blur-xs"
         >
           <ArrowLeft className="w-3.5 h-3.5 text-emerald-800" />
           <span>হোম পেজে ফিরুন</span>
@@ -117,7 +102,7 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
       {/* ========================================================
           MAIN LOGIN CARD (Formal Government MIS Standard)
           ======================================================== */}
-      <div className="w-full max-w-[420px] sm:max-w-[450px] bg-white rounded-2xl shadow-[0_4px_24px_-4px_rgba(20,83,45,0.08)] border border-slate-200/90 p-6 sm:p-8 z-10 transition-all duration-300">
+      <div className="w-full max-w-[420px] sm:max-w-[450px] bg-white/95 backdrop-blur-md rounded-2xl shadow-[0_16px_40px_-8px_rgba(0,0,0,0.35)] border border-white/80 p-6 sm:p-8 z-10 transition-all duration-300">
         
         {/* Top Logo */}
         <div className="flex justify-center mb-3">
@@ -276,9 +261,9 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
       {/* ========================================================
           FOOTER COPYRIGHT & CREDITS (Clean, Formal Government Style)
           ======================================================== */}
-      <footer className="mt-6 text-center text-[11px] text-slate-500 z-10 space-y-0.5">
-        <p className="font-medium text-slate-600">© সার ডিলার ও বিতরণ ব্যবস্থাপনা সিস্টেম — FDMS BANGLADESH</p>
-        <p className="text-slate-400">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার • Developed by Toufiq &amp; Fahad</p>
+      <footer className="mt-6 text-center text-[11px] text-white/90 z-10 space-y-0.5 drop-shadow-sm">
+        <p className="font-semibold text-white">© সার ডিলার ও বিতরণ ব্যবস্থাপনা সিস্টেম — FDMS BANGLADESH</p>
+        <p className="text-emerald-100/90 font-medium">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার • Developed by Toufiq &amp; Fahad</p>
       </footer>
 
     </div>
