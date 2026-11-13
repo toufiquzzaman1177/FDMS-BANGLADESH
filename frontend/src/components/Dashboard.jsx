@@ -41,10 +41,19 @@ import {
   QrCode,
   MapPin,
   Globe,
-  Sparkles
+  Sparkles,
+  Layers
 } from 'lucide-react'
 
-// Dedicated Role-Based Specialist Modules
+// 6 Dedicated Stakeholder Role Dashboards
+import SuperAdminDashboard from './dashboards/SuperAdminDashboard'
+import UpazilaAdminDashboard from './dashboards/UpazilaAdminDashboard'
+import DealerDashboard from './dashboards/DealerDashboard'
+import WardPosDashboard from './dashboards/WardPosDashboard'
+import FieldSaaoDashboard from './dashboards/FieldSaaoDashboard'
+import CitizenDashboard from './dashboards/CitizenDashboard'
+
+// Dedicated Role-Based Specialist Terminal Modules
 import WardPosTerminalModule from './modules/WardPosTerminalModule'
 import FieldInspectionSaaoModule from './modules/FieldInspectionSaaoModule'
 import CitizenPortalModule from './modules/CitizenPortalModule'
@@ -76,453 +85,404 @@ import VerifyStatisticsModule from './modules/VerifyStatisticsModule'
 import DataCleanupModule from './modules/DataCleanupModule'
 import SettingsModule from './modules/SettingsModule'
 
-export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', role: 'জেলা অফিসার' } }) {
-  // 6 Core Stakeholder Roles specified by User
-  const ROLES = [
-    {
-      id: 'super-admin',
-      label: 'সুপার অ্যাডমিন (MoA / DAE HQ)',
-      name: 'ড. মোস্তাফিজুর রহমান',
-      roleTitle: 'সুপার অ্যাডমিন (MoA / DAE HQ)',
-      color: 'bg-purple-600',
-      badgeColor: 'bg-purple-100 text-purple-900 border-purple-200',
-      defaultTab: 'quota-do',
-      description: 'জাতীয় পর্যায়ের সার কোটা বরাদ্দ, সরকারি সর্বোচ্চ খুচরা মূল্য (MRP) ও সিলিং নীতিমালা নির্ধারণ, নতুন কর্মকর্তার অ্যাকাউন্ট অনুমোদন এবং সার্বিক অডিট লগ পরিচালনা।',
-      priorityActions: [
-        { label: 'জাতীয় কোটা বণ্টন', tab: 'quota-do' },
-        { label: 'মূল্য (MRP) ও সিলিং নীতি', tab: 'price-ceiling' },
-        { label: 'কর্মকর্তা অনুমোদন', tab: 'user-approval' },
-        { label: 'সার্বিক অডিট লগ', tab: 'logs' }
-      ]
-    },
-    {
-      id: 'upazila-admin',
-      label: 'উপজেলা অ্যাডমিন (UNO / UAO)',
-      name: 'ড. আহমেদ রফিক',
-      roleTitle: 'উপজেলা অ্যাডমিন (UNO / UAO)',
-      color: 'bg-[#14532d]',
-      badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-200',
-      defaultTab: 'dashboard',
-      description: 'ডিলার নিয়োগ ও তালিকা নিয়ন্ত্রণ, সোনালী ব্যাংকের ট্রেজারি চালান যাচাই করে ডিও (DO) অনুমোদন, মোবাইল কোর্ট লগ এন্ট্রি, অনিয়মে ডিলার সাসপেন্ড এবং মাসিক ‘ফরম-খ’ প্রতিবেদন তৈরি।',
-      priorityActions: [
-        { label: 'ডিলার তালিকা ও নিয়ন্ত্রণ', tab: 'dealers-list' },
-        { label: 'ট্রেজারি ও ডিও অনুমোদন', tab: 'quota-do' },
-        { label: 'মোবাইল কোর্ট ও জরিমানা', tab: 'mobile-court' },
-        { label: 'সরকারি ফরম-খ প্রতিবেদন', tab: 'gov-reports' }
-      ]
-    },
-    {
-      id: 'union-dealer',
-      label: 'ইউনিয়ন সার ডিলার (Dealer)',
-      name: 'আলহাজ্ব মোকাররম হোসেন',
-      roleTitle: 'ইউনিয়ন সার ডিলার (Dealer)',
-      color: 'bg-blue-600',
-      badgeColor: 'bg-blue-100 text-blue-900 border-blue-200',
-      defaultTab: 'ward-outlets',
-      description: 'ব্যাংকে পে-অর্ডার/চালান জমা দেওয়া, বাফার গোডাউন থেকে সার উত্তোলন (Inward), প্রধান গোডাউন থেকে ৩টি ওয়ার্ড বিক্রয়কেন্দ্রে সার পাঠানো (STO) এবং মাসিক ‘ফরম-ক’ দাখিল।',
-      priorityActions: [
-        { label: 'ব্যাংক চালান জমা', tab: 'bank-treasury' },
-        { label: 'বাফার উত্তোলন (Inward)', tab: 'stock' },
-        { label: '৩টি ওয়ার্ডে স্টক ট্রান্সফার (STO)', tab: 'ward-outlets' },
-        { label: 'মাসিক ফরম-ক দাখিল', tab: 'gov-reports' }
-      ]
-    },
-    {
-      id: 'ward-pos',
-      label: 'ওয়ার্ড বিক্রয়কেন্দ্র অপারেটর (POS)',
-      name: 'মোঃ শফিকুল ইসলাম',
-      roleTitle: 'ওয়ার্ড বিক্রয়কেন্দ্র অপারেটর (POS)',
-      color: 'bg-amber-600',
-      badgeColor: 'bg-amber-100 text-amber-900 border-amber-200',
-      defaultTab: 'ward-pos',
-      description: 'কৃষকের NID বা কৃষক কার্ড যাচাই করে জমির সিলিং অনুযায়ী সার বিক্রয়, সরকার নির্ধারিত মূল্যে কিউআর কোডযুক্ত ক্যাশ মেমো প্রিন্ট এবং দৈনিক স্টক ক্লোজিং।',
-      priorityActions: [
-        { label: 'POS সেলস টার্মিনাল', tab: 'ward-pos' },
-        { label: 'কৃষক সিলিং যাচাই', tab: 'farmer-search' },
-        { label: 'বিতরণ রেকর্ড ও ক্যাশ মেমো', tab: 'distribution-records' }
-      ]
-    },
-    {
-      id: 'field-saao',
-      label: 'মাঠ কর্মকর্তা (SAAO)',
-      name: 'মোঃ শহিদুল ইসলাম',
-      roleTitle: 'মাঠ কর্মকর্তা (SAAO / উপসহকারী)',
-      color: 'bg-teal-600',
-      badgeColor: 'bg-teal-100 text-teal-900 border-teal-200',
-      defaultTab: 'field-saao',
-      description: 'ফসলের মৌসুম অনুযায়ী জমির চাহিদা জরিপ এবং ওয়ার্ড বিক্রয়কেন্দ্রে গিয়ে জিপিএস লোকেশনসহ সরেজমিনে স্টক পরিদর্শন ও অডিট রিপোর্ট জমা দেওয়া।',
-      priorityActions: [
-        { label: 'জিপিএস সরেজমিনে পরিদর্শন', tab: 'field-saao' },
-        { label: 'মৌসুমী জমি ও ফসল জরিপ', tab: 'field-saao' },
-        { label: 'ডিলার অডিট নিরীক্ষা', tab: 'dealer-audit' }
-      ]
-    },
-    {
-      id: 'public-citizen',
-      label: 'সাধারণ কৃষক ও নাগরিক (Public)',
-      name: 'উন্মুক্ত নাগরিক সেবা',
-      roleTitle: 'সাধারণ কৃষক ও নাগরিক (Public User)',
-      color: 'bg-slate-700',
-      badgeColor: 'bg-slate-100 text-slate-800 border-slate-200',
-      defaultTab: 'citizen-portal',
-      description: 'কোনো লগইন ছাড়াই উন্মুক্ত মূল্যবোর্ড দেখা, নিকটস্থ ডিলারের লাইভ স্টক খোঁজা এবং অতিরিক্ত দাম বা অনিয়মের বিরুদ্ধে গোপনীয় অভিযোগ দাখিল করা।',
-      priorityActions: [
-        { label: 'উন্মুক্ত মূল্যবোর্ড (MRP)', tab: 'citizen-portal' },
-        { label: 'নিকটস্থ ডিলার লাইভ স্টক', tab: 'citizen-portal' },
-        { label: 'গোপনীয় অভিযোগ দাখিল', tab: 'citizen-portal' }
-      ]
-    }
-  ];
+// 6 Core Stakeholder Roles specified by User
+const ROLES = [
+  {
+    id: 'super-admin',
+    label: 'সুপার অ্যাডমিন (MoA / DAE HQ)',
+    name: 'ড. মোস্তাফিজুর রহমান',
+    roleTitle: 'সুপার অ্যাডমিন (MoA / DAE HQ)',
+    color: 'bg-purple-600',
+    badgeColor: 'bg-purple-100 text-purple-900 border-purple-200',
+    defaultTab: 'dashboard',
+    description: 'জাতীয় পর্যায়ের সার কোটা বরাদ্দ, সরকারি সর্বোচ্চ খুচরা মূল্য (MRP) ও সিলিং নীতিমালা নির্ধারণ, নতুন কর্মকর্তার অ্যাকাউন্ট অনুমোদন এবং সার্বিক অডিট লগ পরিচালনা।',
+    priorityActions: [
+      { label: 'জাতীয় কোটা বণ্টন', tab: 'quota-do' },
+      { label: 'মূল্য (MRP) ও সিলিং নীতি', tab: 'price-ceiling' },
+      { label: 'কর্মকর্তা অনুমোদন', tab: 'user-approval' },
+      { label: 'সার্বিক অডিট লগ', tab: 'logs' }
+    ]
+  },
+  {
+    id: 'upazila-admin',
+    label: 'উপজেলা অ্যাডমিন (UNO / UAO)',
+    name: 'ড. আহমেদ রফিক',
+    roleTitle: 'উপজেলা অ্যাডমিন (UNO / UAO)',
+    color: 'bg-[#14532d]',
+    badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-200',
+    defaultTab: 'dashboard',
+    description: 'ডিলার নিয়োগ ও তালিকা নিয়ন্ত্রণ, সোনালী ব্যাংকের ট্রেজারি চালান যাচাই করে ডিও (DO) অনুমোদন, মোবাইল কোর্ট লগ এন্ট্রি, অনিয়মে ডিলার সাসপেন্ড এবং মাসিক ‘ফরম-খ’ প্রতিবেদন তৈরি।',
+    priorityActions: [
+      { label: 'ডিলার তালিকা ও নিয়ন্ত্রণ', tab: 'dealers-list' },
+      { label: 'ট্রেজারি ও ডিও অনুমোদন', tab: 'quota-do' },
+      { label: 'মোবাইল কোর্ট ও জরিমানা', tab: 'mobile-court' },
+      { label: 'সরকারি ফরম-খ প্রতিবেদন', tab: 'gov-reports' }
+    ]
+  },
+  {
+    id: 'union-dealer',
+    label: 'ইউনিয়ন সার ডিলার (Dealer)',
+    name: 'আলহাজ্ব মোকাররম হোসেন',
+    roleTitle: 'ইউনিয়ন সার ডিলার (Dealer)',
+    color: 'bg-blue-600',
+    badgeColor: 'bg-blue-100 text-blue-900 border-blue-200',
+    defaultTab: 'dashboard',
+    description: 'ব্যাংকে পে-অর্ডার/চালান জমা দেওয়া, বাফার গোডাউন থেকে সার উত্তোলন (Inward), প্রধান গোডাউন থেকে ৩টি ওয়ার্ড বিক্রয়কেন্দ্রে সার পাঠানো (STO) এবং মাসিক ‘ফরম-ক’ দাখিল।',
+    priorityActions: [
+      { label: 'ব্যাংক চালান জমা', tab: 'bank-treasury' },
+      { label: 'বাফার উত্তোলন (Inward)', tab: 'stock' },
+      { label: '৩টি ওয়ার্ডে স্টক ট্রান্সফার (STO)', tab: 'ward-outlets' },
+      { label: 'মাসিক ফরম-ক দাখিল', tab: 'gov-reports' }
+    ]
+  },
+  {
+    id: 'ward-pos',
+    label: 'ওয়ার্ড বিক্রয়কেন্দ্র অপারেটর (POS)',
+    name: 'মোঃ শফিকুল ইসলাম',
+    roleTitle: 'ওয়ার্ড বিক্রয়কেন্দ্র অপারেটর (POS)',
+    color: 'bg-amber-600',
+    badgeColor: 'bg-amber-100 text-amber-900 border-amber-200',
+    defaultTab: 'dashboard',
+    description: 'কৃষকের NID বা কৃষক কার্ড যাচাই করে জমির সিলিং অনুযায়ী সার বিক্রয়, সরকার নির্ধারিত মূল্যে কিউআর কোডযুক্ত ক্যাশ মেমো প্রিন্ট এবং দৈনিক স্টক ক্লোজিং।',
+    priorityActions: [
+      { label: 'POS সেলস টার্মিনাল', tab: 'ward-pos' },
+      { label: 'কৃষক সিলিং যাচাই', tab: 'farmer-search' },
+      { label: 'বিতরণ রেকর্ড ও ক্যাশ মেমো', tab: 'distribution-records' }
+    ]
+  },
+  {
+    id: 'field-saao',
+    label: 'মাঠ কর্মকর্তা (SAAO)',
+    name: 'মোঃ শহিদুল ইসলাম',
+    roleTitle: 'মাঠ কর্মকর্তা (SAAO / উপসহকারী)',
+    color: 'bg-teal-600',
+    badgeColor: 'bg-teal-100 text-teal-900 border-teal-200',
+    defaultTab: 'dashboard',
+    description: 'ফসলের মৌসুম অনুযায়ী জমির চাহিদা জরিপ এবং ওয়ার্ড বিক্রয়কেন্দ্রে গিয়ে জিপিএস লোকেশনসহ সরেজমিনে স্টক পরিদর্শন ও অডিট রিপোর্ট জমা দেওয়া।',
+    priorityActions: [
+      { label: 'জিপিএস সরেজমিনে পরিদর্শন', tab: 'field-saao' },
+      { label: 'মৌসুমী জমি ও ফসল জরিপ', tab: 'field-saao' },
+      { label: 'ডিলার অডিট নিরীক্ষা', tab: 'dealer-audit' }
+    ]
+  },
+  {
+    id: 'public-citizen',
+    label: 'সাধারণ কৃষক ও নাগরিক (Public)',
+    name: 'উন্মুক্ত নাগরিক সেবা',
+    roleTitle: 'সাধারণ কৃষক ও নাগরিক (Public User)',
+    color: 'bg-slate-700',
+    badgeColor: 'bg-slate-100 text-slate-800 border-slate-200',
+    defaultTab: 'dashboard',
+    description: 'কোনো লগইন ছাড়াই উন্মুক্ত মূল্যবোর্ড দেখা, নিকটস্থ ডিলারের লাইভ স্টক খোঁজা এবং অতিরিক্ত দাম বা অনিয়মের বিরুদ্ধে গোপনীয় অভিযোগ দাখিল করা।',
+    priorityActions: [
+      { label: 'উন্মুক্ত মূল্যবোর্ড (MRP)', tab: 'citizen-portal' },
+      { label: 'নিকটস্থ ডিলার লাইভ স্টক', tab: 'citizen-portal' },
+      { label: 'গোপনীয় অভিযোগ দাখিল', tab: 'citizen-portal' }
+    ]
+  }
+];
 
-  const userRole = currentUser?.role || 'উপজেলা অ্যাডমিন (UNO / UAO)';
-  const matchedRole = ROLES.find(r => r.roleTitle === userRole || (userRole && r.label?.includes(userRole))) || ROLES[1];
-  const [activeRole, setActiveRole] = useState(matchedRole);
-  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
-  const [activeTab, setActiveTab] = useState(matchedRole?.id === 'public-citizen' ? 'citizen-portal' : (matchedRole?.id === 'ward-pos' ? 'ward-pos' : (matchedRole?.id === 'field-saao' ? 'field-saao' : 'dashboard')));
-  const [refreshKey, setRefreshKey] = useState(0)
-  const [isVerifying, setIsVerifying] = useState(false)
-  const [verificationSuccess, setVerificationSuccess] = useState(false)
-  const [selectedDealerModal, setSelectedDealerModal] = useState(null)
-  const [searchTerm, setSearchTerm] = useState('')
+// All 26 Modules Grouped
+const allNavigationGroups = [
+  {
+    group: 'মূল মেনু',
+    items: [
+      { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: LayoutGrid },
+    ],
+  },
+  {
+    group: 'কোটা ও সরকারি সরবরাহ',
+    items: [
+      { id: 'quota-do', label: 'কোটা ও ডিও (DO) বরাদ্দ', icon: FileCheck, badge: 'অনুমোদন' },
+      { id: 'bank-treasury', label: 'ব্যাংক চালান ও জামানত', icon: Landmark },
+      { id: 'ward-outlets', label: 'ওয়ার্ড বিক্রয়কেন্দ্র ও স্টক', icon: Store },
+      { id: 'price-ceiling', label: 'মূল্য (MRP) ও সিলিং নীতি', icon: Scale },
+    ],
+  },
+  {
+    group: 'ডিলার ও বিতরণ কার্যক্রম',
+    items: [
+      { id: 'ward-pos', label: 'ওয়ার্ড POS সেলস টার্মিনাল', icon: QrCode, badge: 'POS' },
+      { id: 'dealers-list', label: 'ডিলার তালিকা', icon: Users, badge: '৬' },
+      { id: 'add-dealer', label: 'ডিলার যুক্ত করুন', icon: UserPlus },
+      { id: 'stock', label: 'স্টক ব্যবস্থাপনা', icon: Package },
+      { id: 'dealer-audit', label: 'ডিলার অডিট / প্রোফাইল', icon: FileCheck },
+      { id: 'distribution-records', label: 'বিতরণ রেকর্ড', icon: FileText, badge: '২১১' },
+      { id: 'duplicate-data', label: 'ডুপ্লিকেট ডেটা', icon: Copy, badgeColor: 'rose', badge: '৪' },
+    ],
+  },
+  {
+    group: 'কৃষক ও নাগরিক সেবা',
+    items: [
+      { id: 'citizen-portal', label: 'উন্মুক্ত নাগরিক সেবা পোর্টাল', icon: Globe, badge: 'উন্মুক্ত' },
+      { id: 'farmer-database', label: 'কৃষক নিবন্ধন ও ডেটাবেজ', icon: Users, badge: '৬৪' },
+      { id: 'complaints', label: 'অভিযোগ ও প্রতিকার বক্স', icon: MessageSquare, badgeColor: 'rose', badge: '৩' },
+      { id: 'farmer-search', label: 'কৃষক অনুসন্ধান', icon: UserSearch },
+    ],
+  },
+  {
+    group: 'তদারকি, আইন ও অ্যালার্ট',
+    items: [
+      { id: 'field-saao', label: 'মাঠ পরিদর্শন ও জিপিএস অডিট', icon: MapPin, badge: 'SAAO' },
+      { id: 'mobile-court', label: 'পরিদর্শন ও মোবাইল কোর্ট', icon: Gavel },
+      { id: 'sms-alerts', label: 'এসএমএস ও অ্যানোমালি অ্যালার্ট', icon: ShieldAlert, badgeColor: 'rose', badge: 'অ্যালার্ট' },
+    ],
+  },
+  {
+    group: 'সরকারি প্রতিবেদন ও এক্সপোর্ট',
+    items: [
+      { id: 'gov-reports', label: 'সরকারি ফরম-ক ও ফরম-খ', icon: FileSpreadsheet },
+      { id: 'reports', label: 'রিপোর্ট ও বিশ্লেষণ', icon: BarChart3 },
+      { id: 'export', label: 'ডেটা এক্সপোর্ট', icon: Download },
+    ],
+  },
+  {
+    group: 'প্রশাসন ও নিয়ন্ত্রণ',
+    items: [
+      { id: 'user-approval', label: 'কর্মকর্তা ও ইউজার অনুমোদন', icon: UserCheck, badge: '২' },
+      { id: 'logs', label: 'সিস্টেম লগ', icon: Terminal },
+      { id: 'verify', label: 'পরিসংখ্যান যাচাই', icon: CheckSquare },
+      { id: 'cleanup', label: 'ডেটা মুছুন', icon: Trash2 },
+      { id: 'settings', label: 'সেটিংস', icon: Settings },
+    ],
+  },
+];
 
-  useEffect(() => {
-    document.title = 'ড্যাশবোর্ড | সার বিতরণ ব্যবস্থাপনা সিস্টেম - FDMS Bangladesh'
-  }, [])
-
-  // Top metric cards
-  const summaryStats = [
-    {
-      label: 'মোট ডিলার',
-      value: '6',
-      subtext: '১০০% নিবন্ধিত',
-      icon: Users,
-      color: 'emerald',
-      iconBg: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/10',
-    },
-    {
-      label: 'মোট কৃষক',
-      value: '64',
-      subtext: 'NID ও কার্ড যাচাইকৃত',
-      icon: User,
-      color: 'emerald',
-      iconBg: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/10',
-    },
-    {
-      label: 'মোট বিতরণ',
-      value: '211',
-      subtext: 'ডিজিটাল এন্ট্রি সম্পন্ন',
-      icon: Truck,
-      color: 'emerald',
-      iconBg: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/10',
-    },
-    {
-      label: 'ডুপ্লিকেট ডেটা',
-      value: '4',
-      subtext: 'অডিট নিরীক্ষা আবশ্যক',
-      icon: Copy,
-      color: 'rose',
-      iconBg: 'bg-rose-50 text-rose-600 ring-1 ring-rose-500/10',
-    },
-    {
-      label: 'মোট সার বিতরণ (কেজি)',
-      value: '৩,০৫৫',
-      subtext: 'ইউরিয়া, টিএসপি, ডিএপি, এমওপি',
-      icon: ShoppingBag,
-      color: 'amber',
-      iconBg: 'bg-amber-50 text-amber-700 ring-1 ring-amber-600/10',
-    },
-  ]
-
-  // Farmer classes by land size
-  const farmerClassStats = [
-    {
-      label: 'ছোট কৃষক',
-      value: '28',
-      percentage: '৪৩.৮%',
-      landRange: '০.০১ - ০.৪৯ একর',
-      icon: User,
-      color: '#16a34a',
-      iconBg: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/15',
-    },
-    {
-      label: 'মাঝারি কৃষক',
-      value: '25',
-      percentage: '৩৯.১%',
-      landRange: '০.৫০ - ২.৪৯ একর',
-      icon: User,
-      color: '#d97706',
-      iconBg: 'bg-amber-50 text-amber-700 ring-1 ring-amber-600/15',
-    },
-    {
-      label: 'বড় কৃষক',
-      value: '11',
-      percentage: '১৭.২%',
-      landRange: '২.৫০ একর বা তদূর্ধ্ব',
-      icon: User,
-      color: '#e11d48',
-      iconBg: 'bg-rose-50 text-rose-600 ring-1 ring-rose-600/15',
-    },
-  ]
-
-  // Fertilizer Donut Chart data
-  const fertilizerDistribution = [
-    { name: 'ইউরিয়া', value: 38, hex: '#166534', kg: '১,১৬১ কেজি' },
-    { name: 'টিএসপি', value: 24, hex: '#16a34a', kg: '৭৩৩ কেজি' },
-    { name: 'ডিএপি', value: 18, hex: '#4ade80', kg: '৫৫০ কেজি' },
-    { name: 'এমওপি', value: 14, hex: '#ca8a04', kg: '৪২৮ কেজি' },
-    { name: 'জৈব সার', value: 6, hex: '#78350f', kg: '১৮৩ কেজি' },
-  ]
-
-  // Union distribution bar chart data
-  const unionData = [
-    { name: '১', value: 600, label: '১ নং ইউনিয়ন' },
-    { name: '২', value: 650, label: '২ নং বগারচর' },
-    { name: '৩', value: 680, label: '৩ নং বাট্টাজোড়' },
-    { name: '৪', value: 480, label: '৪ নং সাধুরপাড়া' },
-    { name: '৫', value: 650, label: '৫ নং বকশীগঞ্জ' },
-    { name: '৬', value: 0, label: '৬ নং নিলাখিয়া' },
-    { name: '৭', value: 0, label: '৭ নং ইউনিয়ন' },
-    { name: 'বকশীগঞ্জ', value: 0, label: 'বকশীগঞ্জ পৌরসভা' },
-  ]
-
-  // Monthly distribution trend (Last 6 / 4 months)
-  const monthlyTrend = [
-    { month: '2026-08', value: '৩৩০ কেজি', x: 80, y: 163 },
-    { month: '2026-09', value: '১,৪৫০ কেজি', x: 380, y: 37 },
-    { month: '2026-10', value: '১,১০০ কেজি', x: 680, y: 76 },
-    { month: '2026-11', value: '২০০ কেজি', x: 960, y: 178 },
-  ]
-
-  // Top Dealers by total fertilizer distribution
-  const topDealers = [
-    {
-      rank: 1,
-      name: 'মেসার্স মাটির মানুষ এন্টারপ্রাইজ (ডেমো)',
-      union: '৩ নং বাট্টাজোড় ইউনিয়ন',
-      totalKg: '৬৭০ কেজি',
-      distributions: '45 বিতরণ',
-    },
-    {
-      rank: 2,
-      name: 'মেসার্স কৃষক বন্ধু ঘর (ডেমো)',
-      union: '৫ নং বকশীগঞ্জ ইউনিয়ন',
-      totalKg: '৬২২ কেজি',
-      distributions: '43 বিতরণ',
-    },
-    {
-      rank: 3,
-      name: 'মেসার্স নতুন ফসল ট্রেডার্স (ডেমো)',
-      union: '২ নং বগারচর ইউনিয়ন',
-      totalKg: '৬২০ কেজি',
-      distributions: '45 বিতরণ',
-    },
-    {
-      rank: 4,
-      name: 'মেসার্স সবুজ কৃষি ভান্ডার (ডেমো)',
-      union: '৬ নং ধানুয়া কামালপুর ইউনিয়ন',
-      totalKg: '৫০৫ কেজি',
-      distributions: '41 বিতরণ',
-    },
-    {
-      rank: 5,
-      name: 'মেসার্স সোনালী মাঠ স্টোর (ডেমো)',
-      union: '৪ নং সাধুরপাড়া ইউনিয়ন',
-      totalKg: '৪৭৫ কেজি',
-      distributions: '37 বিতরণ',
-    },
-  ]
-
-  // All dealers distribution table data (Matches target image)
-  const allDealersDistribution = [
-    {
-      id: 1,
-      name: 'মেসার্স মাটির মানুষ এন্টারপ্রাইজ (ডেমো)',
-      union: '৩ নং বাট্টাজোড় ইউনিয়ন',
-      entries: '৪৫',
-      totalKg: '৬৭০',
-      status: 'active',
-      details: {
-        dealerId: 'D-101',
-        tradeLicense: 'TR-2026-3391',
-        urea: '৩৫০ কেজি',
-        tsp: '১২০ কেজি',
-        dap: '১০০ কেজি',
-        mop: '১০০ কেজি',
-      },
-    },
-    {
-      id: 2,
-      name: 'মেসার্স কৃষক বন্ধু ঘর (ডেমো)',
-      union: '৫ নং বকশীগঞ্জ ইউনিয়ন',
-      entries: '৪৩',
-      totalKg: '৬২২',
-      status: 'active',
-      details: {
-        dealerId: 'D-102',
-        tradeLicense: 'TR-2026-4412',
-        urea: '৩১০ কেজি',
-        tsp: '১১২ কেজি',
-        dap: '১০০ কেজি',
-        mop: '১০০ কেজি',
-      },
-    },
-    {
-      id: 3,
-      name: 'মেসার্স নতুন ফসল ট্রেডার্স (ডেমো)',
-      union: '২ নং বগারচর ইউনিয়ন',
-      entries: '৪৫',
-      totalKg: '৬২০',
-      status: 'active',
-      details: {
-        dealerId: 'D-103',
-        tradeLicense: 'TR-2026-5589',
-        urea: '৩০০ কেজি',
-        tsp: '১২০ কেজি',
-        dap: '১০০ কেজি',
-        mop: '১০০ কেজি',
-      },
-    },
-    {
-      id: 4,
-      name: 'মেসার্স সবুজ কৃষি ভান্ডার (ডেমো)',
-      union: '৬ নং ধানুয়া কামালপুর ইউনিয়ন',
-      entries: '৪১',
-      totalKg: '৫০৫',
-      status: 'active',
-      details: {
-        dealerId: 'D-104',
-        tradeLicense: 'TR-2026-6670',
-        urea: '২৫০ কেজি',
-        tsp: '৯৫ কেজি',
-        dap: '৮০ কেজি',
-        mop: '৮০ কেজি',
-      },
-    },
-    {
-      id: 5,
-      name: 'মেসার্স সোনালী মাঠ স্টোর (ডেমো)',
-      union: '৪ নং সাধুরপাড়া ইউনিয়ন',
-      entries: '৩৭',
-      totalKg: '৪৭৫',
-      status: 'active',
-      details: {
-        dealerId: 'D-105',
-        tradeLicense: 'TR-2026-7781',
-        urea: '২৩০ কেজি',
-        tsp: '৮৫ কেজি',
-        dap: '৮০ কেজি',
-        mop: '৮০ কেজি',
-      },
-    },
-    {
-      id: 6,
-      name: 'মেসার্স শ্যামল বাংলা সার বিতান (ডেমো)',
-      union: '৬ নং নিলাখিয়া ইউনিয়ন',
-      entries: '০',
-      totalKg: '০',
-      status: 'inactive',
-      details: {
-        dealerId: 'D-106',
-        tradeLicense: 'TR-2026-8890',
-        urea: '০ কেজি',
-        tsp: '০ কেজি',
-        dap: '০ কেজি',
-        mop: '০ কেজি',
-      },
-    },
-  ]
-
-  // Grouped Sidebar Menu Items for a formal, organized enterprise experience
-  const navigationGroups = [
+// Role-Tailored Navigation Menus
+const roleNavigationGroups = {
+  'super-admin': [
     {
       group: 'মূল মেনু',
       items: [
-        { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: LayoutGrid },
+        { id: 'dashboard', label: 'জাতীয় সার ড্যাশবোর্ড', icon: LayoutGrid },
       ],
     },
     {
-      group: 'কোটা ও সরকারি সরবরাহ',
+      group: 'জাতীয় কোটা ও সরবরাহ',
       items: [
-        { id: 'quota-do', label: 'কোটা ও ডিও (DO) বরাদ্দ', icon: FileCheck, badge: 'অনুমোদন' },
-        { id: 'bank-treasury', label: 'ব্যাংক চালান ও জামানত', icon: Landmark },
-        { id: 'ward-outlets', label: 'ওয়ার্ড বিক্রয়কেন্দ্র ও স্টক', icon: Store },
-        { id: 'price-ceiling', label: 'মূল্য (MRP) ও সিলিং নীতি', icon: Scale },
+        { id: 'quota-do', label: 'জাতীয় কোটা ও ডিও (DO)', icon: FileCheck, badge: 'বরাদ্দ' },
+        { id: 'price-ceiling', label: 'সর্বোচ্চ খুচরা মূল্য (MRP)', icon: Scale, badge: 'গেজেট' },
+        { id: 'stock', label: 'বাফার গোডাউন ও জাতীয় মজুত', icon: Package },
       ],
     },
     {
-      group: 'ডিলার ও বিতরণ কার্যক্রম',
+      group: 'সারাদেশে ডিলার নেটওয়ার্ক',
       items: [
-        { id: 'ward-pos', label: 'ওয়ার্ড POS সেলস টার্মিনাল', icon: QrCode, badge: 'POS' },
-        { id: 'dealers-list', label: 'ডিলার তালিকা', icon: Users, badge: '৬' },
-        { id: 'add-dealer', label: 'ডিলার যুক্ত করুন', icon: UserPlus },
-        { id: 'stock', label: 'স্টক ব্যবস্থাপনা', icon: Package },
-        { id: 'dealer-audit', label: 'ডিলার অডিট / প্রোফাইল', icon: FileCheck },
-        { id: 'distribution-records', label: 'বিতরণ রেকর্ড', icon: FileText, badge: '২১১' },
-        { id: 'duplicate-data', label: 'ডুপ্লিকেট ডেটা', icon: Copy, badgeColor: 'rose', badge: '৪' },
+        { id: 'dealers-list', label: 'অনুমোদিত ডিলার তালিকা', icon: Users, badge: '৫,৪২০' },
+        { id: 'dealer-audit', label: 'ডিলার নিরীক্ষা ও কমপ্লায়েন্স', icon: FileCheck },
+        { id: 'gov-reports', label: 'জাতীয় ফরম-ক ও ফরম-খ সংকলন', icon: FileSpreadsheet },
       ],
     },
     {
-      group: 'কৃষক ও নাগরিক সেবা',
+      group: 'কেন্দ্রীয় প্রশাসন ও অডিট',
       items: [
-        { id: 'citizen-portal', label: 'উন্মুক্ত নাগরিক সেবা পোর্টাল', icon: Globe, badge: 'উন্মুক্ত' },
-        { id: 'farmer-database', label: 'কৃষক নিবন্ধন ও ডেটাবেজ', icon: Users, badge: '৬৪' },
-        { id: 'complaints', label: 'অভিযোগ ও প্রতিকার বক্স', icon: MessageSquare, badgeColor: 'rose', badge: '৩' },
-        { id: 'farmer-search', label: 'কৃষক অনুসন্ধান', icon: UserSearch },
+        { id: 'user-approval', label: 'কর্মকর্তা ও ইউজার অনুমোদন', icon: UserCheck, badge: '২' },
+        { id: 'logs', label: 'সার্বিক অডিট ও নিরাপত্তা লগ', icon: Terminal },
+        { id: 'export', label: 'জাতীয় ডেটা এক্সপোর্ট', icon: Download },
+        { id: 'settings', label: 'কেন্দ্রীয় নীতি সেটিংস', icon: Settings },
+      ],
+    },
+  ],
+
+  'upazila-admin': [
+    {
+      group: 'মূল মেনু',
+      items: [
+        { id: 'dashboard', label: 'উপজেলা ড্যাশবোর্ড', icon: LayoutGrid },
       ],
     },
     {
-      group: 'তদারকি, আইন ও অ্যালার্ট',
+      group: 'ডিলার ও ডিও অনুমোদন',
       items: [
-        { id: 'field-saao', label: 'মাঠ পরিদর্শন ও জিপিএস অডিট', icon: MapPin, badge: 'SAAO' },
-        { id: 'mobile-court', label: 'পরিদর্শন ও মোবাইল কোর্ট', icon: Gavel },
-        { id: 'sms-alerts', label: 'এসএমএস ও অ্যানোমালি অ্যালার্ট', icon: ShieldAlert, badgeColor: 'rose', badge: 'অ্যালার্ট' },
+        { id: 'dealers-list', label: 'ডিলার তালিকা ও নিয়ন্ত্রণ', icon: Users, badge: '৬' },
+        { id: 'add-dealer', label: 'ডিলার নিয়োগ ফরম', icon: UserPlus },
+        { id: 'quota-do', label: 'ট্রেজারি চালান ও ডিও (DO)', icon: FileCheck, badge: 'অনুমোদন' },
+        { id: 'bank-treasury', label: 'সোনালী ব্যাংক চালান ও জামানত', icon: Landmark },
+        { id: 'stock', label: 'উপজেলা সার মজুত লেজার', icon: Package },
+        { id: 'duplicate-data', label: 'ডুপ্লিকেট ডেটা নিরীক্ষা', icon: Copy, badgeColor: 'rose', badge: '৪' },
+      ],
+    },
+    {
+      group: 'মাঠ পরিদর্শন ও আইন',
+      items: [
+        { id: 'mobile-court', label: 'ভ্রাম্যমাণ আদালত ও সার জব্দ', icon: Gavel },
+        { id: 'field-saao', label: 'মাঠ পরিদর্শন (SAAO)', icon: MapPin, badge: 'SAAO' },
+        { id: 'complaints', label: 'কৃষক অভিযোগ ও সমাধান', icon: MessageSquare, badgeColor: 'rose', badge: '৩' },
+        { id: 'sms-alerts', label: 'এসএমএস লগ ও অ্যালার্ট', icon: ShieldAlert, badgeColor: 'rose', badge: 'অ্যালার্ট' },
       ],
     },
     {
       group: 'সরকারি প্রতিবেদন ও এক্সপোর্ট',
       items: [
-        { id: 'gov-reports', label: 'সরকারি ফরম-ক ও ফরম-খ', icon: FileSpreadsheet },
-        { id: 'reports', label: 'রিপোর্ট ও বিশ্লেষণ', icon: BarChart3 },
-        { id: 'export', label: 'ডেটা এক্সপোর্ট', icon: Download },
+        { id: 'gov-reports', label: 'উপজেলা মাসিক ‘ফরম-খ’', icon: FileSpreadsheet },
+        { id: 'reports', label: 'বিতরণ ও পরিসংখ্যান রিপোর্ট', icon: BarChart3 },
+        { id: 'export', label: 'প্রতিবেদন এক্সপোর্ট', icon: Download },
+        { id: 'verify', label: 'পরিসংখ্যান যাচাই', icon: CheckSquare },
+      ],
+    },
+  ],
+
+  'union-dealer': [
+    {
+      group: 'মূল মেনু',
+      items: [
+        { id: 'dashboard', label: 'ডিলার ড্যাশবোর্ড', icon: LayoutGrid },
       ],
     },
     {
-      group: 'প্রশাসন ও নিয়ন্ত্রণ',
+      group: 'ব্যাংক ও বাফার উত্তোলন',
       items: [
-        { id: 'user-approval', label: 'কর্মকর্তা ও ইউজার অনুমোদন', icon: UserCheck, badge: '২' },
-        { id: 'logs', label: 'সিস্টেম লগ', icon: Terminal },
-        { id: 'verify', label: 'পরিসংখ্যান যাচাই', icon: CheckSquare },
-        { id: 'cleanup', label: 'ডেটা মুছুন', icon: Trash2 },
-        { id: 'settings', label: 'সেটিংস', icon: Settings },
+        { id: 'bank-treasury', label: 'সোনালী ব্যাংক চালান ও পে-অর্ডার', icon: Landmark },
+        { id: 'stock', label: 'বাফার গোডাউন উত্তোলন (Inward)', icon: Package },
+        { id: 'dealer-audit', label: 'নিজস্ব ডিলার প্রোফাইল', icon: FileCheck },
       ],
     },
-  ]
+    {
+      group: 'ওয়ার্ড বিক্রয়কেন্দ্র নেটওয়ার্ক',
+      items: [
+        { id: 'ward-outlets', label: '৩টি ওয়ার্ডে সার প্রেরণ (STO)', icon: Store, badge: '৩টি কেন্দ্র' },
+        { id: 'distribution-records', label: 'বিতরণ রেকর্ড ও চালান রশিদ', icon: FileText, badge: '২১১' },
+        { id: 'farmer-search', label: 'কৃষক কার্ড ও সিলিং যাচাই', icon: UserSearch },
+      ],
+    },
+    {
+      group: 'সরকারি ফরম ও মূল্য',
+      items: [
+        { id: 'gov-reports', label: 'মাসিক সরকারি ‘ফরম-ক’ দাখিল', icon: FileSpreadsheet },
+        { id: 'price-ceiling', label: 'অনুমোদিত সরকারি সার দর (MRP)', icon: Scale },
+        { id: 'export', label: 'ডিলার লেজার এক্সপোর্ট', icon: Download },
+      ],
+    },
+  ],
+
+  'ward-pos': [
+    {
+      group: 'মূল মেনু',
+      items: [
+        { id: 'dashboard', label: 'POS সার বিক্রয় ড্যাশবোর্ড', icon: LayoutGrid },
+      ],
+    },
+    {
+      group: 'সার বিক্রয় টার্মিনাল',
+      items: [
+        { id: 'ward-pos', label: 'লাইভ POS সেলস টার্মিনাল', icon: QrCode, badge: 'কাউন্টার' },
+        { id: 'farmer-search', label: 'NID ও কৃষক কার্ড অনুসন্ধান', icon: UserSearch },
+        { id: 'distribution-records', label: 'দৈনিক বিক্রয় ও ক্যাশ মেমো', icon: FileText, badge: '২৮টি আজ' },
+      ],
+    },
+    {
+      group: 'আউটলেট ও কৃষক ডেটাবেজ',
+      items: [
+        { id: 'ward-outlets', label: 'ওয়ার্ড বিক্রয়কেন্দ্র মজুত (STO)', icon: Store },
+        { id: 'farmer-database', label: 'নিবন্ধিত কৃষক তালিকা', icon: Users, badge: '৬৪' },
+        { id: 'price-ceiling', label: 'সরকার নির্ধারিত দর (MRP)', icon: Scale },
+        { id: 'complaints', label: 'কৃষক সহায়তা ও অভিযোগ গ্রহণ', icon: MessageSquare },
+      ],
+    },
+  ],
+
+  'field-saao': [
+    {
+      group: 'মূল মেনু',
+      items: [
+        { id: 'dashboard', label: 'মাঠ কর্মকর্তা ড্যাশবোর্ড', icon: LayoutGrid },
+      ],
+    },
+    {
+      group: 'সরেজমিনে পরিদর্শন ও অডিট',
+      items: [
+        { id: 'field-saao', label: 'জিপিএস সরেজমিনে পরিদর্শন', icon: MapPin, badge: 'SAAO' },
+        { id: 'ward-outlets', label: 'ওয়ার্ড বিক্রয়কেন্দ্র পরিদর্শন', icon: Store },
+        { id: 'dealer-audit', label: 'ডিলার গুদাম ও খতিয়ান অডিট', icon: FileCheck },
+        { id: 'mobile-court', label: 'পরিদর্শন ও মোবাইল কোর্ট রিপোর্ট', icon: Gavel },
+      ],
+    },
+    {
+      group: 'কৃষক ও ফসল জরিপ',
+      items: [
+        { id: 'farmer-database', label: 'কৃষক নিবন্ধন ও জমি হালনাগাদ', icon: Users, badge: '৬৪' },
+        { id: 'farmer-search', label: 'কৃষকের জমি ও সিলিং খতিয়ান', icon: UserSearch },
+        { id: 'sms-alerts', label: 'অস্বাভাবিক বিক্রয় সতর্কতা', icon: ShieldAlert, badgeColor: 'rose', badge: 'অ্যালার্ট' },
+        { id: 'complaints', label: 'মাঠ পর্যায়ের কৃষক অভিযোগ', icon: MessageSquare },
+      ],
+    },
+  ],
+
+  'public-citizen': [
+    {
+      group: 'মূল মেনু',
+      items: [
+        { id: 'dashboard', label: 'নাগরিক সেবা ড্যাশবোর্ড', icon: LayoutGrid },
+      ],
+    },
+    {
+      group: 'উন্মুক্ত নাগরিক তথ্যসেবা',
+      items: [
+        { id: 'citizen-portal', label: 'উন্মুক্ত মূল্যবোর্ড ও লাইভ স্টক', icon: Globe, badge: 'উন্মুক্ত' },
+        { id: 'price-ceiling', label: 'সরকারি সর্বোচ্চ খুচরা মূল্য (MRP)', icon: Scale },
+        { id: 'dealers-list', label: 'অনুমোদিত ডিলারদের তালিকা', icon: Users, badge: '৬' },
+        { id: 'farmer-search', label: 'আমার কৃষক কার্ড ও কোটা তথ্য', icon: UserSearch },
+      ],
+    },
+    {
+      group: 'জনপ্রতিকার ও অভিযোগ',
+      items: [
+        { id: 'complaints', label: 'গোপনীয় অভিযোগ দাখিল বক্স', icon: MessageSquare, badge: 'জিআরএস' },
+      ],
+    },
+  ],
+};
+
+export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহমেদ রফিক', role: 'উপজেলা অ্যাডমিন (UNO / UAO)' } }) {
+  const userRole = currentUser?.role || 'উপজেলা অ্যাডমিন (UNO / UAO)';
+  const matchedRole = ROLES.find(r => r.roleTitle === userRole || (userRole && r.label?.includes(userRole))) || ROLES[1];
+  
+  const [activeRole, setActiveRole] = useState(matchedRole);
+  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [showAllModules, setShowAllModules] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verificationSuccess, setVerificationSuccess] = useState(false);
+
+  useEffect(() => {
+    document.title = `${activeRole?.label || 'ড্যাশবোর্ড'} | সার বিতরণ ব্যবস্থাপনা সিস্টেম - FDMS Bangladesh`
+  }, [activeRole]);
+
+  // Synchronize role if currentUser prop changes
+  useEffect(() => {
+    const roleStr = currentUser?.role || 'উপজেলা অ্যাডমিন (UNO / UAO)';
+    const matched = ROLES.find(r => r.roleTitle === roleStr || (roleStr && r.label?.includes(roleStr))) || ROLES[1];
+    setActiveRole(matched);
+    setActiveTab('dashboard');
+  }, [currentUser]);
 
   const handleRefresh = () => {
-    setRefreshKey(prev => prev + 1)
-  }
+    setRefreshKey(prev => prev + 1);
+  };
 
   const handleVerify = () => {
-    setIsVerifying(true)
+    setIsVerifying(true);
     setTimeout(() => {
-      setIsVerifying(false)
-      setVerificationSuccess(true)
-      setTimeout(() => setVerificationSuccess(false), 3500)
-    }, 700)
-  }
+      setIsVerifying(false);
+      setVerificationSuccess(true);
+      setTimeout(() => setVerificationSuccess(false), 3500);
+    }, 700);
+  };
 
-  const filteredDealers = allDealersDistribution.filter(dealer =>
-    dealer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    dealer.union.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // Determine which navigation groups to display in the sidebar
+  const currentNavigationGroups = showAllModules
+    ? allNavigationGroups
+    : (roleNavigationGroups[activeRole.id] || allNavigationGroups);
 
   return (
     <div className="min-h-screen bg-[#f2f6f3] text-slate-800 flex flex-col font-sans select-none antialiased">
 
       {/* ========================================================
           TOP HEADER (Formal Government Deep Emerald Navbar)
+          Fixed & Sticky
           ======================================================== */}
-      <header className="bg-gradient-to-r from-[#123e21] via-[#164e2a] to-[#144525] text-white px-3 sm:px-5 py-2 shadow-sm border-b border-emerald-900/40 flex items-center justify-between sticky top-0 z-30">
+      <header className="bg-gradient-to-r from-[#123e21] via-[#164e2a] to-[#144525] text-white px-3 sm:px-5 shadow-sm border-b border-emerald-900/40 flex items-center justify-between sticky top-0 z-40 h-14">
 
         {/* Left Branding */}
         <div className="flex items-center space-x-2.5">
@@ -532,14 +492,14 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           <div>
             <div className="flex items-center gap-1.5">
               <h1 className="text-xs sm:text-sm font-bold tracking-tight text-white leading-tight">
-                FDMS — সার বিতরণ ব্যবস্থাপনা সিস্টেম
+                FDMS BANGLADESH — সার বিতরণ ব্যবস্থাপনা
               </h1>
               <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/20 text-[9px] font-medium">
                 জাতীয় পোর্টাল
               </span>
             </div>
             <p className="text-[9px] sm:text-[10px] text-emerald-200/90 font-normal tracking-wide">
-              রেকর্ড ওয়ার্কস্পেস — DEMO DATA — NOT OFFICIAL RECORDS
+              {activeRole.label} কনসোল — DEMO WORKSPACE
             </p>
           </div>
         </div>
@@ -547,30 +507,18 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
         {/* Right Action Controls */}
         <div className="flex items-center space-x-2 text-xs">
 
-          {/* Tour Button */}
-          <button
-            onClick={() => alert('সিস্টেম ট্যুর: বাম পাশের মেনু থেকে ডিলার, কৃষক ও বিতরণ সংক্রান্ত যেকোনো মডিউল ব্যবহার করতে পারেন।')}
-            className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg text-emerald-100 transition-colors cursor-pointer text-[10px] font-medium"
-          >
-            <Clock className="w-3 h-3 text-emerald-300" />
-            <span>ট্যুর</span>
-          </button>
-
-          {/* Request Button */}
-          <button
-            onClick={() => alert('অনুরোধ পাঠানো হয়েছে: কেন্দ্রীয় সার্ভারের সাথে ডাটা সিঙ্ক হচ্ছে।')}
-            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 hover:bg-white/15 border border-white/15 rounded-lg text-emerald-100 transition-colors cursor-pointer text-[10px] font-medium"
-          >
-            <Send className="w-3 h-3 text-emerald-300" />
-            <span>FDMS অনুরোধ</span>
-          </button>
+          {/* Quick Help / Info Pill */}
+          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-white/10 border border-white/15 rounded-lg text-emerald-100 text-[11px] font-medium">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
+            <span>সিস্টেম স্টেটাস: ১০০% সক্রিয়</span>
+          </div>
 
           {/* Interactive Role Switcher Pill & Dropdown */}
           <div className="relative">
             <button
               onClick={() => setShowRoleDropdown(!showRoleDropdown)}
               className="flex items-center bg-black/35 hover:bg-black/50 rounded-xl py-1 px-2.5 border border-white/20 text-white cursor-pointer transition-colors shadow-2xs"
-              title="ক্লিক করে স্টেকহোল্ডার রোল পরিবর্তন করুন"
+              title="ক্লিক করে স্টেকহোল্ডার ভূমিকা পরিবর্তন করুন"
             >
               <div className={`w-5 h-5 rounded-full ${activeRole.color} flex items-center justify-center text-[10px] font-bold text-white mr-1.5 border border-white/30 shrink-0`}>
                 {activeRole.name.charAt(0)}
@@ -604,7 +552,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                       onClick={() => {
                         setActiveRole(r);
                         setShowRoleDropdown(false);
-                        setActiveTab(r.defaultTab);
+                        setActiveTab('dashboard');
                       }}
                       className={`w-full text-left p-2.5 rounded-xl transition-all flex items-start gap-2.5 cursor-pointer ${
                         activeRole.id === r.id ? 'bg-emerald-50 text-emerald-950 border border-emerald-300' : 'hover:bg-slate-50 text-slate-700'
@@ -634,56 +582,88 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
       </header>
 
       {/* ========================================================
-          BODY: SIDEBAR + MAIN CONTENT (Centered Max-Width Layout)
+          BODY: SIDEBAR + MAIN CONTENT
+          Sidebar is FIXED & STICKY, Scrolling Independently
           ======================================================== */}
-      <div className="flex-1 flex flex-col md:flex-row max-w-[1400px] w-full mx-auto">
+      <div className="flex-1 flex flex-col md:flex-row max-w-[1440px] w-full mx-auto">
 
-        {/* Left Sidebar (Formal Grouped Navigation) */}
-        <aside className="w-full md:w-60 lg:w-64 bg-white md:border-r border-slate-200/80 flex flex-col shrink-0 py-4 px-3 shadow-[1px_0_4px_rgba(0,0,0,0.02)] md:sticky md:top-12 md:self-start md:max-h-[calc(100vh-3rem)] md:overflow-y-auto">
-          <nav className="space-y-4">
-            {navigationGroups.map((group, gIdx) => (
-              <div key={gIdx} className="space-y-1">
-                <p className="px-3 text-xs font-semibold text-slate-500 tracking-normal mb-1">
-                  {group.group}
-                </p>
-                <div className="space-y-0.5">
-                  {group.items.map((item) => {
-                    const Icon = item.icon
-                    const isActive = activeTab === item.id
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => setActiveTab(item.id)}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[13.5px] font-medium transition-all text-left cursor-pointer group ${isActive
-                            ? 'bg-[#ecf8ef] text-[#14532d] font-bold border-l-4 border-[#166534] shadow-2xs'
-                            : 'text-slate-700 hover:bg-slate-50/90 hover:text-slate-900'
-                          }`}
-                      >
-                        <div className="flex items-center space-x-3 truncate">
-                          <Icon
-                            className={`w-[18px] h-[18px] shrink-0 transition-colors ${isActive ? 'text-[#166534]' : 'text-slate-400 group-hover:text-slate-600'
-                              }`}
-                            strokeWidth={1.85}
-                          />
-                          <span className="truncate">{item.label}</span>
-                        </div>
-                        {item.badge && (
-                          <span
-                            className={`text-xs font-bold px-2 py-0.5 rounded-full font-mono transition-transform ${item.badgeColor === 'rose'
-                                ? 'bg-rose-100/90 text-rose-700'
-                                : 'bg-emerald-100/90 text-emerald-800'
-                              }`}
-                          >
-                            {item.badge}
-                          </span>
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
+        {/* Left Sidebar (Formal Grouped Navigation - Fixed & Sticky) */}
+        <aside className="w-full md:w-64 lg:w-72 bg-white md:border-r border-slate-200/80 flex flex-col justify-between shrink-0 py-3.5 px-3 shadow-[1px_0_4px_rgba(0,0,0,0.02)] md:sticky md:top-14 md:self-start md:h-[calc(100vh-3.5rem)] md:overflow-y-auto">
+          <div className="space-y-3.5">
+            {/* Role Header Badge in Sidebar */}
+            <div className="px-2 pb-2.5 border-b border-slate-100 flex items-center justify-between">
+              <div className="flex items-center gap-2 truncate">
+                <span className={`w-2.5 h-2.5 rounded-full ${activeRole.color} shrink-0`}></span>
+                <span className="text-[11.5px] font-bold text-slate-800 truncate">
+                  {activeRole.label}
+                </span>
               </div>
-            ))}
-          </nav>
+              <span className="text-[10px] text-slate-500 font-mono bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 shrink-0">
+                {showAllModules ? 'সকল মডিউল' : 'নির্দিষ্ট রোল'}
+              </span>
+            </div>
+
+            <nav className="space-y-4">
+              {currentNavigationGroups.map((group, gIdx) => (
+                <div key={gIdx} className="space-y-1">
+                  <p className="px-3 text-xs font-semibold text-slate-500 tracking-normal mb-1">
+                    {group.group}
+                  </p>
+                  <div className="space-y-0.5">
+                    {group.items.map((item) => {
+                      const Icon = item.icon
+                      const isActive = activeTab === item.id
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => setActiveTab(item.id)}
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[13px] font-medium transition-all text-left cursor-pointer group ${isActive
+                              ? 'bg-[#ecf8ef] text-[#14532d] font-bold border-l-4 border-[#166534] shadow-2xs'
+                              : 'text-slate-700 hover:bg-slate-50/90 hover:text-slate-900'
+                            }`}
+                        >
+                          <div className="flex items-center space-x-2.5 truncate">
+                            <Icon
+                              className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-[#166534]' : 'text-slate-400 group-hover:text-slate-600'
+                                }`}
+                              strokeWidth={1.85}
+                            />
+                            <span className="truncate">{item.label}</span>
+                          </div>
+                          {item.badge && (
+                            <span
+                              className={`text-[11px] font-bold px-1.5 py-0.2 rounded-full font-mono transition-transform ${item.badgeColor === 'rose'
+                                  ? 'bg-rose-100/90 text-rose-700'
+                                  : 'bg-emerald-100/90 text-emerald-800'
+                                }`}
+                            >
+                              {item.badge}
+                            </span>
+                          )}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              ))}
+            </nav>
+          </div>
+
+          {/* Sidebar Footer with Toggle to show All Modules or Filtered Role Modules */}
+          <div className="pt-3 border-t border-slate-100 mt-4 space-y-2">
+            <button
+              onClick={() => setShowAllModules(!showAllModules)}
+              className="w-full py-2 px-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-900 border border-slate-200 text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer"
+            >
+              <div className="flex items-center gap-1.5">
+                <Layers className="w-3.5 h-3.5 text-emerald-700" />
+                <span className="text-[11.5px]">{showAllModules ? 'রোল-নির্দিষ্ট মেনু দেখুন' : 'সকল ২৬টি মডিউল দেখুন'}</span>
+              </div>
+              <span className="text-[9px] bg-white px-1.5 py-0.5 rounded border border-slate-200 font-mono text-slate-500">
+                {showAllModules ? 'সব সক্রিয়' : 'ফিল্টার্ড'}
+              </span>
+            </button>
+          </div>
         </aside>
 
         {/* Main Workspace Area (Formal Compact Density) */}
@@ -724,587 +704,39 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                   </div>
                 </div>
               </div>
-              {/* Formal Sub-Header & Status Banner */}
-              <div className="bg-white rounded-xl p-3 sm:p-3.5 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-2.5">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
-                      ড্যাশবোর্ড পর্যবেক্ষণ
-                    </h2>
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-semibold flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      লাইভ রেকর্ড
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-[11px] text-emerald-800 font-medium mt-1">
-                    <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-emerald-600" />
-                    <span>
-                      কাউন্টার সামঞ্জস্য যাচাই: সব ডিলার সেলস হিস্টোরির যোগফল = মোট বিতরণ ও মোট সার। সর্বশেষ পূর্ণ যাচাই: ৯/১১/২০২৬, ৯:৫৮:০৩ PM
-                    </span>
-                  </div>
-                </div>
 
-                <div className="flex items-center gap-2 self-start md:self-auto shrink-0">
-                  <button
-                    onClick={handleRefresh}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-white hover:bg-emerald-50/60 text-emerald-800 border border-slate-200 hover:border-emerald-500 rounded-lg text-xs font-semibold shadow-2xs transition-all cursor-pointer"
-                  >
-                    <RefreshCw className={`w-3.5 h-3.5 text-emerald-700 ${refreshKey ? 'animate-spin' : ''}`} />
-                    <span>রিফ্রেশ</span>
-                  </button>
-
-                  <button
-                    onClick={handleVerify}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#164e2a] hover:bg-[#123e21] text-white rounded-lg text-xs font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
-                  >
-                    <CheckSquare className="w-3.5 h-3.5 text-emerald-200" />
-                    <span>{isVerifying ? 'যাচাই হচ্ছে...' : 'পরিসংখ্যান যাচাই'}</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Toast message on verify */}
-              {verificationSuccess && (
-                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-900 text-xs flex items-center justify-between shadow-xs animate-fadeIn">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>সকল ডিলারের মজুদ খতিয়ান এবং বিক্রয় রসিদ নির্ভুলভাবে নিরীক্ষিত হয়েছে। কোনো অসঙ্গতি পাওয়া যায়নি।</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-emerald-700">১০০% সামঞ্জস্যপূর্ণ</span>
-                </div>
+              {/* Role-Specific Dedicated Dashboard Content */}
+              {activeRole.id === 'super-admin' && (
+                <SuperAdminDashboard onNavigate={setActiveTab} />
               )}
 
-              {/* Row 1: Top 5 Summary Metrics Cards (Executive KPIs) */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
-                {summaryStats.map((item, index) => {
-                  const Icon = item.icon
-                  return (
-                    <div
-                      key={index}
-                      className="bg-white rounded-xl p-3 sm:p-3.5 border border-slate-200/70 shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
-                    >
-                      <div className="flex items-center mb-2">
-                        <div className={`p-2 rounded-lg ${item.iconBg}`}>
-                          <Icon className="w-3.5 h-3.5" strokeWidth={2} />
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-mono">
-                          {item.value}
-                        </div>
-                        <div className="text-xs text-slate-700 font-semibold mt-0.5">
-                          {item.label}
-                        </div>
-                        <div className="text-[10px] text-slate-400 font-normal mt-0.5">
-                          {item.subtext}
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+              {activeRole.id === 'upazila-admin' && (
+                <UpazilaAdminDashboard
+                  onNavigate={setActiveTab}
+                  onVerify={handleVerify}
+                  isVerifying={isVerifying}
+                  verificationSuccess={verificationSuccess}
+                  onRefresh={handleRefresh}
+                  refreshKey={refreshKey}
+                />
+              )}
 
-              {/* Row 2: Farmer Categories (কৃষক শ্রেণী - জমির পরিমাণ অনুযায়ী) */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xs sm:text-sm font-bold text-slate-900">
-                    কৃষক শ্রেণী (জমির পরিমাণ অনুযায়ী)
-                  </h3>
-                  <span className="text-[11px] text-slate-500 font-normal">
-                    মোট ৬৪ জন নিবন্ধিত কৃষক
-                  </span>
-                </div>
+              {activeRole.id === 'union-dealer' && (
+                <DealerDashboard onNavigate={setActiveTab} />
+              )}
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
-                  {farmerClassStats.map((item, index) => {
-                    const Icon = item.icon
-                    return (
-                      <div
-                        key={index}
-                        className="bg-white rounded-xl p-3 sm:p-3.5 border border-slate-200/70 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between"
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className={`p-2 rounded-lg ${item.iconBg}`}>
-                            <Icon className="w-3.5 h-3.5" strokeWidth={2} />
-                          </div>
-                          <span className="text-[11px] font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded-full border border-slate-200/70">
-                            {item.percentage}
-                          </span>
-                        </div>
+              {activeRole.id === 'ward-pos' && (
+                <WardPosDashboard onNavigate={setActiveTab} />
+              )}
 
-                        <div className="mt-2.5">
-                          <div className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-mono">
-                            {item.value}
-                          </div>
-                          <div className="text-xs text-slate-800 font-semibold mt-0.5">
-                            {item.label}
-                          </div>
-                          <div className="text-[10px] text-slate-400 mt-0.5">
-                            জমির আওতা: {item.landRange}
-                          </div>
+              {activeRole.id === 'field-saao' && (
+                <FieldSaaoDashboard onNavigate={setActiveTab} />
+              )}
 
-                          {/* Soft visual progress indicator */}
-                          <div className="w-full bg-slate-100 rounded-full h-1 mt-2 overflow-hidden">
-                            <div
-                              className="h-full rounded-full transition-all duration-500"
-                              style={{
-                                width: item.percentage.replace('%', '') + '%',
-                                backgroundColor: item.color
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
+              {activeRole.id === 'public-citizen' && (
+                <CitizenDashboard onNavigate={setActiveTab} />
+              )}
 
-              {/* Row 3: Two Analytics Charts (Donut + Bar Chart) */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-
-                {/* Left Chart Card: সার ভিত্তিক বিতরণ (Donut Chart) */}
-                <div className="lg:col-span-5 bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs flex flex-col justify-between">
-                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
-                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">
-                      সার ভিত্তিক বিতরণ
-                    </h4>
-                    <span className="text-[10px] text-slate-400">শতাংশ ও পরিমাণ</span>
-                  </div>
-
-                  {/* SVG Donut Chart */}
-                  <div className="py-2 flex flex-col items-center justify-center">
-                    <div className="relative w-32 h-32 sm:w-36 sm:h-36">
-                      <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90 transform drop-shadow-xs">
-                        {/* Segment 1: Urea (38%) */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="35"
-                          fill="transparent"
-                          stroke="#166534"
-                          strokeWidth="18"
-                          strokeDasharray="83.6 220"
-                          strokeDashoffset="0"
-                        />
-                        {/* Segment 2: TSP (24%) */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="35"
-                          fill="transparent"
-                          stroke="#16a34a"
-                          strokeWidth="18"
-                          strokeDasharray="52.8 220"
-                          strokeDashoffset="-83.6"
-                        />
-                        {/* Segment 3: DAP (18%) */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="35"
-                          fill="transparent"
-                          stroke="#4ade80"
-                          strokeWidth="18"
-                          strokeDasharray="39.6 220"
-                          strokeDashoffset="-136.4"
-                        />
-                        {/* Segment 4: MOP (14%) */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="35"
-                          fill="transparent"
-                          stroke="#ca8a04"
-                          strokeWidth="18"
-                          strokeDasharray="30.8 220"
-                          strokeDashoffset="-176"
-                        />
-                        {/* Segment 5: Organic (6%) */}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="35"
-                          fill="transparent"
-                          stroke="#78350f"
-                          strokeWidth="18"
-                          strokeDasharray="13.2 220"
-                          strokeDashoffset="-206.8"
-                        />
-                      </svg>
-                      {/* Inner Center Badge */}
-                      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                        <span className="text-xs font-bold text-slate-900 font-mono">৩,০৫৫</span>
-                        <span className="text-[9px] text-slate-500 font-medium">মোট কেজি</span>
-                      </div>
-                    </div>
-
-                    {/* Chart Legend with Quantities */}
-                    <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 mt-3 text-[10px] text-slate-600 font-medium w-full px-1">
-                      {fertilizerDistribution.map((item, idx) => (
-                        <div key={idx} className="flex items-center justify-between py-0.5 border-b border-slate-50">
-                          <div className="flex items-center space-x-1.5">
-                            <span
-                              className="w-2 h-2 rounded-full inline-block shrink-0"
-                              style={{ backgroundColor: item.hex }}
-                            ></span>
-                            <span>{item.name}</span>
-                          </div>
-                          <span className="text-slate-400 text-[9px] font-mono">{item.kg}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right Chart Card: ইউনিয়ন ভিত্তিক বিতরণ (কেজি) (Bar Chart) */}
-                <div className="lg:col-span-7 bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs flex flex-col justify-between">
-                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
-                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">
-                      ইউনিয়ন ভিত্তিক বিতরণ (কেজি)
-                    </h4>
-                    <span className="text-[10px] text-slate-400">সর্বোচ্চ সীমা: ৭০০ কেজি</span>
-                  </div>
-
-                  {/* SVG Bar Chart with Axis */}
-                  <div className="pt-2 pb-0.5 w-full">
-                    <div className="flex w-full h-40 sm:h-44">
-
-                      {/* Y-Axis scale */}
-                      <div className="flex flex-col justify-between items-end pr-2 text-[9px] text-slate-400 font-mono select-none h-34 pb-1">
-                        <span>700</span>
-                        <span>600</span>
-                        <span>500</span>
-                        <span>400</span>
-                        <span>300</span>
-                        <span>200</span>
-                        <span>100</span>
-                        <span>0</span>
-                      </div>
-
-                      {/* Bars Container */}
-                      <div className="flex-1 flex flex-col justify-between h-full">
-                        <div className="relative flex-1 border-b border-l border-slate-200/80 flex items-end justify-around px-1.5 sm:px-3">
-
-                          {/* Horizontal Gridlines */}
-                          <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
-                            <div className="border-t border-dashed border-slate-200 w-full"></div>
-                            <div className="border-t border-dashed border-slate-200 w-full"></div>
-                            <div className="border-t border-dashed border-slate-200 w-full"></div>
-                            <div className="border-t border-dashed border-slate-200 w-full"></div>
-                            <div className="border-t border-dashed border-slate-200 w-full"></div>
-                            <div className="border-t border-dashed border-slate-200 w-full"></div>
-                            <div className="border-t border-dashed border-slate-200 w-full"></div>
-                          </div>
-
-                          {/* Bars */}
-                          {unionData.map((union, i) => {
-                            const heightPercent = union.value > 0 ? (union.value / 700) * 100 : 0
-                            return (
-                              <div
-                                key={i}
-                                className="flex flex-col items-center h-full justify-end group z-10 w-6 sm:w-8"
-                              >
-                                {union.value > 0 ? (
-                                  <div
-                                    style={{ height: `${heightPercent}%` }}
-                                    className="w-full bg-gradient-to-t from-[#15532d] to-[#22c55e] hover:to-emerald-400 rounded-t transition-all duration-300 relative shadow-2xs"
-                                  >
-                                    {/* Tooltip on hover */}
-                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[9px] py-0.5 px-1.5 rounded pointer-events-none whitespace-nowrap shadow z-20 font-medium">
-                                      {union.value} কেজি
-                                    </div>
-                                  </div>
-                                ) : (
-                                  <div className="h-0.5 w-full bg-transparent"></div>
-                                )}
-                              </div>
-                            )
-                          })}
-                        </div>
-
-                        {/* X-Axis labels */}
-                        <div className="flex justify-around items-center pt-1.5 text-[10px] text-slate-600 font-medium px-1.5 sm:px-3">
-                          {unionData.map((union, i) => (
-                            <span key={i} className="w-6 sm:w-8 text-center truncate">
-                              {union.name}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Row 4: মাসিক বিতরণ ট্রেন্ড (সর্বশেষ ৬ মাস) (Monthly Distribution Trend) */}
-              <div className="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs space-y-2">
-                <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
-                  <h4 className="text-xs sm:text-sm font-bold text-slate-900">
-                    মাসিক বিতরণ ট্রেন্ড (সর্বশেষ ৬ মাস)
-                  </h4>
-                  <span className="text-[10px] text-slate-400">সর্বোচ্চ মৌসুম: সেপ্টেম্বর ২০২৬</span>
-                </div>
-
-                {/* SVG Area / Spline Trend Chart */}
-                <div className="w-full overflow-x-auto pt-1">
-                  <div className="min-w-[500px] sm:min-w-full">
-                    <div className="flex w-full">
-
-                      {/* Y-Axis Labels */}
-                      <div className="flex flex-col justify-between items-end pr-2.5 text-[9px] text-slate-400 font-mono select-none h-34 pb-4">
-                        <span>1,600</span>
-                        <span>1,400</span>
-                        <span>1,200</span>
-                        <span>1,000</span>
-                        <span>800</span>
-                        <span>600</span>
-                        <span>400</span>
-                        <span>200</span>
-                        <span>0</span>
-                      </div>
-
-                      {/* Chart Area */}
-                      <div className="flex-1 flex flex-col justify-between">
-                        <div className="relative h-34 border-b border-l border-slate-200/80">
-
-                          {/* Gridlines */}
-                          <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-40">
-                            <div className="border-t border-slate-200 w-full"></div>
-                            <div className="border-t border-slate-200 w-full"></div>
-                            <div className="border-t border-slate-200 w-full"></div>
-                            <div className="border-t border-slate-200 w-full"></div>
-                            <div className="border-t border-slate-200 w-full"></div>
-                            <div className="border-t border-slate-200 w-full"></div>
-                            <div className="border-t border-slate-200 w-full"></div>
-                            <div className="border-t border-slate-200 w-full"></div>
-                          </div>
-
-                          {/* SVG Spline Path & Gradient */}
-                          <svg viewBox="0 0 1000 200" preserveAspectRatio="none" className="absolute inset-0 w-full h-full overflow-visible">
-                            <defs>
-                              <linearGradient id="trendGradientEyeSmooth" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#15803d" stopOpacity="0.25" />
-                                <stop offset="100%" stopColor="#15803d" stopOpacity="0.01" />
-                              </linearGradient>
-                            </defs>
-
-                            {/* Filled Area */}
-                            <path
-                              d="M 80 163 C 200 120, 260 37, 380 37 C 500 37, 580 60, 680 76 C 780 95, 880 160, 960 178 L 960 200 L 80 200 Z"
-                              fill="url(#trendGradientEyeSmooth)"
-                            />
-
-                            {/* Curve Line */}
-                            <path
-                              d="M 80 163 C 200 120, 260 37, 380 37 C 500 37, 580 60, 680 76 C 780 95, 880 160, 960 178"
-                              fill="none"
-                              stroke="#166534"
-                              strokeWidth="2.5"
-                              strokeLinecap="round"
-                            />
-
-                            {/* Data Points */}
-                            {monthlyTrend.map((pt, idx) => (
-                              <g key={idx} className="cursor-pointer group">
-                                <circle
-                                  cx={pt.x}
-                                  cy={pt.y}
-                                  r="4"
-                                  className="fill-[#166534] stroke-white stroke-2 group-hover:r-5.5 transition-all"
-                                />
-                              </g>
-                            ))}
-                          </svg>
-
-                        </div>
-
-                        {/* X-Axis Month Labels */}
-                        <div className="flex justify-between items-center pt-1.5 text-[10px] text-slate-500 font-mono px-4 sm:px-10">
-                          {monthlyTrend.map((pt, idx) => (
-                            <span key={idx}>{pt.month}</span>
-                          ))}
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 5: শীর্ষ ডিলার (মোট সার বিতরণ অনুযায়ী) (Top Dealers Card) */}
-              <div className="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs space-y-3">
-                <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
-                  <h4 className="text-xs sm:text-sm font-bold text-slate-900">
-                    শীর্ষ ডিলার (মোট সার বিতরণ অনুযায়ী)
-                  </h4>
-                  <span className="text-[10px] text-slate-400">সেরা ৫ জন বিক্রেতা</span>
-                </div>
-
-                <div className="divide-y divide-slate-100">
-                  {topDealers.map((dealer) => (
-                    <div
-                      key={dealer.rank}
-                      className="flex items-center justify-between py-2 px-1.5 rounded-lg hover:bg-slate-50/70 transition-colors"
-                    >
-                      {/* Left: Rank & Dealer Info */}
-                      <div className="flex items-center space-x-2.5">
-                        <div className="w-5.5 h-5.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-bold flex items-center justify-center shrink-0 border border-emerald-200/70">
-                          {dealer.rank}
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold text-slate-900 leading-tight">
-                            {dealer.name}
-                          </p>
-                          <p className="text-[10px] text-slate-400 mt-0.5">
-                            {dealer.union}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Right: Quantity & Distributions */}
-                      <div className="text-right flex flex-col items-end">
-                        <span className="bg-emerald-50 text-emerald-800 text-[11px] font-bold px-2 py-0.2 rounded-full border border-emerald-200/60 inline-block font-mono">
-                          {dealer.totalKg}
-                        </span>
-                        <span className="text-[9px] text-slate-400 mt-0.5 font-medium">
-                          {dealer.distributions}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Bottom Reconciliation Bar & Action Button */}
-                <div className="pt-2.5 border-t border-dashed border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                  <div>
-                    <p className="text-[11px] text-slate-800 font-bold">
-                      সকল ডিলারের যোগফল: ২১১ বিতরণ • ৩,০৫৫ কেজি
-                    </p>
-                    <div className="mt-1.5">
-                      <button
-                        onClick={() => setActiveTab('dealer-audit')}
-                        className="border border-emerald-700/60 text-emerald-800 hover:bg-emerald-50 text-[11px] font-semibold px-2.5 py-1 rounded-lg cursor-pointer transition-colors inline-flex items-center gap-1 shadow-2xs"
-                      >
-                        <span>ডিলার-ভিত্তিক অডিট দেখুন</span>
-                        <ChevronRight className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="self-start sm:self-auto">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] font-semibold">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                      <span>ড্যাশবোর্ড মোটের সাথে মিলেছে</span>
-                    </span>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Row 6: সকল ডিলারের সার বিতরণ (কেজি) (All Dealers Distribution Table) */}
-              <div className="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs space-y-3">
-
-                {/* Header & Table Search Filter */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-1.5 border-b border-slate-100">
-                  <div>
-                    <h4 className="text-xs sm:text-sm font-bold text-slate-900">
-                      সকল ডিলারের সার বিতরণ (কেজি)
-                    </h4>
-                    <p className="text-[10px] text-slate-400 mt-0.5">
-                      উপজেলা সার ও বীজ মনিটরিং কমিটির নিরীক্ষিত খতিয়ান
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <div className="relative">
-                      <Search className="w-3 h-3 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
-                      <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="ডিলার বা ইউনিয়ন খুঁজুন..."
-                        className="pl-7 pr-2.5 py-1 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1.5 focus:ring-emerald-600 focus:bg-white transition-all w-40 sm:w-48"
-                      />
-                    </div>
-                    <span className="text-[10px] text-slate-500 font-semibold px-2 py-0.5 bg-slate-100 rounded shrink-0">
-                      {filteredDealers.length} জন ডিলার
-                    </span>
-                  </div>
-                </div>
-
-                {/* Table */}
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-slate-700">
-
-                    {/* Table Head */}
-                    <thead className="bg-[#f2f7f3] text-emerald-950 font-bold text-[11px]">
-                      <tr>
-                        <th className="py-2.5 px-3 w-10 text-center text-emerald-900">#</th>
-                        <th className="py-2.5 px-3 text-emerald-900">ডিলার</th>
-                        <th className="py-2.5 px-3 text-emerald-900">ইউনিয়ন</th>
-                        <th className="py-2.5 px-3 text-emerald-900">বিতরণ (এন্ট্রি)</th>
-                        <th className="py-2.5 px-3 text-emerald-900">মোট সার (কেজি)</th>
-                        <th className="py-2.5 px-3 text-right w-24">অ্যাকশন</th>
-                      </tr>
-                    </thead>
-
-                    {/* Table Body */}
-                    <tbody className="divide-y divide-slate-100">
-                      {filteredDealers.map((dealer) => (
-                        <tr key={dealer.id} className="hover:bg-slate-50/70 transition-colors">
-                          <td className="py-2 px-3 text-center text-slate-400 font-mono font-medium">
-                            {dealer.id}
-                          </td>
-                          <td className="py-2 px-3 font-medium text-slate-900">
-                            <div className="flex items-center">
-                              <span>{dealer.name}</span>
-                              {dealer.status === 'inactive' && (
-                                <span className="ml-2 px-1.5 py-0.2 bg-rose-50 text-rose-700 border border-rose-200 rounded-full text-[9px] font-bold">
-                                  নিষ্ক্রিয়
-                                </span>
-                              )}
-                            </div>
-                          </td>
-                          <td className="py-2 px-3 text-slate-600">
-                            {dealer.union}
-                          </td>
-                          <td className="py-2 px-3 text-slate-600 font-mono font-medium">
-                            {dealer.entries}
-                          </td>
-                          <td className="py-2 px-3 font-bold text-slate-900 font-mono">
-                            {dealer.totalKg}
-                          </td>
-                          <td className="py-2 px-3 text-right">
-                            <button
-                              onClick={() => setSelectedDealerModal(dealer)}
-                              className="px-2.5 py-1 bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-600/70 rounded-lg text-[11px] font-semibold shadow-2xs transition-all cursor-pointer inline-flex items-center gap-1"
-                            >
-                              <span>বিস্তারিত</span>
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-
-                    {/* Table Footer: Total Row */}
-                    <tfoot>
-                      <tr className="border-t border-slate-200 font-bold text-slate-900 bg-slate-50/40">
-                        <td className="py-2 px-3"></td>
-                        <td className="py-2 px-3 text-slate-900">সকল ডিলারের মোট</td>
-                        <td className="py-2 px-3"></td>
-                        <td className="py-2 px-3 text-slate-900 font-mono">২১১</td>
-                        <td className="py-2 px-3 text-slate-900 font-mono">৩,০৫৫</td>
-                        <td className="py-2 px-3"></td>
-                      </tr>
-                    </tfoot>
-
-                  </table>
-                </div>
-
-              </div>
             </>
           ) : (
             /* Sub-View for Enterprise Modules and Other Sidebar Tabs */
@@ -1320,11 +752,11 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                   </button>
                   <span className="text-slate-300">/</span>
                   <span className="text-xs font-semibold text-slate-800">
-                    {navigationGroups.flatMap(g => g.items).find(m => m.id === activeTab)?.label}
+                    {allNavigationGroups.flatMap(g => g.items).find(m => m.id === activeTab)?.label || 'মডিউল বিবরণ'}
                   </span>
                 </div>
                 <div className="text-[11px] text-slate-400 font-mono hidden sm:block">
-                  FDMS-MIS-BANGLADESH
+                  FDMS-MIS-BANGLADESH • {activeRole?.label}
                 </div>
               </div>
 
@@ -1370,71 +802,18 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
       </div>
 
       {/* ========================================================
-          FULL WIDTH FOOTER (Spans across entire screen including under the left sidebar menu)
+          FORMAL GOVERNMENT FOOTER
           ======================================================== */}
-      <footer className="w-full bg-[#f2f6f3] border-t border-slate-200/90 py-4 sm:py-5 text-center text-[11px] sm:text-xs text-slate-500 z-10">
-        <p className="px-4 font-normal tracking-normal text-slate-500">
-          © FDMS BANGLADESH — All Rights Reserved · Developed by Toufiq &amp; Fahad
-        </p>
-      </footer>
-
-      {/* Dealer Details Modal */}
-      {selectedDealerModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl border border-slate-100 animate-fadeIn space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <div>
-                <h3 className="text-base font-bold text-slate-900">{selectedDealerModal.name}</h3>
-                <p className="text-xs text-slate-500">{selectedDealerModal.union}</p>
-              </div>
-              <button
-                onClick={() => setSelectedDealerModal(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-sm font-bold cursor-pointer transition-colors"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="space-y-2.5 text-xs">
-              <div className="flex justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500">ডিলার আইডি:</span>
-                <span className="font-semibold text-slate-800 font-mono">{selectedDealerModal.details?.dealerId}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500">ট্রেড লাইসেন্স:</span>
-                <span className="font-semibold text-slate-800 font-mono">{selectedDealerModal.details?.tradeLicense}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500">ইউরিয়া বিতরণ:</span>
-                <span className="font-semibold text-emerald-700">{selectedDealerModal.details?.urea}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500">টিএসপি বিতরণ:</span>
-                <span className="font-semibold text-emerald-700">{selectedDealerModal.details?.tsp}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500">ডিএপি বিতরণ:</span>
-                <span className="font-semibold text-emerald-700">{selectedDealerModal.details?.dap}</span>
-              </div>
-              <div className="flex justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500">এমওপি বিতরণ:</span>
-                <span className="font-semibold text-emerald-700">{selectedDealerModal.details?.mop}</span>
-              </div>
-              <div className="flex justify-between py-1 pt-2 font-bold text-sm">
-                <span className="text-slate-900">মোট সার বিতরণ:</span>
-                <span className="text-emerald-800 font-mono">{selectedDealerModal.totalKg} কেজি</span>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setSelectedDealerModal(null)}
-              className="w-full py-2.5 bg-[#123e21] hover:bg-[#164e2a] text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer"
-            >
-              বন্ধ করুন
-            </button>
-          </div>
+      <footer className="mt-auto border-t border-slate-200/90 bg-white py-3.5 px-4 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between max-w-[1440px] w-full mx-auto">
+        <div className="flex items-center space-x-2">
+          <span className="font-semibold text-slate-700">FDMS BANGLADESH</span>
+          <span className="text-slate-300">|</span>
+          <span>সার ডিলার ও বিতরণ ব্যবস্থাপনা সিস্টেম</span>
         </div>
-      )}
+        <div className="text-[11px] text-slate-400 mt-1 sm:mt-0 font-medium">
+          গণপ্রজাতন্ত্রী বাংলাদেশ সরকার • Developed by Toufiq &amp; Fahad (CSE 3292)
+        </div>
+      </footer>
 
     </div>
   )
