@@ -28,8 +28,28 @@ import {
   TrendingUp,
   AlertCircle,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  Landmark,
+  Store,
+  Gavel,
+  MessageSquare,
+  FileSpreadsheet,
+  UserCheck,
+  Scale,
+  ShieldAlert
 } from 'lucide-react'
+
+// 10 Core Enterprise GovMIS Modules
+import QuotaDOModule from './modules/QuotaDOModule'
+import BankTreasuryModule from './modules/BankTreasuryModule'
+import WardOutletsModule from './modules/WardOutletsModule'
+import FarmerDatabaseModule from './modules/FarmerDatabaseModule'
+import MobileCourtModule from './modules/MobileCourtModule'
+import ComplaintsModule from './modules/ComplaintsModule'
+import GovReportsModule from './modules/GovReportsModule'
+import UserApprovalModule from './modules/UserApprovalModule'
+import PriceCeilingModule from './modules/PriceCeilingModule'
+import SmsAlertsModule from './modules/SmsAlertsModule'
 
 export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', role: 'জেলা অফিসার' } }) {
   const [activeTab, setActiveTab] = useState('dashboard')
@@ -295,10 +315,19 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
       ],
     },
     {
-      group: 'ডিলার ও বিতরণ',
+      group: 'কোটা ও সরকারি সরবরাহ',
       items: [
-        { id: 'add-dealer', label: 'ডিলার যুক্ত করুন', icon: UserPlus },
+        { id: 'quota-do', label: 'কোটা ও ডিও (DO) বরাদ্দ', icon: FileCheck, badge: 'অনুমোদন' },
+        { id: 'bank-treasury', label: 'ব্যাংক চালান ও জামানত', icon: Landmark },
+        { id: 'ward-outlets', label: 'ওয়ার্ড বিক্রয়কেন্দ্র ও স্টক', icon: Store },
+        { id: 'price-ceiling', label: 'মূল্য (MRP) ও সিলিং নীতি', icon: Scale },
+      ],
+    },
+    {
+      group: 'ডিলার ও বিতরণ কার্যক্রম',
+      items: [
         { id: 'dealers-list', label: 'ডিলার তালিকা', icon: Users, badge: '৬' },
+        { id: 'add-dealer', label: 'ডিলার যুক্ত করুন', icon: UserPlus },
         { id: 'stock', label: 'স্টক ব্যবস্থাপনা', icon: Package },
         { id: 'dealer-audit', label: 'ডিলার অডিট / প্রোফাইল', icon: FileCheck },
         { id: 'distribution-records', label: 'বিতরণ রেকর্ড', icon: FileText, badge: '২১১' },
@@ -306,16 +335,32 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
       ],
     },
     {
-      group: 'কৃষক ও রিপোর্ট',
+      group: 'কৃষক ও নাগরিক সেবা',
       items: [
+        { id: 'farmer-database', label: 'কৃষক নিবন্ধন ও ডেটাবেজ', icon: Users, badge: '৬৪' },
+        { id: 'complaints', label: 'অভিযোগ ও প্রতিকার বক্স', icon: MessageSquare, badgeColor: 'rose', badge: '৩' },
         { id: 'farmer-search', label: 'কৃষক অনুসন্ধান', icon: UserSearch },
+      ],
+    },
+    {
+      group: 'তদারকি, আইন ও অ্যালার্ট',
+      items: [
+        { id: 'mobile-court', label: 'পরিদর্শন ও মোবাইল কোর্ট', icon: Gavel },
+        { id: 'sms-alerts', label: 'এসএমএস ও অ্যানোমালি অ্যালার্ট', icon: ShieldAlert, badgeColor: 'rose', badge: 'অ্যালার্ট' },
+      ],
+    },
+    {
+      group: 'সরকারি প্রতিবেদন ও এক্সপোর্ট',
+      items: [
+        { id: 'gov-reports', label: 'সরকারি ফরম-ক ও ফরম-খ', icon: FileSpreadsheet },
         { id: 'reports', label: 'রিপোর্ট ও বিশ্লেষণ', icon: BarChart3 },
         { id: 'export', label: 'ডেটা এক্সপোর্ট', icon: Download },
       ],
     },
     {
-      group: 'সিস্টেম প্রশাসন',
+      group: 'প্রশাসন ও নিয়ন্ত্রণ',
       items: [
+        { id: 'user-approval', label: 'কর্মকর্তা ও ইউজার অনুমোদন', icon: UserCheck, badge: '২' },
         { id: 'logs', label: 'সিস্টেম লগ', icon: Terminal },
         { id: 'verify', label: 'পরিসংখ্যান যাচাই', icon: CheckSquare },
         { id: 'cleanup', label: 'ডেটা মুছুন', icon: Trash2 },
@@ -1054,28 +1099,42 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               </div>
             </>
           ) : (
-            /* Sub-View for Other Sidebar Tabs */
-            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-                <div>
-                  <h2 className="text-xl font-bold text-slate-900">
+            /* Sub-View for Enterprise Modules and Other Sidebar Tabs */
+            <div className="space-y-4">
+              {/* Back to dashboard button & breadcrumb bar */}
+              <div className="bg-white rounded-xl p-3 px-4 border border-slate-200 shadow-2xs flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setActiveTab('dashboard')}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-[#14532d] text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+                  >
+                    &larr; ড্যাশবোর্ডে ফিরুন
+                  </button>
+                  <span className="text-slate-300">/</span>
+                  <span className="text-xs font-semibold text-slate-800">
                     {navigationGroups.flatMap(g => g.items).find(m => m.id === activeTab)?.label}
-                  </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    মডিউলটির ফ্রন্টএন্ড ভিউ প্রস্তুত ও সক্রিয় রয়েছে
-                  </p>
+                  </span>
                 </div>
-                <button
-                  onClick={() => setActiveTab('dashboard')}
-                  className="px-4 py-2 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
-                >
-                  &larr; ড্যাশবোর্ডে ফিরুন
-                </button>
+                <div className="text-[11px] text-slate-400 font-mono hidden sm:block">
+                  FDMS-MIS-BANGLADESH
+                </div>
               </div>
 
-              {/* Sample Content tailored to selected tab */}
+              {/* 10 Core Enterprise GovMIS Modules */}
+              {activeTab === 'quota-do' && <QuotaDOModule />}
+              {activeTab === 'bank-treasury' && <BankTreasuryModule />}
+              {activeTab === 'ward-outlets' && <WardOutletsModule />}
+              {activeTab === 'farmer-database' && <FarmerDatabaseModule />}
+              {activeTab === 'mobile-court' && <MobileCourtModule />}
+              {activeTab === 'complaints' && <ComplaintsModule />}
+              {activeTab === 'gov-reports' && <GovReportsModule />}
+              {activeTab === 'user-approval' && <UserApprovalModule />}
+              {activeTab === 'price-ceiling' && <PriceCeilingModule />}
+              {activeTab === 'sms-alerts' && <SmsAlertsModule />}
+
+              {/* Standard Auxiliary Views */}
               {activeTab === 'add-dealer' && (
-                <div className="max-w-2xl space-y-4">
+                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-xs max-w-2xl space-y-4">
                   <h3 className="text-sm font-bold text-slate-800">নতুন ডিলার নিবন্ধন ফর্ম</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <input type="text" placeholder="ডিলারের পূর্ণ নাম" className="px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
@@ -1083,14 +1142,15 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                     <input type="text" placeholder="ইউনিয়ন" className="px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
                     <input type="text" placeholder="মোবাইল নম্বর" className="px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
                   </div>
-                  <button className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-xs cursor-pointer">
+                  <button className="px-5 py-2.5 bg-[#14532d] hover:bg-emerald-900 text-white rounded-xl text-xs font-semibold shadow-xs cursor-pointer">
                     সংরক্ষণ করুন
                   </button>
                 </div>
               )}
 
               {activeTab === 'dealers-list' && (
-                <div className="space-y-3">
+                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-3">
+                  <h3 className="text-sm font-bold text-slate-800 mb-3">অনুমোদিত ডিলার তালিকা</h3>
                   <div className="overflow-x-auto">
                     <table className="w-full text-xs text-left text-slate-600">
                       <thead className="bg-slate-50 text-slate-700 font-semibold uppercase text-[11px]">
@@ -1123,18 +1183,33 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                 </div>
               )}
 
-              {activeTab !== 'add-dealer' && activeTab !== 'dealers-list' && (
-                <div className="p-8 text-center text-slate-400 space-y-2">
+              {/* Other generic views fallback if not in the 10 modules or add/list */}
+              {![
+                'quota-do',
+                'bank-treasury',
+                'ward-outlets',
+                'farmer-database',
+                'mobile-court',
+                'complaints',
+                'gov-reports',
+                'user-approval',
+                'price-ceiling',
+                'sms-alerts',
+                'add-dealer',
+                'dealers-list'
+              ].includes(activeTab) && (
+                <div className="bg-white rounded-2xl p-8 border border-slate-200/80 shadow-xs text-center text-slate-400 space-y-2">
                   <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-500">
                     <Package className="w-6 h-6" />
                   </div>
-                  <h4 className="text-sm font-semibold text-slate-700">{navigationGroups.flatMap(g => g.items).find(m => m.id === activeTab)?.label} মডিউল</h4>
+                  <h4 className="text-sm font-semibold text-slate-700">
+                    {navigationGroups.flatMap(g => g.items).find(m => m.id === activeTab)?.label} মডিউল
+                  </h4>
                   <p className="text-xs text-slate-500 max-w-md mx-auto">
-                    এই মডিউলের জন্য ফ্রন্টএন্ড কম্পোনেন্ট রেডি রয়েছে। ড্যাশবোর্ড থেকে সহজেই এক ক্লিকে যেকোনো ডেটা মনিটর করতে পারবেন।
+                    এই মডিউলের জন্য ফ্রন্টএন্ড ভিউ প্রস্তুত রয়েছে। বামপাশের মেনু থেকে যেকোনো মডিউলে সহজেই কাজ করতে পারবেন।
                   </p>
                 </div>
               )}
-
             </div>
           )}
 
