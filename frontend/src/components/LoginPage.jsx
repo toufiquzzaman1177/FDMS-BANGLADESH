@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import logoImg from '../assets/logo.jpg'
 import { 
   Sprout, 
@@ -18,6 +18,10 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [loginSuccessRole, setLoginSuccessRole] = useState(null)
+
+  useEffect(() => {
+    document.title = 'লগইন | সার বিতরণ ব্যবস্থাপনা সিস্টেম - FDMS Bangladesh'
+  }, [])
 
   // Demo accounts for quick testing
   const demoAccounts = [

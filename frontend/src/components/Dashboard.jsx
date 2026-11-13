@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   LayoutDashboard,
   UserPlus,
@@ -38,6 +38,10 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
   const [verificationSuccess, setVerificationSuccess] = useState(false)
   const [selectedDealerModal, setSelectedDealerModal] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
+
+  useEffect(() => {
+    document.title = 'ড্যাশবোর্ড | সার বিতরণ ব্যবস্থাপনা সিস্টেম - FDMS Bangladesh'
+  }, [])
 
   // Top metric cards
   const summaryStats = [
