@@ -23,12 +23,14 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
     document.title = 'লগইন | সার বিতরণ ব্যবস্থাপনা সিস্টেম - FDMS Bangladesh'
   }, [])
 
-  // Demo accounts for quick testing
+  // 6 Official GovMIS Stakeholder Demo Accounts
   const demoAccounts = [
-    { label: 'অ্যাডমিন', id: 'admin@fdms.gov.bd', pass: 'admin123', role: 'সুপার অ্যাডমিন' },
-    { label: 'UNO / কৃষি অফিসার', id: 'uao.longadu@dae.gov.bd', pass: 'uao12345', role: 'উপজেলা কৃষি অফিসার (UAO)' },
-    { label: 'ইউনিয়ন ডিলার', id: 'dealer.union1@fdms.gov.bd', pass: 'dealer123', role: 'অনুমোদিত ডিলার' },
-    { label: 'POS অপারেটর', id: 'pos.ward3@fdms.gov.bd', pass: 'pos12345', role: 'রিটেইল POS অপারেটর' },
+    { label: '১. সুপার অ্যাডমিন (MoA/HQ)', id: 'hq.admin@moa.gov.bd', pass: 'admin123', role: 'সুপার অ্যাডমিন (MoA / DAE HQ)', name: 'ড. মোস্তাফিজুর রহমান' },
+    { label: '২. উপজেলা অ্যাডমিন (UNO/UAO)', id: 'uao.chatmohar@dae.gov.bd', pass: 'uao12345', role: 'উপজেলা অ্যাডমিন (UNO / UAO)', name: 'ড. আহমেদ রফিক' },
+    { label: '৩. ইউনিয়ন সার ডিলার (Dealer)', id: 'dealer.union1@fdms.gov.bd', pass: 'dealer123', role: 'ইউনিয়ন সার ডিলার (Dealer)', name: 'আলহাজ্ব মোকাররম হোসেন' },
+    { label: '৪. ওয়ার্ড বিক্রয়কেন্দ্র POS', id: 'pos.ward3@fdms.gov.bd', pass: 'pos12345', role: 'ওয়ার্ড বিক্রয়কেন্দ্র অপারেটর (POS)', name: 'মোঃ শফিকুল ইসলাম' },
+    { label: '৫. মাঠ কর্মকর্তা (SAAO)', id: 'saao.block1@dae.gov.bd', pass: 'saao12345', role: 'মাঠ কর্মকর্তা (SAAO / উপসহকারী)', name: 'মোঃ শহিদুল ইসলাম' },
+    { label: '৬. সাধারণ কৃষক ও নাগরিক', id: 'citizen@fdms.gov.bd', pass: 'public123', role: 'সাধারণ কৃষক ও নাগরিক (Public User)', name: 'উন্মুক্ত নাগরিক' }
   ]
 
   const handleQuickFill = (account) => {
@@ -57,11 +59,12 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
     setTimeout(() => {
       setIsLoading(false)
       const matched = demoAccounts.find(acc => acc.id === identifier.trim())
-      const detectedRole = matched ? matched.role : 'অনুমোদিত ব্যবহারকারী'
+      const detectedRole = matched ? matched.role : 'উপজেলা অ্যাডমিন (UNO / UAO)'
+      const detectedName = matched ? matched.name : 'ড. আহমেদ রফিক'
       setLoginSuccessRole(detectedRole)
 
       if (onLoginSuccess) {
-        onLoginSuccess({ identifier, role: detectedRole })
+        onLoginSuccess({ identifier, role: detectedRole, name: detectedName })
       }
     }, 900)
   }
@@ -223,13 +226,32 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
 
         {/* Instructional Note (Matching target image text) */}
         <p className="text-[12px] sm:text-xs text-slate-500 text-center leading-relaxed mt-5">
-          অ্যাডমিন, UNO ও ডিলার — সবাই একই ফর্ম দিয়ে লগইন করবেন। লগইনের পর আপনার UID অনুযায়ী সঠিক প্যানেল খুলবে।
+          অ্যাডমিন, UNO, ডিলার, POS অপারেটর ও মাঠ কর্মকর্তা — সবাই একই ফর্ম দিয়ে লগইন করবেন। আপনার রোল অনুযায়ী নির্দিষ্ট কন্ট্রোল প্যানেল খুলবে।
         </p>
 
-        {/* Quick Demo Selector for Presentation / Pair Programming */}
-        <div className="mt-6 pt-5 border-t border-slate-100">
+        {/* Public Citizen Portal Direct Link */}
+        <div className="mt-4 text-center">
+          <button
+            type="button"
+            onClick={() => {
+              if (onLoginSuccess) {
+                onLoginSuccess({
+                  identifier: 'citizen@fdms.gov.bd',
+                  role: 'সাধারণ কৃষক ও নাগরিক (Public User)',
+                  name: 'উন্মুক্ত নাগরিক'
+                });
+              }
+            }}
+            className="w-full py-2.5 px-3 bg-emerald-50 hover:bg-emerald-100 text-[#14532d] border border-emerald-300 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer flex items-center justify-center gap-1.5"
+          >
+            <span>🌐 কোনো লগইন ছাড়াই উন্মুক্ত নাগরিক সেবা দেখুন</span>
+          </button>
+        </div>
+
+        {/* Quick Demo Selector for Presentation */}
+        <div className="mt-5 pt-4 border-t border-slate-100">
           <p className="text-[11px] text-slate-400 text-center mb-2 font-medium">
-            দ্রুত ডেমো লগইন টেস্ট করুন:
+            ৬টি স্টেকহোল্ডার রোলে দ্রুত লগইন টেস্ট করুন:
           </p>
           <div className="grid grid-cols-2 gap-1.5">
             {demoAccounts.map((acc, index) => (
@@ -237,7 +259,7 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
                 key={index}
                 type="button"
                 onClick={() => handleQuickFill(acc)}
-                className="text-[11px] py-1.5 px-2 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-800 rounded-lg border border-slate-200/80 transition-colors text-center truncate cursor-pointer font-medium"
+                className="text-[10.5px] py-1.5 px-2 bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-900 rounded-lg border border-slate-200 transition-colors text-left truncate cursor-pointer font-medium"
               >
                 {acc.label}
               </button>

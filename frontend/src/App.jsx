@@ -14,9 +14,9 @@ import {
 } from 'lucide-react'
 
 export default function App() {
-  // Default to 'dashboard' so user sees the newly designed dashboard immediately
+  // Default to 'dashboard' with Upazila Admin role
   const [currentPage, setCurrentPage] = useState('dashboard')
-  const [loggedInUser, setLoggedInUser] = useState({ name: 'Swapnil', role: 'জেলা অফিসার' })
+  const [loggedInUser, setLoggedInUser] = useState({ name: 'ড. আহমেদ রফিক', role: 'উপজেলা অ্যাডমিন (UNO / UAO)' })
 
   const modules = [
     {
@@ -62,7 +62,7 @@ export default function App() {
       <Dashboard 
         currentUser={loggedInUser}
         onLogout={() => {
-          setLoggedInUser({ name: 'Swapnil', role: 'জেলা অফিসার' })
+          setLoggedInUser({ name: 'ড. আহমেদ রফিক', role: 'উপজেলা অ্যাডমিন (UNO / UAO)' })
           setCurrentPage('login')
         }}
       />
@@ -75,7 +75,7 @@ export default function App() {
       <LoginPage 
         onBackToHome={() => setCurrentPage('home')}
         onLoginSuccess={(user) => {
-          setLoggedInUser({ name: user.name || 'Swapnil', role: user.role || 'জেলা অফিসার' })
+          setLoggedInUser({ name: user.name || 'ড. আহমেদ রফিক', role: user.role || 'উপজেলা অ্যাডমিন (UNO / UAO)' })
           setTimeout(() => setCurrentPage('dashboard'), 600)
         }}
       />

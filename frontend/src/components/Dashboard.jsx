@@ -36,8 +36,17 @@ import {
   FileSpreadsheet,
   UserCheck,
   Scale,
-  ShieldAlert
+  ShieldAlert,
+  QrCode,
+  MapPin,
+  Globe,
+  Sparkles
 } from 'lucide-react'
+
+// Dedicated Role-Based Specialist Modules
+import WardPosTerminalModule from './modules/WardPosTerminalModule'
+import FieldInspectionSaaoModule from './modules/FieldInspectionSaaoModule'
+import CitizenPortalModule from './modules/CitizenPortalModule'
 
 // 10 Core Enterprise GovMIS Modules
 import QuotaDOModule from './modules/QuotaDOModule'
@@ -67,7 +76,107 @@ import DataCleanupModule from './modules/DataCleanupModule'
 import SettingsModule from './modules/SettingsModule'
 
 export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', role: 'জেলা অফিসার' } }) {
-  const [activeTab, setActiveTab] = useState('dashboard')
+  // 6 Core Stakeholder Roles specified by User
+  const ROLES = [
+    {
+      id: 'super-admin',
+      label: 'সুপার অ্যাডমিন (MoA / DAE HQ)',
+      name: 'ড. মোস্তাফিজুর রহমান',
+      roleTitle: 'সুপার অ্যাডমিন (MoA / DAE HQ)',
+      color: 'bg-purple-600',
+      badgeColor: 'bg-purple-100 text-purple-900 border-purple-200',
+      defaultTab: 'quota-do',
+      description: 'জাতীয় পর্যায়ের সার কোটা বরাদ্দ, সরকারি সর্বোচ্চ খুচরা মূল্য (MRP) ও সিলিং নীতিমালা নির্ধারণ, নতুন কর্মকর্তার অ্যাকাউন্ট অনুমোদন এবং সার্বিক অডিট লগ পরিচালনা।',
+      priorityActions: [
+        { label: 'জাতীয় কোটা বণ্টন', tab: 'quota-do' },
+        { label: 'মূল্য (MRP) ও সিলিং নীতি', tab: 'price-ceiling' },
+        { label: 'কর্মকর্তা অনুমোদন', tab: 'user-approval' },
+        { label: 'সার্বিক অডিট লগ', tab: 'logs' }
+      ]
+    },
+    {
+      id: 'upazila-admin',
+      label: 'উপজেলা অ্যাডমিন (UNO / UAO)',
+      name: 'ড. আহমেদ রফিক',
+      roleTitle: 'উপজেলা অ্যাডমিন (UNO / UAO)',
+      color: 'bg-[#14532d]',
+      badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-200',
+      defaultTab: 'dashboard',
+      description: 'ডিলার নিয়োগ ও তালিকা নিয়ন্ত্রণ, সোনালী ব্যাংকের ট্রেজারি চালান যাচাই করে ডিও (DO) অনুমোদন, মোবাইল কোর্ট লগ এন্ট্রি, অনিয়মে ডিলার সাসপেন্ড এবং মাসিক ‘ফরম-খ’ প্রতিবেদন তৈরি।',
+      priorityActions: [
+        { label: 'ডিলার তালিকা ও নিয়ন্ত্রণ', tab: 'dealers-list' },
+        { label: 'ট্রেজারি ও ডিও অনুমোদন', tab: 'quota-do' },
+        { label: 'মোবাইল কোর্ট ও জরিমানা', tab: 'mobile-court' },
+        { label: 'সরকারি ফরম-খ প্রতিবেদন', tab: 'gov-reports' }
+      ]
+    },
+    {
+      id: 'union-dealer',
+      label: 'ইউনিয়ন সার ডিলার (Dealer)',
+      name: 'আলহাজ্ব মোকাররম হোসেন',
+      roleTitle: 'ইউনিয়ন সার ডিলার (Dealer)',
+      color: 'bg-blue-600',
+      badgeColor: 'bg-blue-100 text-blue-900 border-blue-200',
+      defaultTab: 'ward-outlets',
+      description: 'ব্যাংকে পে-অর্ডার/চালান জমা দেওয়া, বাফার গোডাউন থেকে সার উত্তোলন (Inward), প্রধান গোডাউন থেকে ৩টি ওয়ার্ড বিক্রয়কেন্দ্রে সার পাঠানো (STO) এবং মাসিক ‘ফরম-ক’ দাখিল।',
+      priorityActions: [
+        { label: 'ব্যাংক চালান জমা', tab: 'bank-treasury' },
+        { label: 'বাফার উত্তোলন (Inward)', tab: 'stock' },
+        { label: '৩টি ওয়ার্ডে স্টক ট্রান্সফার (STO)', tab: 'ward-outlets' },
+        { label: 'মাসিক ফরম-ক দাখিল', tab: 'gov-reports' }
+      ]
+    },
+    {
+      id: 'ward-pos',
+      label: 'ওয়ার্ড বিক্রয়কেন্দ্র অপারেটর (POS)',
+      name: 'মোঃ শফিকুল ইসলাম',
+      roleTitle: 'ওয়ার্ড বিক্রয়কেন্দ্র অপারেটর (POS)',
+      color: 'bg-amber-600',
+      badgeColor: 'bg-amber-100 text-amber-900 border-amber-200',
+      defaultTab: 'ward-pos',
+      description: 'কৃষকের NID বা কৃষক কার্ড যাচাই করে জমির সিলিং অনুযায়ী সার বিক্রয়, সরকার নির্ধারিত মূল্যে কিউআর কোডযুক্ত ক্যাশ মেমো প্রিন্ট এবং দৈনিক স্টক ক্লোজিং।',
+      priorityActions: [
+        { label: 'POS সেলস টার্মিনাল', tab: 'ward-pos' },
+        { label: 'কৃষক সিলিং যাচাই', tab: 'farmer-search' },
+        { label: 'বিতরণ রেকর্ড ও ক্যাশ মেমো', tab: 'distribution-records' }
+      ]
+    },
+    {
+      id: 'field-saao',
+      label: 'মাঠ কর্মকর্তা (SAAO)',
+      name: 'মোঃ শহিদুল ইসলাম',
+      roleTitle: 'মাঠ কর্মকর্তা (SAAO / উপসহকারী)',
+      color: 'bg-teal-600',
+      badgeColor: 'bg-teal-100 text-teal-900 border-teal-200',
+      defaultTab: 'field-saao',
+      description: 'ফসলের মৌসুম অনুযায়ী জমির চাহিদা জরিপ এবং ওয়ার্ড বিক্রয়কেন্দ্রে গিয়ে জিপিএস লোকেশনসহ সরেজমিনে স্টক পরিদর্শন ও অডিট রিপোর্ট জমা দেওয়া।',
+      priorityActions: [
+        { label: 'জিপিএস সরেজমিনে পরিদর্শন', tab: 'field-saao' },
+        { label: 'মৌসুমী জমি ও ফসল জরিপ', tab: 'field-saao' },
+        { label: 'ডিলার অডিট নিরীক্ষা', tab: 'dealer-audit' }
+      ]
+    },
+    {
+      id: 'public-citizen',
+      label: 'সাধারণ কৃষক ও নাগরিক (Public)',
+      name: 'উন্মুক্ত নাগরিক সেবা',
+      roleTitle: 'সাধারণ কৃষক ও নাগরিক (Public User)',
+      color: 'bg-slate-700',
+      badgeColor: 'bg-slate-100 text-slate-800 border-slate-200',
+      defaultTab: 'citizen-portal',
+      description: 'কোনো লগইন ছাড়াই উন্মুক্ত মূল্যবোর্ড দেখা, নিকটস্থ ডিলারের লাইভ স্টক খোঁজা এবং অতিরিক্ত দাম বা অনিয়মের বিরুদ্ধে গোপনীয় অভিযোগ দাখিল করা।',
+      priorityActions: [
+        { label: 'উন্মুক্ত মূল্যবোর্ড (MRP)', tab: 'citizen-portal' },
+        { label: 'নিকটস্থ ডিলার লাইভ স্টক', tab: 'citizen-portal' },
+        { label: 'গোপনীয় অভিযোগ দাখিল', tab: 'citizen-portal' }
+      ]
+    }
+  ];
+
+  const matchedRole = ROLES.find(r => r.roleTitle === currentUser.role || r.label.includes(currentUser.role)) || ROLES[1];
+  const [activeRole, setActiveRole] = useState(matchedRole);
+  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const [activeTab, setActiveTab] = useState(matchedRole.id === 'public-citizen' ? 'citizen-portal' : (matchedRole.id === 'ward-pos' ? 'ward-pos' : (matchedRole.id === 'field-saao' ? 'field-saao' : 'dashboard')));
   const [refreshKey, setRefreshKey] = useState(0)
   const [isVerifying, setIsVerifying] = useState(false)
   const [verificationSuccess, setVerificationSuccess] = useState(false)
@@ -341,6 +450,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     {
       group: 'ডিলার ও বিতরণ কার্যক্রম',
       items: [
+        { id: 'ward-pos', label: 'ওয়ার্ড POS সেলস টার্মিনাল', icon: QrCode, badge: 'POS' },
         { id: 'dealers-list', label: 'ডিলার তালিকা', icon: Users, badge: '৬' },
         { id: 'add-dealer', label: 'ডিলার যুক্ত করুন', icon: UserPlus },
         { id: 'stock', label: 'স্টক ব্যবস্থাপনা', icon: Package },
@@ -352,6 +462,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     {
       group: 'কৃষক ও নাগরিক সেবা',
       items: [
+        { id: 'citizen-portal', label: 'উন্মুক্ত নাগরিক সেবা পোর্টাল', icon: Globe, badge: 'উন্মুক্ত' },
         { id: 'farmer-database', label: 'কৃষক নিবন্ধন ও ডেটাবেজ', icon: Users, badge: '৬৪' },
         { id: 'complaints', label: 'অভিযোগ ও প্রতিকার বক্স', icon: MessageSquare, badgeColor: 'rose', badge: '৩' },
         { id: 'farmer-search', label: 'কৃষক অনুসন্ধান', icon: UserSearch },
@@ -360,6 +471,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     {
       group: 'তদারকি, আইন ও অ্যালার্ট',
       items: [
+        { id: 'field-saao', label: 'মাঠ পরিদর্শন ও জিপিএস অডিট', icon: MapPin, badge: 'SAAO' },
         { id: 'mobile-court', label: 'পরিদর্শন ও মোবাইল কোর্ট', icon: Gavel },
         { id: 'sms-alerts', label: 'এসএমএস ও অ্যানোমালি অ্যালার্ট', icon: ShieldAlert, badgeColor: 'rose', badge: 'অ্যালার্ট' },
       ],
@@ -451,15 +563,61 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
             <span>FDMS অনুরোধ</span>
           </button>
 
-          {/* User Profile Pill */}
-          <div className="flex items-center bg-black/25 rounded-lg py-0.5 px-2 border border-white/15 text-white">
-            <div className="w-4.5 h-4.5 rounded-full bg-emerald-600 flex items-center justify-center text-[9px] font-bold text-white mr-1.5 border border-emerald-400/30">
-              {currentUser.name.charAt(0)}
-            </div>
-            <span className="font-semibold text-[11px] mr-1.5 text-slate-100">{currentUser.name}</span>
-            <span className="bg-amber-500/90 text-slate-950 text-[9px] font-bold px-1.5 py-0.2 rounded tracking-wider">
-              {currentUser.role}
-            </span>
+          {/* Interactive Role Switcher Pill & Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowRoleDropdown(!showRoleDropdown)}
+              className="flex items-center bg-black/35 hover:bg-black/50 rounded-xl py-1 px-2.5 border border-white/20 text-white cursor-pointer transition-colors shadow-2xs"
+              title="ক্লিক করে স্টেকহোল্ডার রোল পরিবর্তন করুন"
+            >
+              <div className={`w-5 h-5 rounded-full ${activeRole.color} flex items-center justify-center text-[10px] font-bold text-white mr-1.5 border border-white/30 shrink-0`}>
+                {activeRole.name.charAt(0)}
+              </div>
+              <div className="flex flex-col text-left mr-1.5">
+                <span className="font-bold text-[11px] text-white leading-tight">{activeRole.name}</span>
+                <span className="text-[9px] text-emerald-200 font-medium leading-tight">{activeRole.roleTitle}</span>
+              </div>
+              <ChevronDown className="w-3.5 h-3.5 text-emerald-300 ml-0.5 shrink-0" />
+            </button>
+
+            {/* Dropdown Menu for 6 Stakeholder Roles */}
+            {showRoleDropdown && (
+              <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 p-2 text-slate-800 animate-scale-in">
+                <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">স্টেকহোল্ডার ভূমিকা পরিবর্তন</span>
+                    <span className="text-[11px] text-slate-600">৬টি অনুমোদিত গভমেন্ট রোলে ইন্টারফেস রূপান্তর</span>
+                  </div>
+                  <button
+                    onClick={() => setShowRoleDropdown(false)}
+                    className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div className="py-1 space-y-1 max-h-[380px] overflow-y-auto">
+                  {ROLES.map(r => (
+                    <button
+                      key={r.id}
+                      onClick={() => {
+                        setActiveRole(r);
+                        setShowRoleDropdown(false);
+                        setActiveTab(r.defaultTab);
+                      }}
+                      className={`w-full text-left p-2.5 rounded-xl transition-all flex items-start gap-2.5 cursor-pointer ${
+                        activeRole.id === r.id ? 'bg-emerald-50 text-emerald-950 border border-emerald-300' : 'hover:bg-slate-50 text-slate-700'
+                      }`}
+                    >
+                      <div className={`w-3.5 h-3.5 rounded-full ${r.color} mt-0.5 shrink-0 shadow-2xs`}></div>
+                      <div>
+                        <div className="text-xs font-bold">{r.label}</div>
+                        <div className="text-[10px] text-slate-500 leading-relaxed mt-0.5">{r.description}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Logout Button */}
@@ -531,6 +689,39 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
 
           {activeTab === 'dashboard' ? (
             <>
+              {/* Active Role Governance & Responsibility Card */}
+              <div className="bg-gradient-to-r from-emerald-50/90 via-white to-slate-50 border border-emerald-200/90 rounded-xl p-3.5 shadow-2xs">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                  <div className="flex items-start gap-3">
+                    <div className={`w-8 h-8 rounded-lg ${activeRole.color} text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-xs mt-0.5`}>
+                      {activeRole.name.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white border border-emerald-200 text-emerald-900">
+                          সক্রিয় স্টেকহোল্ডার ভূমিকা: {activeRole.label}
+                        </span>
+                        <span className="text-xs font-bold text-slate-800">{activeRole.name}</span>
+                      </div>
+                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                        {activeRole.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 flex-wrap shrink-0">
+                    {activeRole.priorityActions.map((act, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActiveTab(act.tab)}
+                        className="px-2.5 py-1 bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer shadow-2xs"
+                      >
+                        {act.label} &rarr;
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
               {/* Formal Sub-Header & Status Banner */}
               <div className="bg-white rounded-xl p-3 sm:p-3.5 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-2.5">
                 <div>
@@ -1134,6 +1325,11 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                   FDMS-MIS-BANGLADESH
                 </div>
               </div>
+
+              {/* Role-Specific Specialist Terminal Modules */}
+              {activeTab === 'ward-pos' && <WardPosTerminalModule />}
+              {activeTab === 'field-saao' && <FieldInspectionSaaoModule />}
+              {activeTab === 'citizen-portal' && <CitizenPortalModule onBackToDashboard={() => setActiveTab('dashboard')} />}
 
               {/* Dedicated Modular Views for All Features */}
               {activeTab === 'quota-do' && <QuotaDOModule />}
