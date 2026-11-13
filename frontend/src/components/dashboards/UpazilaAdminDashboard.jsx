@@ -347,8 +347,8 @@ export default function UpazilaAdminDashboard({
                   ))}
                 </div>
 
-                {/* Bars Container with Distinct Pillars and Clean Whitespace Gaps */}
-                <div className="absolute inset-x-7 sm:inset-x-8 top-3 bottom-6 flex items-end justify-between px-0.5 sm:px-2">
+                {/* Bars Container with Reduced Gaps & Balanced Pillar Widths */}
+                <div className="absolute inset-x-6 sm:inset-x-8 top-3 bottom-6 flex items-end justify-between px-0.5 sm:px-1.5">
                   {unionData.map((u, i) => {
                     const maxVal = 800
                     const heightPercent = u.value > 0 ? Math.max((u.value / maxVal) * 100, 5) : 0
@@ -360,16 +360,16 @@ export default function UpazilaAdminDashboard({
                       >
                         {u.value > 0 ? (
                           <>
-                            <span className="text-[8px] sm:text-[9.5px] font-mono text-emerald-900 font-bold mb-1 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-[8.5px] sm:text-[10px] font-mono text-emerald-900 font-bold mb-1 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                               {u.value}
                             </span>
                             <div
                               style={{ height: `${heightPercent}%` }}
-                              className="w-3.5 xs:w-4 sm:w-6 md:w-7 max-w-[28px] rounded-t-sm sm:rounded-t-md bg-[#166534] hover:bg-[#14532d] shadow-2xs transition-all duration-300"
+                              className="w-5 xs:w-6 sm:w-7 md:w-8 max-w-[32px] rounded-t-sm sm:rounded-t-md bg-[#166534] hover:bg-[#14532d] shadow-2xs transition-all duration-300"
                             />
                           </>
                         ) : (
-                          <div className="w-3 xs:w-3.5 sm:w-5 md:w-6 h-1 rounded-full bg-slate-200 mb-0" />
+                          <div className="w-5 xs:w-6 sm:w-7 md:w-8 h-1 rounded-full bg-slate-200 mb-0" />
                         )}
                       </div>
                     )
@@ -377,7 +377,7 @@ export default function UpazilaAdminDashboard({
                 </div>
 
                 {/* X-Axis Labels */}
-                <div className="absolute inset-x-7 sm:inset-x-8 bottom-0 flex justify-between px-0.5 sm:px-2 text-[10px] sm:text-[11px] text-slate-600 font-medium">
+                <div className="absolute inset-x-6 sm:inset-x-8 bottom-0 flex justify-between px-0.5 sm:px-1.5 text-[10px] sm:text-[11px] text-slate-600 font-medium">
                   {unionData.map((u, i) => (
                     <span key={i} className="flex-1 text-center truncate" title={u.label}>
                       {u.name}
