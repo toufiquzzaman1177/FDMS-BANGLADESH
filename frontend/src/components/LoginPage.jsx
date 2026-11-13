@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import logoImg from '../assets/logo.jpg'
-import loginBg from '../assets/login-bg.jpg'
+import loginBg from '../assets/bg.jpg'
 import {
   Sprout,
   ArrowLeft,
@@ -74,11 +74,11 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
 
   return (
     <div className="min-h-screen w-full relative flex flex-col justify-between items-center py-6 sm:py-8 px-4 overflow-hidden select-none font-sans">
-      
+
       {/* ========================================================
           AGRICULTURAL LANDSCAPE BACKGROUND & OVERLAY
           ======================================================== */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all scale-100"
         style={{ backgroundImage: `url(${loginBg})` }}
       />
@@ -103,14 +103,14 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
           MAIN LOGIN CARD (Formal Government MIS Standard)
           ======================================================== */}
       <div className="w-full max-w-[420px] sm:max-w-[450px] bg-white/95 backdrop-blur-md rounded-2xl shadow-[0_16px_40px_-8px_rgba(0,0,0,0.35)] border border-white/80 p-6 sm:p-8 z-10 transition-all duration-300">
-        
+
         {/* Top Logo */}
         <div className="flex justify-center mb-3">
           <div className="p-1.5 rounded-2xl bg-slate-50 border border-slate-100 shadow-2xs">
-            <img 
-              src={logoImg} 
-              alt="FDMS Logo" 
-              className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-xl" 
+            <img
+              src={logoImg}
+              alt="FDMS Logo"
+              className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-xl"
             />
           </div>
         </div>
@@ -146,7 +146,7 @@ export default function LoginPage({ onBackToHome, onLoginSuccess }) {
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-3.5">
-          
+
           {/* Email / ID Field */}
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1 text-left">
