@@ -144,8 +144,8 @@ export default function App() {
       <header className="bg-[#14532d] text-white shadow-xs border-b border-emerald-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-white/10 rounded-lg border border-white/15">
-              <Sprout className="w-8 h-8 text-emerald-200" />
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white flex items-center justify-center p-0.5 border border-white/30 shadow-xs shrink-0 overflow-hidden">
+              <img src="/logo.jpg" alt="FDMS" className="w-full h-full object-contain rounded-lg" />
             </div>
             <div>
               <div className="flex items-center gap-2">

@@ -484,9 +484,9 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
       <header className="bg-[#14532d] border-b border-emerald-900/50 text-white px-3 sm:px-5 shadow-[0_1px_4px_rgba(0,0,0,0.08)] flex items-center justify-between sticky top-0 z-40 h-14">
 
         {/* Left Branding */}
-        <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center p-1 border border-white/20 shadow-inner">
-            <img src="/logo.jpg" alt="FDMS" className="w-full h-full object-contain rounded-md" />
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white flex items-center justify-center p-0.5 border border-white/30 shadow-xs shrink-0 overflow-hidden">
+            <img src="/logo.jpg" alt="FDMS" className="w-full h-full object-contain rounded-lg" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
