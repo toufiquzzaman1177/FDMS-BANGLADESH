@@ -112,7 +112,7 @@ export default function UpazilaAdminDashboard({
     { name: '৫', value: 650, label: '৫ নং বকশীগঞ্জ' },
     { name: '৬', value: 0, label: '৬ নং নিলাখিয়া' },
     { name: '৭', value: 0, label: '৭ নং ইউনিয়ন' },
-    { name: 'বকশীগঞ্জ', value: 0, label: 'বকশীগঞ্জ পৌরসভা' },
+    { name: 'পৌর', value: 0, label: 'বকশীগঞ্জ পৌরসভা' },
   ]
 
   // Monthly distribution trend
@@ -347,33 +347,39 @@ export default function UpazilaAdminDashboard({
                   ))}
                 </div>
 
-                {/* Bars Container */}
-                <div className="absolute inset-x-8 top-3 bottom-6 flex items-end justify-between px-1 sm:px-3">
+                {/* Bars Container with Distinct Pillars and Clean Whitespace Gaps */}
+                <div className="absolute inset-x-7 sm:inset-x-8 top-3 bottom-6 flex items-end justify-between px-0.5 sm:px-2">
                   {unionData.map((u, i) => {
                     const maxVal = 800
-                    const heightPercent = (u.value / maxVal) * 100
+                    const heightPercent = u.value > 0 ? Math.max((u.value / maxVal) * 100, 5) : 0
                     return (
-                      <div key={i} className="flex flex-col items-center flex-1 max-w-[40px] sm:max-w-[48px] h-full justify-end group cursor-pointer">
-                        {u.value > 0 && (
-                          <span className="text-[9px] font-mono text-emerald-800 font-bold mb-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            {u.value}
-                          </span>
+                      <div 
+                        key={i} 
+                        className="flex flex-col items-center flex-1 h-full justify-end group cursor-pointer"
+                        title={`${u.label}: ${u.value} কেজি`}
+                      >
+                        {u.value > 0 ? (
+                          <>
+                            <span className="text-[8px] sm:text-[9.5px] font-mono text-emerald-900 font-bold mb-1 opacity-90 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                              {u.value}
+                            </span>
+                            <div
+                              style={{ height: `${heightPercent}%` }}
+                              className="w-3.5 xs:w-4 sm:w-6 md:w-7 max-w-[28px] rounded-t-sm sm:rounded-t-md bg-[#166534] hover:bg-[#14532d] shadow-2xs transition-all duration-300"
+                            />
+                          </>
+                        ) : (
+                          <div className="w-3 xs:w-3.5 sm:w-5 md:w-6 h-1 rounded-full bg-slate-200 mb-0" />
                         )}
-                        <div
-                          style={{ height: `${heightPercent}%` }}
-                          className={`w-full rounded-t-md transition-all duration-300 ${
-                            u.value > 0 ? 'bg-[#166534] hover:bg-[#14532d] shadow-2xs' : 'bg-transparent'
-                          }`}
-                        />
                       </div>
                     )
                   })}
                 </div>
 
                 {/* X-Axis Labels */}
-                <div className="absolute inset-x-8 bottom-0 flex justify-between px-1 sm:px-3 text-[10px] text-slate-600 font-medium truncate">
+                <div className="absolute inset-x-7 sm:inset-x-8 bottom-0 flex justify-between px-0.5 sm:px-2 text-[10px] sm:text-[11px] text-slate-600 font-medium">
                   {unionData.map((u, i) => (
-                    <span key={i} className="flex-1 text-center truncate max-w-[44px]" title={u.label}>
+                    <span key={i} className="flex-1 text-center truncate" title={u.label}>
                       {u.name}
                     </span>
                   ))}
