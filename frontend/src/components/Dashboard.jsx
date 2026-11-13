@@ -811,7 +811,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
           <span>সার ডিলার ও বিতরণ ব্যবস্থাপনা সিস্টেম</span>
         </div>
         <div className="text-[11px] text-slate-400 mt-1 sm:mt-0 font-medium">
-          গণপ্রজাতন্ত্রী বাংলাদেশ সরকার • Developed by Toufiq &amp; Fahad (CSE 3292)
+          গণপ্রজাতন্ত্রী বাংলাদেশ সরকার • Developed by Toufiq &amp; Fahad
         </div>
       </footer>
 

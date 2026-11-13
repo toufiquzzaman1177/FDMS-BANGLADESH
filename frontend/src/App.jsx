@@ -155,7 +155,7 @@ export default function App() {
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-emerald-200">
-                Fertilizer Dealer &amp; Distribution Management System • CSE 3292
+                Fertilizer Dealer &amp; Distribution Management System
               </p>
             </div>
           </div>
@@ -288,7 +288,7 @@ export default function App() {
       <footer className="mt-16 border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500 space-y-1">
         <p>© সার ডিলার ও বিতরণ ব্যবস্থাপনা সিস্টেম — All Rights Reserved</p>
         <p className="text-slate-400 text-[11px]">
-          Developed by <span className="text-slate-600 font-medium">Team Two Factor</span> (Fahad &amp; Toufiq) • CSE 3292
+          Developed by <span className="text-slate-600 font-medium">Team Two Factor</span> (Fahad &amp; Toufiq)
         </p>
       </footer>
     </div>
