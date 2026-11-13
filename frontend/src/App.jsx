@@ -141,21 +141,21 @@ export default function App() {
     <ErrorBoundary>
       <div className="min-h-screen bg-slate-50 text-slate-800">
       {/* Top Banner */}
-      <header className="bg-emerald-800 text-white shadow-md">
+      <header className="bg-[#14532d] text-white shadow-xs border-b border-emerald-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-emerald-700 rounded-lg">
+            <div className="p-2 bg-white/10 rounded-lg border border-white/15">
               <Sprout className="w-8 h-8 text-emerald-200" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-xl sm:text-2xl font-bold tracking-tight">FDMS BANGLADESH</h1>
-                <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-600 rounded-full text-emerald-100">
-                  v1.0 MVP
+                <span className="px-2 py-0.5 text-xs font-semibold bg-emerald-800/80 rounded-full text-emerald-100 border border-emerald-600/50">
+                  GovMIS
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-emerald-200">
-                Fertilizer Dealer &amp; Distribution Management System
+              <p className="text-xs sm:text-sm text-emerald-100/90">
+                সার ডিলার ও বিতরণ ব্যবস্থাপনা সিস্টেম • গণপ্রজাতন্ত্রী বাংলাদেশ সরকার
               </p>
             </div>
           </div>
@@ -163,16 +163,16 @@ export default function App() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setCurrentPage('dashboard')}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs sm:text-sm font-semibold shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs sm:text-sm font-semibold border border-white/20 shadow-xs transition-all cursor-pointer"
             >
               <LayoutDashboard className="w-4 h-4 text-emerald-200" />
               <span>ড্যাশবোর্ড খুলুন</span>
             </button>
             <button
               onClick={() => setCurrentPage('login')}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 text-xs sm:text-sm font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-[#14532d] hover:bg-emerald-50 text-xs sm:text-sm font-semibold shadow-xs hover:shadow transition-all cursor-pointer"
             >
-              <LogIn className="w-4 h-4 text-emerald-700" />
+              <LogIn className="w-4 h-4 text-[#14532d]" />
               <span>লগইন করুন</span>
             </button>
           </div>
@@ -200,7 +200,7 @@ export default function App() {
             <div className="shrink-0 flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => setCurrentPage('dashboard')}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#1e6837] hover:bg-emerald-800 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all text-sm cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#14532d] hover:bg-[#166534] text-white font-semibold rounded-xl shadow-xs transition-all text-sm cursor-pointer"
               >
                 <LayoutDashboard className="w-4 h-4" />
                 <span>ড্যাশবোর্ডে প্রবেশ করুন</span>

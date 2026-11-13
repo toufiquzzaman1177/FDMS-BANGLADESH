@@ -479,7 +479,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
           TOP HEADER (Formal Government Deep Emerald Navbar)
           Fixed & Sticky
           ======================================================== */}
-      <header className="bg-gradient-to-r from-[#123e21] via-[#164e2a] to-[#144525] text-white px-3 sm:px-5 shadow-sm border-b border-emerald-900/40 flex items-center justify-between sticky top-0 z-40 h-14">
+      <header className="bg-[#14532d] border-b border-emerald-900/50 text-white px-3 sm:px-5 shadow-[0_1px_4px_rgba(0,0,0,0.08)] flex items-center justify-between sticky top-0 z-40 h-14">
 
         {/* Left Branding */}
         <div className="flex items-center space-x-2.5">
@@ -647,8 +647,8 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
 
           {activeTab === 'dashboard' ? (
             <>
-              {/* Active Role Governance & Responsibility Card */}
-              <div className="bg-gradient-to-r from-emerald-50/90 via-white to-slate-50 border border-emerald-200/90 rounded-xl p-3.5 shadow-2xs">
+              {/* Active Role Governance & Responsibility Card - Formal Administrative Standard */}
+              <div className="bg-white border border-slate-200/80 rounded-xl p-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                   <div className="flex items-start gap-3">
                     <div className={`w-8 h-8 rounded-lg ${activeRole?.color || 'bg-[#14532d]'} text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-xs mt-0.5`}>
@@ -656,7 +656,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
                     </div>
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white border border-emerald-200 text-emerald-900">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-900">
                           সক্রিয় স্টেকহোল্ডার ভূমিকা: {activeRole?.label || 'অ্যাডমিন'}
                         </span>
                         <span className="text-xs font-bold text-slate-800">{activeRole?.name || 'ব্যবহারকারী'}</span>
@@ -672,7 +672,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
                       <button
                         key={i}
                         onClick={() => setActiveTab(act.tab)}
-                        className="px-2.5 py-1 bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer shadow-2xs"
+                        className="px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-950 border border-slate-200 hover:border-emerald-300 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer shadow-2xs"
                       >
                         {act.label} &rarr;
                       </button>
