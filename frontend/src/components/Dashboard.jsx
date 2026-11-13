@@ -84,6 +84,8 @@ import SystemLogsModule from './modules/SystemLogsModule'
 import VerifyStatisticsModule from './modules/VerifyStatisticsModule'
 import DataCleanupModule from './modules/DataCleanupModule'
 import SettingsModule from './modules/SettingsModule'
+import UserProfileModule from './modules/UserProfileModule'
+import UserProfileModal from './UserProfileModal'
 
 // 6 Core Stakeholder Roles specified by User
 const ROLES = [
@@ -438,7 +440,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
   const matchedRole = ROLES.find(r => r.roleTitle === userRole || (userRole && r.label?.includes(userRole))) || ROLES[1];
   
   const [activeRole, setActiveRole] = useState(matchedRole);
-  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [refreshKey, setRefreshKey] = useState(0);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -510,62 +512,19 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
             <span>সিস্টেম স্টেটাস: ১০০% সক্রিয়</span>
           </div>
 
-          {/* Interactive Role Switcher Pill & Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-              className="flex items-center bg-black/35 hover:bg-black/50 rounded-xl py-1 px-2.5 border border-white/20 text-white cursor-pointer transition-colors shadow-2xs"
-              title="ক্লিক করে স্টেকহোল্ডার ভূমিকা পরিবর্তন করুন"
-            >
-              <div className={`w-5 h-5 rounded-full ${activeRole.color} flex items-center justify-center text-[10px] font-bold text-white mr-1.5 border border-white/30 shrink-0`}>
-                {activeRole.name.charAt(0)}
-              </div>
-              <div className="flex flex-col text-left mr-1.5">
-                <span className="font-bold text-[11px] text-white leading-tight">{activeRole.name}</span>
-                <span className="text-[9px] text-emerald-200 font-medium leading-tight">{activeRole.roleTitle}</span>
-              </div>
-              <ChevronDown className="w-3.5 h-3.5 text-emerald-300 ml-0.5 shrink-0" />
-            </button>
-
-            {/* Dropdown Menu for 6 Stakeholder Roles */}
-            {showRoleDropdown && (
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 p-2 text-slate-800 animate-scale-in">
-                <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">স্টেকহোল্ডার ভূমিকা পরিবর্তন</span>
-                    <span className="text-[11px] text-slate-600">৬টি অনুমোদিত গভমেন্ট রোলে ইন্টারফেস রূপান্তর</span>
-                  </div>
-                  <button
-                    onClick={() => setShowRoleDropdown(false)}
-                    className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="py-1 space-y-1 max-h-[380px] overflow-y-auto">
-                  {ROLES.map(r => (
-                    <button
-                      key={r.id}
-                      onClick={() => {
-                        setActiveRole(r);
-                        setShowRoleDropdown(false);
-                        setActiveTab('dashboard');
-                      }}
-                      className={`w-full text-left p-2.5 rounded-xl transition-all flex items-start gap-2.5 cursor-pointer ${
-                        activeRole.id === r.id ? 'bg-emerald-50 text-emerald-950 border border-emerald-300' : 'hover:bg-slate-50 text-slate-700'
-                      }`}
-                    >
-                      <div className={`w-3.5 h-3.5 rounded-full ${r.color} mt-0.5 shrink-0 shadow-2xs`}></div>
-                      <div>
-                        <div className="text-xs font-bold">{r.label}</div>
-                        <div className="text-[10px] text-slate-500 leading-relaxed mt-0.5">{r.description}</div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          {/* Official User Profile Icon Button */}
+          <button
+            onClick={() => setShowProfileModal(true)}
+            title="কর্মকর্তা / ব্যবহারকারী প্রোফাইল দেখুন"
+            className="flex items-center gap-2 py-1.5 px-3 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-white/20 transition-all cursor-pointer shadow-2xs group"
+          >
+            <div className={`w-6 h-6 rounded-full ${activeRole.color} border border-white/30 flex items-center justify-center text-white shrink-0 shadow-xs`}>
+              <User className="w-3.5 h-3.5" />
+            </div>
+            <span className="text-xs font-semibold text-emerald-100 group-hover:text-white">
+              প্রোফাইল
+            </span>
+          </button>
 
           {/* Logout Button */}
           <button
@@ -651,15 +610,25 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
               <div className="bg-white border border-slate-200/80 rounded-xl p-3.5 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                   <div className="flex items-start gap-3">
-                    <div className={`w-8 h-8 rounded-lg ${activeRole?.color || 'bg-[#14532d]'} text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-xs mt-0.5`}>
+                    <button
+                      onClick={() => setShowProfileModal(true)}
+                      title="প্রোফাইল বিবরণ দেখুন"
+                      className={`w-8 h-8 rounded-lg ${activeRole?.color || 'bg-[#14532d]'} text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-xs mt-0.5 cursor-pointer hover:opacity-90`}
+                    >
                       {activeRole?.name ? activeRole.name.charAt(0) : 'অ'}
-                    </div>
+                    </button>
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-900">
                           সক্রিয় স্টেকহোল্ডার ভূমিকা: {activeRole?.label || 'অ্যাডমিন'}
                         </span>
-                        <span className="text-xs font-bold text-slate-800">{activeRole?.name || 'ব্যবহারকারী'}</span>
+                        <button
+                          onClick={() => setShowProfileModal(true)}
+                          className="text-xs font-bold text-slate-800 hover:text-emerald-800 cursor-pointer text-left hover:underline"
+                          title="প্রোফাইল দেখুন"
+                        >
+                          {activeRole?.name || 'ব্যবহারকারী'}
+                        </button>
                       </div>
                       <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
                         {activeRole?.description || ''}
@@ -770,12 +739,28 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
               {activeTab === 'verify' && <VerifyStatisticsModule />}
               {activeTab === 'cleanup' && <DataCleanupModule />}
               {activeTab === 'settings' && <SettingsModule />}
+              {activeTab === 'profile' && <UserProfileModule activeRole={activeRole} />}
             </div>
           )}
 
         </main>
 
       </div>
+
+      {/* ========================================================
+          OFFICIAL USER PROFILE MODAL (Opened from Header Profile Icon)
+          ======================================================== */}
+      <UserProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        activeRole={activeRole}
+        onSwitchRole={(newRole) => {
+          setActiveRole(newRole);
+          setActiveTab('dashboard');
+          setShowProfileModal(false);
+        }}
+        roles={ROLES}
+      />
 
       {/* ========================================================
           FORMAL GOVERNMENT FOOTER
