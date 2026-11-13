@@ -436,48 +436,123 @@ export default function UpazilaAdminDashboard({
         </div>
       </div>
 
-      {/* Row 4: Monthly Distribution Trend */}
-      <div className="bg-white rounded-xl p-3.5 sm:p-4 border border-slate-200/70 shadow-xs space-y-3">
-        <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+      {/* Row 4: Monthly Distribution Trend (Matches Target Design) */}
+      <div className="bg-white rounded-xl p-3.5 sm:p-5 border border-slate-200/70 shadow-xs space-y-3">
+        <div className="pb-1">
           <h4 className="text-xs sm:text-sm font-bold text-slate-900">
-            মাসিক সার বিতরণ চিত্র (মাস ভিত্তিক)
+            মাসিক বিতরণ ট্রেন্ড (সর্বশেষ ৬ মাস)
           </h4>
-          <span className="text-[10px] text-slate-400">সর্বশেষ ৪ মাসের অগ্রগতি</span>
         </div>
 
-        <div className="py-2">
-          <div className="relative h-44 sm:h-52 w-full">
-            <svg viewBox="0 0 1040 220" className="w-full h-full overflow-visible">
-              <line x1="40" y1="20" x2="1000" y2="20" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="40" y1="70" x2="1000" y2="70" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="40" y1="120" x2="1000" y2="120" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="3 3" />
-              <line x1="40" y1="170" x2="1000" y2="170" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="3 3" />
+        <div className="py-1">
+          <div className="relative w-full overflow-x-auto">
+            <svg viewBox="0 0 1000 260" className="w-full h-auto min-w-[650px] overflow-visible">
+              <defs>
+                <linearGradient id="trendAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#166534" stopOpacity="0.22" />
+                  <stop offset="60%" stopColor="#166534" stopOpacity="0.10" />
+                  <stop offset="100%" stopColor="#166534" stopOpacity="0.04" />
+                </linearGradient>
+              </defs>
 
+              {/* Y-Axis Labels & Horizontal Grid Lines */}
+              {[
+                { val: '1,600', y: 20 },
+                { val: '1,400', y: 45 },
+                { val: '1,200', y: 70 },
+                { val: '1,000', y: 95 },
+                { val: '800', y: 120 },
+                { val: '600', y: 145 },
+                { val: '400', y: 170 },
+                { val: '200', y: 195 },
+                { val: '0', y: 220 },
+              ].map((tick, i) => (
+                <g key={i}>
+                  <text
+                    x="58"
+                    y={tick.y + 3.5}
+                    textAnchor="end"
+                    fill="#64748b"
+                    fontSize="11"
+                    fontFamily="monospace"
+                  >
+                    {tick.val}
+                  </text>
+                  <line
+                    x1="70"
+                    y1={tick.y}
+                    x2="960"
+                    y2={tick.y}
+                    stroke="#e2e8f0"
+                    strokeWidth={tick.y === 220 ? '1.5' : '1'}
+                  />
+                </g>
+              ))}
+
+              {/* Vertical Grid Lines */}
+              {[70, 367, 663, 960].map((vx, i) => (
+                <line
+                  key={i}
+                  x1={vx}
+                  y1={20}
+                  x2={vx}
+                  y2={220}
+                  stroke="#e2e8f0"
+                  strokeWidth="1"
+                />
+              ))}
+
+              {/* Smooth Area Fill below the curve */}
               <path
-                d="M 80 163 L 380 37 L 680 76 L 960 178"
+                d="M 70 179 C 180 115, 260 35, 367 39 C 470 43, 565 65, 663 83 C 760 100, 860 155, 960 195 L 960 220 L 70 220 Z"
+                fill="url(#trendAreaGradient)"
+              />
+
+              {/* Smooth Spline Curve Line */}
+              <path
+                d="M 70 179 C 180 115, 260 35, 367 39 C 470 43, 565 65, 663 83 C 760 100, 860 155, 960 195"
                 fill="none"
-                stroke="#166534"
-                strokeWidth="3.5"
+                stroke="#1b6334"
+                strokeWidth="3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
 
-              {monthlyTrend.map((pt, idx) => (
-                <g key={idx} className="cursor-pointer group">
-                  <circle cx={pt.x} cy={pt.y} r="6" fill="#166534" stroke="#ffffff" strokeWidth="2.5" />
-                  <rect x={pt.x - 36} y={pt.y - 30} width="72" height="20" rx="4" fill="#14532d" />
-                  <text x={pt.x} y={pt.y - 16} textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="bold">
-                    {pt.value}
-                  </text>
-                </g>
+              {/* 4 Data Points Circles */}
+              {[
+                { x: 70, y: 179, val: '৩৩০ কেজি', month: '2026-08' },
+                { x: 367, y: 39, val: '১,৪৫০ কেজি', month: '2026-09' },
+                { x: 663, y: 83, val: '১,১০০ কেজি', month: '2026-10' },
+                { x: 960, y: 195, val: '২০০ কেজি', month: '2026-11' },
+              ].map((pt, i) => (
+                <circle
+                  key={i}
+                  cx={pt.x}
+                  cy={pt.y}
+                  r="4"
+                  fill="#f0fdf4"
+                  stroke="#1b6334"
+                  strokeWidth="2.5"
+                  className="cursor-pointer hover:r-6 transition-all"
+                >
+                  <title>{`${pt.month}: ${pt.val}`}</title>
+                </circle>
               ))}
-            </svg>
 
-            <div className="flex justify-between items-center pt-1.5 text-[10px] text-slate-500 font-mono px-4 sm:px-10">
-              {monthlyTrend.map((pt, idx) => (
-                <span key={idx}>{pt.month}</span>
-              ))}
-            </div>
+              {/* X-Axis Month Labels */}
+              <text x="70" y="244" textAnchor="start" fill="#64748b" fontSize="11" fontFamily="monospace">
+                2026-08
+              </text>
+              <text x="367" y="244" textAnchor="middle" fill="#64748b" fontSize="11" fontFamily="monospace">
+                2026-09
+              </text>
+              <text x="663" y="244" textAnchor="middle" fill="#64748b" fontSize="11" fontFamily="monospace">
+                2026-10
+              </text>
+              <text x="960" y="244" textAnchor="end" fill="#64748b" fontSize="11" fontFamily="monospace">
+                2026-11
+              </text>
+            </svg>
           </div>
         </div>
       </div>
