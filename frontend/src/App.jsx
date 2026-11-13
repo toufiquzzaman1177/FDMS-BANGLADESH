@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import LoginPage from './components/LoginPage'
 import Dashboard from './components/Dashboard'
 import { 
@@ -10,8 +10,58 @@ import {
   TrendingUp, 
   LogIn,
   CheckCircle2,
-  LayoutDashboard
+  LayoutDashboard,
+  AlertTriangle,
+  RotateCcw
 } from 'lucide-react'
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false, error: null }
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error }
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("FDMS Application Error:", error, errorInfo)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 sm:p-8 max-w-lg w-full text-center">
+            <div className="w-14 h-14 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-200">
+              <AlertTriangle className="w-7 h-7" />
+            </div>
+            <h2 className="text-xl font-bold text-slate-900 mb-2">সিস্টেমে সাময়িক ত্রুটি ঘটেছে</h2>
+            <p className="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
+              ড্যাশবোর্ডটি লোড করতে একটি অপ্রত্যাশিত সমস্যা দেখা দিয়েছে। নিচে বোতামে ক্লিক করে পুনরায় লোড করুন।
+            </p>
+            {this.state.error && (
+              <div className="mb-6 p-3 bg-slate-50 border border-slate-200 rounded-xl text-left font-mono text-[11px] text-red-700 overflow-x-auto max-h-32">
+                {this.state.error.toString()}
+              </div>
+            )}
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => window.location.reload()}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#14532d] hover:bg-emerald-800 text-white text-xs sm:text-sm font-semibold rounded-xl transition-all cursor-pointer shadow-xs"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>পুনরায় লোড করুন</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 export default function App() {
   // Default to 'dashboard' with Upazila Admin role
@@ -59,32 +109,37 @@ export default function App() {
   // View 1: Main Admin/Officer Dashboard (Matches target screenshot)
   if (currentPage === 'dashboard') {
     return (
-      <Dashboard 
-        currentUser={loggedInUser}
-        onLogout={() => {
-          setLoggedInUser({ name: 'ড. আহমেদ রফিক', role: 'উপজেলা অ্যাডমিন (UNO / UAO)' })
-          setCurrentPage('login')
-        }}
-      />
+      <ErrorBoundary>
+        <Dashboard 
+          currentUser={loggedInUser}
+          onLogout={() => {
+            setLoggedInUser({ name: 'ড. আহমেদ রফিক', role: 'উপজেলা অ্যাডমিন (UNO / UAO)' })
+            setCurrentPage('login')
+          }}
+        />
+      </ErrorBoundary>
     )
   }
 
   // View 2: High-Fidelity Login Page
   if (currentPage === 'login') {
     return (
-      <LoginPage 
-        onBackToHome={() => setCurrentPage('home')}
-        onLoginSuccess={(user) => {
-          setLoggedInUser({ name: user.name || 'ড. আহমেদ রফিক', role: user.role || 'উপজেলা অ্যাডমিন (UNO / UAO)' })
-          setTimeout(() => setCurrentPage('dashboard'), 600)
-        }}
-      />
+      <ErrorBoundary>
+        <LoginPage 
+          onBackToHome={() => setCurrentPage('home')}
+          onLoginSuccess={(user) => {
+            setLoggedInUser({ name: user.name || 'ড. আহমেদ রফিক', role: user.role || 'উপজেলা অ্যাডমিন (UNO / UAO)' })
+            setTimeout(() => setCurrentPage('dashboard'), 600)
+          }}
+        />
+      </ErrorBoundary>
     )
   }
 
   // View 3: Home / Landing Page View
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
+    <ErrorBoundary>
+      <div className="min-h-screen bg-slate-50 text-slate-800">
       {/* Top Banner */}
       <header className="bg-emerald-800 text-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -237,5 +292,6 @@ export default function App() {
         </p>
       </footer>
     </div>
+    </ErrorBoundary>
   )
 }

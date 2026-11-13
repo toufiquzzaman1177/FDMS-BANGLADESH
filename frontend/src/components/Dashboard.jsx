@@ -28,6 +28,7 @@ import {
   TrendingUp,
   AlertCircle,
   ChevronRight,
+  ChevronDown,
   ExternalLink,
   Landmark,
   Store,
@@ -173,10 +174,11 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     }
   ];
 
-  const matchedRole = ROLES.find(r => r.roleTitle === currentUser.role || r.label.includes(currentUser.role)) || ROLES[1];
+  const userRole = currentUser?.role || 'উপজেলা অ্যাডমিন (UNO / UAO)';
+  const matchedRole = ROLES.find(r => r.roleTitle === userRole || (userRole && r.label?.includes(userRole))) || ROLES[1];
   const [activeRole, setActiveRole] = useState(matchedRole);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
-  const [activeTab, setActiveTab] = useState(matchedRole.id === 'public-citizen' ? 'citizen-portal' : (matchedRole.id === 'ward-pos' ? 'ward-pos' : (matchedRole.id === 'field-saao' ? 'field-saao' : 'dashboard')));
+  const [activeTab, setActiveTab] = useState(matchedRole?.id === 'public-citizen' ? 'citizen-portal' : (matchedRole?.id === 'ward-pos' ? 'ward-pos' : (matchedRole?.id === 'field-saao' ? 'field-saao' : 'dashboard')));
   const [refreshKey, setRefreshKey] = useState(0)
   const [isVerifying, setIsVerifying] = useState(false)
   const [verificationSuccess, setVerificationSuccess] = useState(false)
@@ -693,24 +695,24 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
               <div className="bg-gradient-to-r from-emerald-50/90 via-white to-slate-50 border border-emerald-200/90 rounded-xl p-3.5 shadow-2xs">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                   <div className="flex items-start gap-3">
-                    <div className={`w-8 h-8 rounded-lg ${activeRole.color} text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-xs mt-0.5`}>
-                      {activeRole.name.charAt(0)}
+                    <div className={`w-8 h-8 rounded-lg ${activeRole?.color || 'bg-[#14532d]'} text-white flex items-center justify-center text-xs font-bold shrink-0 shadow-xs mt-0.5`}>
+                      {activeRole?.name ? activeRole.name.charAt(0) : 'অ'}
                     </div>
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white border border-emerald-200 text-emerald-900">
-                          সক্রিয় স্টেকহোল্ডার ভূমিকা: {activeRole.label}
+                          সক্রিয় স্টেকহোল্ডার ভূমিকা: {activeRole?.label || 'অ্যাডমিন'}
                         </span>
-                        <span className="text-xs font-bold text-slate-800">{activeRole.name}</span>
+                        <span className="text-xs font-bold text-slate-800">{activeRole?.name || 'ব্যবহারকারী'}</span>
                       </div>
                       <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
-                        {activeRole.description}
+                        {activeRole?.description || ''}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1.5 flex-wrap shrink-0">
-                    {activeRole.priorityActions.map((act, i) => (
+                    {(activeRole?.priorityActions || []).map((act, i) => (
                       <button
                         key={i}
                         onClick={() => setActiveTab(act.tab)}
