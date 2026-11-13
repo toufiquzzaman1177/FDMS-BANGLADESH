@@ -440,7 +440,6 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
   const [activeRole, setActiveRole] = useState(matchedRole);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [showAllModules, setShowAllModules] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationSuccess, setVerificationSuccess] = useState(false);
@@ -471,9 +470,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
   };
 
   // Determine which navigation groups to display in the sidebar
-  const currentNavigationGroups = showAllModules
-    ? allNavigationGroups
-    : (roleNavigationGroups[activeRole.id] || allNavigationGroups);
+  const currentNavigationGroups = roleNavigationGroups[activeRole.id] || allNavigationGroups;
 
   return (
     <div className="min-h-screen bg-[#f2f6f3] text-slate-800 flex flex-col font-sans select-none antialiased">
@@ -588,18 +585,13 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
       <div className="flex-1 flex flex-col md:flex-row max-w-[1440px] w-full mx-auto">
 
         {/* Left Sidebar (Formal Grouped Navigation - Fixed & Sticky) */}
-        <aside className="w-full md:w-64 lg:w-72 bg-white md:border-r border-slate-200/80 flex flex-col justify-between shrink-0 py-3.5 px-3 shadow-[1px_0_4px_rgba(0,0,0,0.02)] md:sticky md:top-14 md:self-start md:h-[calc(100vh-3.5rem)] md:overflow-y-auto">
+        <aside className="w-full md:w-64 lg:w-72 bg-white md:border-r border-slate-200/80 flex flex-col shrink-0 py-3.5 px-3 shadow-[1px_0_4px_rgba(0,0,0,0.02)] md:sticky md:top-14 md:self-start md:h-[calc(100vh-3.5rem)] md:overflow-y-auto">
           <div className="space-y-3.5">
             {/* Role Header Badge in Sidebar */}
-            <div className="px-2 pb-2.5 border-b border-slate-100 flex items-center justify-between">
-              <div className="flex items-center gap-2 truncate">
-                <span className={`w-2.5 h-2.5 rounded-full ${activeRole.color} shrink-0`}></span>
-                <span className="text-[11.5px] font-bold text-slate-800 truncate">
-                  {activeRole.label}
-                </span>
-              </div>
-              <span className="text-[10px] text-slate-500 font-mono bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200 shrink-0">
-                {showAllModules ? 'সকল মডিউল' : 'নির্দিষ্ট রোল'}
+            <div className="px-2 pb-2.5 border-b border-slate-100 flex items-center gap-2 truncate">
+              <span className={`w-2.5 h-2.5 rounded-full ${activeRole.color} shrink-0`}></span>
+              <span className="text-[11.5px] font-bold text-slate-800 truncate">
+                {activeRole.label}
               </span>
             </div>
 
@@ -647,22 +639,6 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
                 </div>
               ))}
             </nav>
-          </div>
-
-          {/* Sidebar Footer with Toggle to show All Modules or Filtered Role Modules */}
-          <div className="pt-3 border-t border-slate-100 mt-4 space-y-2">
-            <button
-              onClick={() => setShowAllModules(!showAllModules)}
-              className="w-full py-2 px-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-900 border border-slate-200 text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer"
-            >
-              <div className="flex items-center gap-1.5">
-                <Layers className="w-3.5 h-3.5 text-emerald-700" />
-                <span className="text-[11.5px]">{showAllModules ? 'রোল-নির্দিষ্ট মেনু দেখুন' : 'সকল ২৬টি মডিউল দেখুন'}</span>
-              </div>
-              <span className="text-[9px] bg-white px-1.5 py-0.5 rounded border border-slate-200 font-mono text-slate-500">
-                {showAllModules ? 'সব সক্রিয়' : 'ফিল্টার্ড'}
-              </span>
-            </button>
           </div>
         </aside>
 
