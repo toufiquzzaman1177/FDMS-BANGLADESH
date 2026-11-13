@@ -524,13 +524,10 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                       key={index}
                       className="bg-white rounded-xl p-3 sm:p-3.5 border border-slate-200/70 shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
                     >
-                      <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center mb-2">
                         <div className={`p-2 rounded-lg ${item.iconBg}`}>
                           <Icon className="w-3.5 h-3.5" strokeWidth={2} />
                         </div>
-                        <span className="text-[9px] font-semibold text-slate-400">
-                          ID-0{index + 1}
-                        </span>
                       </div>
                       <div>
                         <div className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-mono">
