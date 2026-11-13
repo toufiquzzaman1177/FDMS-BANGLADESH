@@ -42,7 +42,9 @@ import {
   MapPin,
   Globe,
   Sparkles,
-  Layers
+  Layers,
+  Menu,
+  X
 } from 'lucide-react'
 
 // 6 Dedicated Stakeholder Role Dashboards
@@ -441,6 +443,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
   
   const [activeRole, setActiveRole] = useState(matchedRole);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [refreshKey, setRefreshKey] = useState(0);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -481,32 +484,45 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
           TOP HEADER (Formal Government Deep Emerald Navbar)
           Fixed & Sticky
           ======================================================== */}
-      <header className="bg-[#14532d] border-b border-emerald-900/50 text-white px-3 sm:px-5 shadow-[0_1px_4px_rgba(0,0,0,0.08)] flex items-center justify-between sticky top-0 z-40 h-14">
+      <header className="bg-[#14532d] border-b border-emerald-900/50 text-white px-3 sm:px-4 lg:px-6 shadow-[0_1px_4px_rgba(0,0,0,0.08)] flex items-center justify-between sticky top-0 z-40 h-14 sm:h-15">
 
-        {/* Left Branding */}
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white flex items-center justify-center p-0.5 border border-white/30 shadow-xs shrink-0 overflow-hidden">
+        {/* Left Branding with Hamburger Menu for Mobile & Tablet */}
+        <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+          {/* Mobile/Tablet Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-colors cursor-pointer shrink-0"
+            title="মেনু খুলুন/বন্ধ করুন"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5 text-emerald-200" /> : <Menu className="w-5 h-5 text-emerald-200" />}
+          </button>
+
+          {/* Logo */}
+          <div className="w-9 h-9 sm:w-10 sm:h-10 lg:w-11 lg:h-11 rounded-xl bg-white flex items-center justify-center p-0.5 border border-white/30 shadow-xs shrink-0 overflow-hidden">
             <img src="/logo.jpg" alt="FDMS" className="w-full h-full object-contain rounded-lg" />
           </div>
-          <div>
+
+          <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <h1 className="text-xs sm:text-sm font-bold tracking-tight text-white leading-tight">
-                FDMS BANGLADESH — সার বিতরণ ব্যবস্থাপনা
+              <h1 className="text-xs sm:text-sm font-bold tracking-tight text-white leading-tight truncate max-w-[170px] xs:max-w-[220px] sm:max-w-none">
+                FDMS BANGLADESH
+                <span className="hidden sm:inline font-normal text-emerald-200/90"> — সার বিতরণ ব্যবস্থাপনা</span>
               </h1>
-              <span className="hidden sm:inline-block px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/20 text-[9px] font-medium">
+              <span className="hidden md:inline-block px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-200 border border-emerald-400/20 text-[9px] font-medium shrink-0">
                 জাতীয় পোর্টাল
               </span>
             </div>
-            <p className="text-[9px] sm:text-[10px] text-emerald-200/90 font-normal tracking-wide">
-              {activeRole.label} কনসোল — DEMO WORKSPACE
+            <p className="text-[9px] sm:text-[10px] text-emerald-200/90 font-normal tracking-wide truncate max-w-[190px] xs:max-w-[240px] sm:max-w-none">
+              {activeRole.label}
             </p>
           </div>
         </div>
 
         {/* Right Action Controls */}
-        <div className="flex items-center space-x-2 text-xs">
+        <div className="flex items-center space-x-1.5 sm:space-x-2 text-xs shrink-0">
 
-          {/* Quick Help / Info Pill */}
+          {/* Quick Help / Info Pill (Desktop Only) */}
           <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 bg-white/10 border border-white/15 rounded-lg text-emerald-100 text-[11px] font-medium">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
             <span>সিস্টেম স্টেটাস: ১০০% সক্রিয়</span>
@@ -516,12 +532,12 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
           <button
             onClick={() => setShowProfileModal(true)}
             title="কর্মকর্তা / ব্যবহারকারী প্রোফাইল দেখুন"
-            className="flex items-center gap-2 py-1.5 px-3 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-white/20 transition-all cursor-pointer shadow-2xs group"
+            className="flex items-center gap-1.5 sm:gap-2 py-1 px-2 sm:px-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all cursor-pointer shadow-2xs group"
           >
-            <div className={`w-6 h-6 rounded-full ${activeRole.color} border border-white/30 flex items-center justify-center text-white shrink-0 shadow-xs`}>
-              <User className="w-3.5 h-3.5" />
+            <div className={`w-5 h-5 sm:w-5.5 sm:h-5.5 rounded-full ${activeRole.color} border border-white/30 flex items-center justify-center text-white shrink-0 shadow-xs`}>
+              <User className="w-3 h-3 text-white" />
             </div>
-            <span className="text-xs font-semibold text-emerald-100 group-hover:text-white">
+            <span className="text-[11px] sm:text-xs font-semibold text-emerald-100 group-hover:text-white hidden xs:inline sm:inline">
               প্রোফাইল
             </span>
           </button>
@@ -530,7 +546,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
           <button
             onClick={onLogout}
             title="লগআউট করে প্রস্থান করুন"
-            className="p-1.5 rounded-lg bg-white/10 hover:bg-rose-600/80 text-white border border-white/15 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-rose-600/80 text-white border border-white/15 transition-colors cursor-pointer shrink-0"
           >
             <LogOut className="w-3.5 h-3.5" />
           </button>
@@ -538,13 +554,114 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
       </header>
 
       {/* ========================================================
+          MOBILE / TABLET SLIDE-OVER DRAWER (< md)
+          ======================================================== */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 md:hidden transition-opacity"
+        />
+      )}
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-white shadow-2xl flex flex-col py-4 px-3 transform transition-transform duration-300 ease-in-out md:hidden ${
+          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {/* Drawer Header */}
+        <div className="flex items-center justify-between pb-3 mb-2 border-b border-slate-100 px-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className={`w-2.5 h-2.5 rounded-full ${activeRole.color} shrink-0`}></span>
+            <span className="text-xs font-bold text-slate-800 truncate">
+              {activeRole.label}
+            </span>
+          </div>
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className="p-1 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 cursor-pointer shrink-0"
+            title="মেনু বন্ধ করুন"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Drawer Nav Items */}
+        <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+          <nav className="space-y-3">
+            {currentNavigationGroups.map((group, gIdx) => (
+              <div key={gIdx} className="space-y-1">
+                <p className="px-3 text-[11px] font-semibold text-slate-400 tracking-normal mb-1">
+                  {group.group}
+                </p>
+                <div className="space-y-0.5">
+                  {group.items.map((item) => {
+                    const Icon = item.icon
+                    const isActive = activeTab === item.id
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setActiveTab(item.id);
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all text-left cursor-pointer group ${
+                          isActive
+                            ? 'bg-[#ecf8ef] text-[#14532d] font-bold border-l-4 border-[#166534] shadow-2xs'
+                            : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+                        }`}
+                      >
+                        <div className="flex items-center space-x-2.5 truncate">
+                          <Icon
+                            className={`w-4 h-4 shrink-0 transition-colors ${
+                              isActive ? 'text-[#166534]' : 'text-slate-400 group-hover:text-slate-600'
+                            }`}
+                            strokeWidth={1.85}
+                          />
+                          <span className="truncate">{item.label}</span>
+                        </div>
+                        {item.badge && (
+                          <span
+                            className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full font-mono ${
+                              item.badgeColor === 'rose'
+                                ? 'bg-rose-100 text-rose-700'
+                                : 'bg-emerald-100 text-emerald-800'
+                            }`}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+          </nav>
+        </div>
+
+        {/* Drawer Footer */}
+        <div className="pt-3 border-t border-slate-100 px-2 flex items-center justify-between text-[11px] text-slate-500">
+          <span className="truncate">{activeRole.name}</span>
+          <button
+            onClick={() => {
+              setShowProfileModal(true);
+              setMobileMenuOpen(false);
+            }}
+            className="text-emerald-700 font-bold hover:underline"
+          >
+            প্রোফাইল
+          </button>
+        </div>
+      </aside>
+
+      {/* ========================================================
           BODY: SIDEBAR + MAIN CONTENT
-          Sidebar is FIXED & STICKY, Scrolling Independently
+          Sidebar is FIXED & STICKY on Desktop & Tablet (md+)
           ======================================================== */}
       <div className="flex-1 flex flex-col md:flex-row max-w-[1440px] w-full mx-auto">
 
-        {/* Left Sidebar (Formal Grouped Navigation - Fixed & Sticky) */}
-        <aside className="w-full md:w-64 lg:w-72 bg-white md:border-r border-slate-200/80 flex flex-col shrink-0 py-3.5 px-3 shadow-[1px_0_4px_rgba(0,0,0,0.02)] md:sticky md:top-14 md:self-start md:h-[calc(100vh-3.5rem)] md:overflow-y-auto">
+        {/* Left Sidebar (Desktop & Tablet docked - md and lg) */}
+        <aside className="hidden md:flex flex-col w-56 md:w-60 lg:w-72 bg-white md:border-r border-slate-200/80 shrink-0 py-3.5 px-2.5 lg:px-3 shadow-[1px_0_4px_rgba(0,0,0,0.02)] md:sticky md:top-14 md:self-start md:h-[calc(100vh-3.5rem)] md:overflow-y-auto">
           <div className="space-y-3.5">
             {/* Role Header Badge in Sidebar */}
             <div className="px-2 pb-2.5 border-b border-slate-100 flex items-center gap-2 truncate">
@@ -568,12 +685,12 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
                         <button
                           key={item.id}
                           onClick={() => setActiveTab(item.id)}
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[13px] font-medium transition-all text-left cursor-pointer group ${isActive
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[12.5px] lg:text-[13px] font-medium transition-all text-left cursor-pointer group ${isActive
                               ? 'bg-[#ecf8ef] text-[#14532d] font-bold border-l-4 border-[#166534] shadow-2xs'
                               : 'text-slate-700 hover:bg-slate-50/90 hover:text-slate-900'
                             }`}
                         >
-                          <div className="flex items-center space-x-2.5 truncate">
+                          <div className="flex items-center space-x-2 lg:space-x-2.5 truncate">
                             <Icon
                               className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-[#166534]' : 'text-slate-400 group-hover:text-slate-600'
                                 }`}
@@ -583,7 +700,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
                           </div>
                           {item.badge && (
                             <span
-                              className={`text-[11px] font-bold px-1.5 py-0.2 rounded-full font-mono transition-transform ${item.badgeColor === 'rose'
+                              className={`text-[10px] lg:text-[11px] font-bold px-1.5 py-0.2 rounded-full font-mono transition-transform ${item.badgeColor === 'rose'
                                   ? 'bg-rose-100/90 text-rose-700'
                                   : 'bg-emerald-100/90 text-emerald-800'
                                 }`}
@@ -601,8 +718,8 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
           </div>
         </aside>
 
-        {/* Main Workspace Area (Formal Compact Density) */}
-        <main className="flex-1 p-3.5 sm:p-4 lg:p-5 space-y-4 min-w-0">
+        {/* Main Workspace Area (Formal Compact Density with Bottom Safe Area for Mobile) */}
+        <main className="flex-1 p-3 sm:p-4 lg:p-5 space-y-3.5 sm:space-y-4 min-w-0 pb-20 md:pb-6 overflow-x-hidden">
 
           {activeTab === 'dashboard' ? (
             <>
@@ -761,6 +878,53 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
         }}
         roles={ROLES}
       />
+
+      {/* ========================================================
+          MOBILE BOTTOM QUICK ACTION BAR (Native App Feel < md)
+          ======================================================== */}
+      <nav className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-2px_10px_rgba(0,0,0,0.06)] md:hidden flex items-center justify-around px-2 py-1 select-none">
+        <button
+          onClick={() => {
+            setActiveTab('dashboard');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-lg text-[10.5px] font-semibold transition-colors cursor-pointer ${
+            activeTab === 'dashboard' ? 'text-[#14532d]' : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <LayoutGrid className="w-5 h-5 mb-0.5" strokeWidth={activeTab === 'dashboard' ? 2.3 : 1.8} />
+          <span>ড্যাশবোর্ড</span>
+        </button>
+
+        <button
+          onClick={() => setMobileMenuOpen(true)}
+          className="flex flex-col items-center justify-center py-1 px-3 rounded-lg text-[10.5px] font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+        >
+          <Layers className="w-5 h-5 mb-0.5" strokeWidth={1.8} />
+          <span>মেনু / মডিউল</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setActiveTab('farmer-search');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-3 rounded-lg text-[10.5px] font-semibold transition-colors cursor-pointer ${
+            activeTab === 'farmer-search' ? 'text-[#14532d]' : 'text-slate-500 hover:text-slate-800'
+          }`}
+        >
+          <UserSearch className="w-5 h-5 mb-0.5" strokeWidth={activeTab === 'farmer-search' ? 2.3 : 1.8} />
+          <span>কৃষক সার্চ</span>
+        </button>
+
+        <button
+          onClick={() => setShowProfileModal(true)}
+          className="flex flex-col items-center justify-center py-1 px-3 rounded-lg text-[10.5px] font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+        >
+          <User className="w-5 h-5 mb-0.5" strokeWidth={1.8} />
+          <span>প্রোফাইল</span>
+        </button>
+      </nav>
 
       {/* ========================================================
           FORMAL GOVERNMENT FOOTER
