@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import {
-  LayoutDashboard,
+  LayoutGrid,
   UserPlus,
   Users,
   Package,
-  FileCheck2,
+  FileCheck,
   FileText,
   Copy,
   UserSearch,
@@ -291,7 +291,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
     {
       group: 'মূল মেনু',
       items: [
-        { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: LayoutDashboard },
+        { id: 'dashboard', label: 'ড্যাশবোর্ড', icon: LayoutGrid },
       ],
     },
     {
@@ -300,7 +300,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
         { id: 'add-dealer', label: 'ডিলার যুক্ত করুন', icon: UserPlus },
         { id: 'dealers-list', label: 'ডিলার তালিকা', icon: Users, badge: '৬' },
         { id: 'stock', label: 'স্টক ব্যবস্থাপনা', icon: Package },
-        { id: 'dealer-audit', label: 'ডিলার অডিট / প্রোফাইল', icon: FileCheck2 },
+        { id: 'dealer-audit', label: 'ডিলার অডিট / প্রোফাইল', icon: FileCheck },
         { id: 'distribution-records', label: 'বিতরণ রেকর্ড', icon: FileText, badge: '২১১' },
         { id: 'duplicate-data', label: 'ডুপ্লিকেট ডেটা', icon: Copy, badgeColor: 'rose', badge: '৪' },
       ],
@@ -418,15 +418,15 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
           ======================================================== */}
       <div className="flex-1 flex flex-col md:flex-row max-w-[1400px] w-full mx-auto">
 
-        {/* Left Sidebar (Formal Compact Navigation) */}
-        <aside className="w-full md:w-48 lg:w-56 bg-white md:border-r border-slate-200/70 flex flex-col shrink-0 py-3 shadow-[1px_0_4px_rgba(0,0,0,0.01)] md:sticky md:top-12 md:self-start md:max-h-[calc(100vh-3rem)] md:overflow-y-auto">
-          <nav className="space-y-3 px-2.5">
+        {/* Left Sidebar (Formal Grouped Navigation) */}
+        <aside className="w-full md:w-60 lg:w-64 bg-white md:border-r border-slate-200/80 flex flex-col shrink-0 py-4 px-3 shadow-[1px_0_4px_rgba(0,0,0,0.02)] md:sticky md:top-12 md:self-start md:max-h-[calc(100vh-3rem)] md:overflow-y-auto">
+          <nav className="space-y-4">
             {navigationGroups.map((group, gIdx) => (
-              <div key={gIdx} className="space-y-0.5">
-                <p className="px-2 text-[9px] font-bold uppercase tracking-wider text-slate-400">
+              <div key={gIdx} className="space-y-1">
+                <p className="px-3 text-xs font-semibold text-slate-500 tracking-normal mb-1">
                   {group.group}
                 </p>
-                <div className="space-y-0.5 pt-0.5">
+                <div className="space-y-0.5">
                   {group.items.map((item) => {
                     const Icon = item.icon
                     const isActive = activeTab === item.id
@@ -434,20 +434,26 @@ export default function Dashboard({ onLogout, currentUser = { name: 'Swapnil', r
                       <button
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
-                        className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all text-left cursor-pointer ${isActive
-                            ? 'bg-emerald-50/90 text-emerald-900 font-semibold border-l-[3px] border-emerald-700 shadow-2xs'
-                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[13.5px] font-medium transition-all text-left cursor-pointer group ${isActive
+                            ? 'bg-[#ecf8ef] text-[#14532d] font-bold border-l-4 border-[#166534] shadow-2xs'
+                            : 'text-slate-700 hover:bg-slate-50/90 hover:text-slate-900'
                           }`}
                       >
-                        <div className="flex items-center space-x-2 truncate">
-                          <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-emerald-700' : 'text-slate-400'}`} strokeWidth={1.8} />
+                        <div className="flex items-center space-x-3 truncate">
+                          <Icon
+                            className={`w-[18px] h-[18px] shrink-0 transition-colors ${isActive ? 'text-[#166534]' : 'text-slate-400 group-hover:text-slate-600'
+                              }`}
+                            strokeWidth={1.85}
+                          />
                           <span className="truncate">{item.label}</span>
                         </div>
                         {item.badge && (
-                          <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full ${item.badgeColor === 'rose'
-                              ? 'bg-rose-100 text-rose-700'
-                              : 'bg-emerald-100 text-emerald-800'
-                            }`}>
+                          <span
+                            className={`text-xs font-bold px-2 py-0.5 rounded-full font-mono transition-transform ${item.badgeColor === 'rose'
+                                ? 'bg-rose-100/90 text-rose-700'
+                                : 'bg-emerald-100/90 text-emerald-800'
+                              }`}
+                          >
                             {item.badge}
                           </span>
                         )}
