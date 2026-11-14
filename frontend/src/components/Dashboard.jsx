@@ -831,7 +831,7 @@ export default function Dashboard({ onLogout, currentUser = { name: 'ড. আহ
               {activeTab === 'quota-do' && <QuotaDOModule />}
               {activeTab === 'bank-treasury' && <BankTreasuryModule />}
               {activeTab === 'ward-outlets' && <WardOutletsModule />}
-              {activeTab === 'price-ceiling' && <PriceCeilingModule />}
+              {activeTab === 'price-ceiling' && <PriceCeilingModule activeRole={activeRole} />}
 
               {activeTab === 'dealers-list' && <DealersListModule />}
               {activeTab === 'add-dealer' && <AddDealerModule />}

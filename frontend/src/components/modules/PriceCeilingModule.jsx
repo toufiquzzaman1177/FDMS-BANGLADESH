@@ -18,7 +18,13 @@ import {
   X
 } from 'lucide-react';
 
-export default function PriceCeilingModule() {
+export default function PriceCeilingModule({ activeRole }) {
+  const isCitizen = 
+    activeRole?.id === 'public-citizen' || 
+    activeRole?.label?.includes('নাগরিক') || 
+    activeRole?.roleTitle?.includes('নাগরিক') ||
+    activeRole?.roleTitle?.includes('Citizen');
+
   const [activeTab, setActiveTab] = useState('mrp'); // 'mrp' or 'ceiling'
   const [calculatorCrop, setCalculatorCrop] = useState('boro');
   const [calculatorLandBigha, setCalculatorLandBigha] = useState(3);
@@ -181,6 +187,7 @@ export default function PriceCeilingModule() {
     calculatedQuota.gypsum * 12;
 
   const handleEditClick = (item) => {
+    if (isCitizen) return;
     setEditItem({ ...item });
     setShowEditModal(true);
   };
@@ -287,13 +294,15 @@ export default function PriceCeilingModule() {
                       <h3 className="text-base font-bold text-slate-800 mt-2">{item.name}</h3>
                       <p className="text-[11px] text-slate-500 mt-0.5">{item.composition}</p>
                     </div>
-                    <button
-                      onClick={() => handleEditClick(item)}
-                      title="দর সংশোধন"
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-800 hover:bg-emerald-50 transition-colors"
-                    >
-                      <Edit3 className="w-4 h-4" />
-                    </button>
+                    {!isCitizen && (
+                      <button
+                        onClick={() => handleEditClick(item)}
+                        title="দর সংশোধন"
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-800 hover:bg-emerald-50 transition-colors cursor-pointer"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
 
                   <div className="mt-4 pt-4 border-t border-slate-100 space-y-2">
@@ -510,7 +519,7 @@ export default function PriceCeilingModule() {
       )}
 
       {/* Edit MRP Modal */}
-      {showEditModal && editItem && (
+      {!isCitizen && showEditModal && editItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-scale-in">
             <div className="flex items-center justify-between pb-4 border-b border-slate-100">
